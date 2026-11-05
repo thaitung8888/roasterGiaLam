@@ -8,7 +8,7 @@ export const Menu = (() => {
   body.innerHTML = MENU.map(g => `
     <section class="menu-sec" id="m-${g.id}" aria-labelledby="mh-${g.id}">
       <h3 id="mh-${g.id}">${esc(g.name)}<small>${esc(g.note)}</small></h3>
-      ${g.items.map(([n, d, p]) => `<div class="item"><b>${esc(n)}</b><i>${vnd(p)}</i>${d ? `<span>${esc(d)}</span>` : ''}</div>`).join('')}
+      ${g.items.map(([n, d, p]) => `<div class="item"><b>${esc(n)}</b>${p ? `<i>${vnd(p)}</i>` : ''}${d ? `<span>${esc(d)}</span>` : ''}</div>`).join('')}
     </section>`).join('');
   const tabBtns = MENU.map((g, i) => {
     const b = document.createElement('button');
