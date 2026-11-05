@@ -1,6 +1,7 @@
 // Khởi động cảnh: dựng từng khu (có thanh tải), rồi chạy vòng lặp vẽ.
 import { STATIONS } from '../config/stations.js';
 import { reduce } from '../env.js';
+import { setMood } from './atmosphere.js';
 import { createRig } from './cameraRig.js';
 import { SHADOWS, camera, initCore, renderer, runFrame, scene } from './core.js';
 import { toPlan } from './helpers.js';
@@ -10,7 +11,7 @@ import { createHotspots } from '../ui/hotspots.js';
 import { Menu } from '../ui/menu.js';
 
 // Bám theo tiến độ cuộn bằng lò xo tới hạn: khởi động êm và dừng êm, tay vuốt giật mấy camera cũng không giật theo.
-const SMOOTH = 0.26;
+const SMOOTH = 0.15;
 function follow(cur, target, s, dt) {
   const o = 2 / SMOOTH, x = o * dt, e = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x), d = cur - target, tmp = (s.v + o * d) * dt;
   s.v = (s.v - o * tmp) * e;
@@ -59,7 +60,7 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
     else cur = follow(cur, target, spring, dt);
     if (Math.abs(target - cur) < 2e-4 && Math.abs(spring.v) < 2e-3) { cur = target; spring.v = 0; }
     if (moving) quality.sample(raw);
-    rig.place(cur); hud.update(cur);
+    rig.place(cur); hud.update(cur); setMood(cur);
     // góc máy thử khi so với ảnh thật (chỉ khi chạy npm run dev): gõ window.__cam = { pos: [x, y, z], look: [x, y, z] } trong console
     if (import.meta.env.DEV && window.__cam) { camera.position.copy(toPlan(...window.__cam.pos)); camera.lookAt(toPlan(...window.__cam.look)); }
     runFrame(t, dt);

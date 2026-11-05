@@ -61,7 +61,8 @@ gialam-coffee-roaster/
       ├─ helpers.js           Hàm dựng nhanh: box, boxAt, cyl, plane, rod, beam, group…
       ├─ random.js            Số ngẫu nhiên có hạt giống (cảnh lần nào cũng giống nhau)
       ├─ materials.js         Vật liệu dùng chung (M.xxx)
-      ├─ foliage.js           Lá cây gom vào InstancedMesh
+      ├─ foliage.js           Lá cây gom vào InstancedMesh, lay trong gió
+      ├─ atmosphere.js        Trời có mây, hoàng hôn ở góc dating, vệt nắng qua kính
       ├─ lights.js            Trời, nắng, đèn điểm (điện thoại dùng ít đèn hơn)
       ├─ plan.js              Co mặt bằng cả cảnh theo PLAN, bàn ghế giữ kích thước thật
       ├─ quality.js           Tự hạ độ phân giải khi máy không theo kịp
@@ -75,6 +76,7 @@ gialam-coffee-roaster/
          ├─ outside.js        Vỉa hè, đường, đê, tranh tường hoa sen, nhà bên
          ├─ shell.js          Vỏ xưởng, mặt tiền, cửa lùa, chữ nổi, mái vì kèo
          ├─ dating.js         Góc dating
+         ├─ dike.js           Người đi bộ và xe đạp trên mặt đê, nhìn từ kính dating
          ├─ floor2.js         Tầng 2 + cầu thang thép từ tầng 1
          ├─ bar.js            Quầy order
          ├─ camping.js        Khu camping, cột 4 đèn tuýp, cây ficus
@@ -93,6 +95,8 @@ Quy ước chia lớp giống xom-le-15: **config** chỉ chứa dữ liệu, **
 **Chỉnh góc máy**: sửa `camera.pos` (vị trí) và `camera.look` (điểm nhìn) của trạm. Trục toạ độ thiết kế: `x` từ -10 (tường trái) tới 10 (tường phải, phía quầy); `z` từ 0 (mặt tiền) tới -30 (tường sau); `y` là chiều cao. Khi chạy `npm run dev`, gõ `window.__cam = { pos: [x, y, z], look: [x, y, z] }` trong console để thử một góc máy bất kỳ.
 
 **Camera đi qua cầu thang hoặc lối đi**: thêm điểm vào `via` của trạm đích. Camera đi ngang các điểm này mà không dừng lại.
+
+**Đổi trạm có hoàng hôn**: thêm `dusk: true` cho trạm đó trong `stations.js`. Màu trời và ánh sáng nằm trong `src/scene/atmosphere.js`.
 
 **Đổi menu và giá**: sửa `src/config/menu.js`.
 

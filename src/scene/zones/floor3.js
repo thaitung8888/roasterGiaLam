@@ -1,12 +1,13 @@
-// Tầng 3: tường sau, phòng làm việc (bàn xanh ngọc), vách kính + cửa lùa tự mở, sân nửa ngoài trời, hai cây lớn.
+// Tầng 3: tường sau, phòng làm việc (quầy xanh ngọc liền tường thấp), vách kính + cửa lùa tự mở, sân nửa ngoài trời, hai cây lớn.
 import { BACK, HALL, LV, PLAN } from '../../config/levels.js';
 import { T, camera, lin, onFrame, scene } from '../core.js';
 import { leafBlob } from '../foliage.js';
-import { GLASS, V, add, beam, box, boxAt, cyl, fit, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
+import { GLASS, V, add, beam, box, boxAt, cyl, fit, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
-import { kermitChair, plyChair, roundTable, stool } from '../props/furniture.js';
-import { alocasia, fern, fig, monsteraBig, pothosTrail } from '../props/plants.js';
+import { plyChair, roundTable, tubChair } from '../props/furniture.js';
+import { alocasia, fern, fig, monsteraBig, pot, pothosTrail } from '../props/plants.js';
 import { R, rr } from '../random.js';
+import { canvasTex } from '../textures/canvas.js';
 import { TX } from '../textures/index.js';
 
 export function buildFloor3() {
@@ -17,7 +18,7 @@ export function buildFloor3() {
   noCast(boxAt(XP, 10.2, 7.3, HALL.eave, z1, z1 - 0.2, M.corr));
   // khối dưới tầng 3 trong nhà
   boxAt(-10, XP, 0, Y3 - 0.05, -24.7, z1, M.white);
-  noCast(boxAt(-10, XP, Y3 - 0.05, Y3, -24.7, z1, M.epoxy));
+  noCast(boxAt(-10, XP, Y3 - 0.05, Y3, -24.7, z1, tmat(TX.epoxy, [3, 3], 0.45, '#8c9fa8')));   // sàn xanh xám đậm hơn tầng dưới, như ảnh
   // bậc từ tầng 2 lên tầng 3
   for (let k = 1; k <= 4; k++) boxAt(-9.9, -8.6, LV.t2, LV.t2 + k * 0.175, -23.5 - (k - 1) * 0.3, -23.5 - k * 0.3, M.epoxy);
   // sàn sân tầng 3 (mái của xưởng rang + WC)
@@ -29,33 +30,32 @@ export function buildFloor3() {
     noCast(plane(L, 1.0, GLASS(), (x0 + x1) / 2, Y3 + 0.5, (z0 + z1r) / 2, alongZ ? Math.PI / 2 : 0));
     boxAt(Math.min(x0, x1) - 0.03, Math.max(x0, x1) + 0.03, Y3 + 0.98, Y3 + 1.02, Math.min(z0, z1r) - 0.03, Math.max(z0, z1r) + 0.03, M.steel);
   };
-  rail(-8.6, XP, -24.72, -24.72); rail(XP + 0.02, XP + 0.02, -24.72, ZF);
-  boxAt(-8.3, -4.2, Y3 + 0.72, Y3 + 0.76, -24.85, -25.45, std('#2d8a99', 0.55));   // mặt bàn làm việc xanh ngọc như ảnh
-  for (const x of [-8.15, -4.35]) boxAt(x - 0.03, x + 0.03, Y3, Y3 + 0.72, -24.9, -25.4, M.steel);
-  boxAt(-8.3, -4.2, Y3 + 0.76, Y3 + 0.8, -24.86, -24.92, std('#2a2c2e', 0.6));
-  for (const x of [-7.6, -6.6, -5.6, -4.6]) {
-    stool(x, Y3, -25.85);
-    boxAt(x - 0.16, x + 0.16, Y3 + 0.77, Y3 + 0.785, -25.0, -25.22, std('#3a3d40', 0.4, 0.5));
-    boxAt(x - 0.16, x + 0.16, Y3 + 0.78, Y3 + 0.98, -24.98, -25.0, std('#202224', 0.3, 0.4)).rotation.x = -0.2;
+  rail(XP + 0.02, XP + 0.02, -24.72, ZF);
+  // quầy làm việc (theo ảnh): mặt xanh ngọc liền vào tường thấp ở mép sàn, nhìn thẳng xuống xưởng, đầu quầy là trụ tường có chậu cây
+  const KX0 = -8.6, KX1 = XP - 0.06, KY = Y3 + 0.76, KZ = -24.68, teal = std('#2d8a99', 0.5);
+  boxAt(KX0, KX1, Y3, KY, KZ, -24.92, M.white);
+  boxAt(KX0 + 0.3, KX1, KY, KY + 0.045, KZ, -25.42, teal);
+  boxAt(KX0, KX0 + 0.3, Y3, Y3 + 1.02, KZ, -25.6, M.white);
+  pot(KX0 + 0.15, Y3 + 1.02, -25.15, 0.12, 0.16);
+  leafBlob('heart', KX0 + 0.15, Y3 + 1.42, -25.15, 0.34, 46, 0.2, [0.26, 0.31], [0.22, 0.34]);
+  pothosTrail(KX0 + 0.2, Y3 + 1.14, -25.3, 0.5);
+  for (const x of [-7.6, -6.65, -5.7, -4.75]) tubChair(x, Y3, -25.85, rr(-0.08, 0.08));
+  for (const x of [-7.6, -5.7]) {
+    boxAt(x - 0.16, x + 0.16, KY + 0.045, KY + 0.06, -25.0, -25.22, std('#3a3d40', 0.4, 0.5));
+    boxAt(x - 0.16, x + 0.16, KY + 0.055, KY + 0.255, -24.98, -25.0, std('#202224', 0.3, 0.4)).rotation.x = -0.2;
   }
-  for (const x of [-7.1, -5.1]) {
-    rod(V(x, Y3 + 1.75, -25.15), V(x, HALL.eave - 0.4, -25.15), 0.004, M.steel, scene, 3);
-    const gl = new T.Mesh(new T.SphereGeometry(0.16, 16, 12), M.lamp); gl.position.set(x, Y3 + 1.6, -25.15); keep(noCast(add(gl)));
-  }
-  // (bỏ tủ sách) góc tường: đèn tuýp đứng + quạt cây như ảnh
-  cyl(0.12, 0.12, 0.02, std('#1b1c1e', 0.5, 0.5), -9.55, Y3 + 0.01, -27.9, 16);
-  rod(V(-9.55, Y3, -27.9), V(-9.55, Y3 + 0.35, -27.9), 0.012, std('#1b1c1e', 0.5, 0.5), null, 6);
-  noCast(rod(V(-9.55, Y3 + 0.35, -27.9), V(-9.55, Y3 + 1.75, -27.9), 0.028, glow('#ffe6c0', 1.9), null, 10));
-  const sf = group(-9.4, Y3, -28.7, Math.PI / 2 + 0.4), fanM = std('#e9e9e6', 0.5);
-  cyl(0.18, 0.2, 0.04, fanM, 0, 0.02, 0, 16, sf); rod(V(0, 0, 0), V(0, 1.0, 0), 0.016, fanM, sf, 8);
-  box(0.1, 0.14, 0.16, fanM, 0, 1.06, -0.04, sf);
-  const sring = new T.Mesh(new T.TorusGeometry(0.2, 0.008, 6, 28), std('#cfd2d2', 0.4, 0.5)); sring.position.set(0, 1.08, 0.1); sf.add(sring);
-  const sbl = live(group(0, 1.08, 0.09, 0, sf));
-  for (let k = 0; k < 3; k++) { const b = box(0.08, 0.17, 0.006, std('#dfe3e6', 0.4), 0, 0, 0, sbl); b.position.set(Math.sin(k * 2.094) * 0.09, Math.cos(k * 2.094) * 0.09, 0); b.rotation.z = -k * 2.094; }
-  onFrame((t, dt) => { sbl.rotation.z += dt * 12; });
+  // lá cờ nhỏ trên quầy, ly nước
+  const flag = canvasTex(96, 64, (g, w, h) => {
+    g.fillStyle = '#d0232a'; g.fillRect(0, 0, w, h); g.fillStyle = '#f8d34a'; g.beginPath();
+    for (let k = 0; k < 10; k++) { const r = k % 2 ? 9 : 22, a = -Math.PI / 2 + k * Math.PI / 5; g.lineTo(w / 2 + Math.cos(a) * r, h / 2 + Math.sin(a) * r); }
+    g.fill();
+  }, { clamp: true });
+  rod(V(-6.5, KY + 0.045, -25.02), V(-6.5, KY + 0.34, -25.02), 0.004, M.steel, null, 4);
+  keep(noCast(plane(0.2, 0.135, new T.MeshStandardMaterial({ map: flag, roughness: 0.8, side: T.DoubleSide }), -6.39, KY + 0.27, -25.02)));
+  cyl(0.035, 0.03, 0.1, std('#d99a3e', 0.3), -7.05, KY + 0.095, -25.2, 12); cyl(0.035, 0.03, 0.1, std('#4a2c1a', 0.3), -6.1, KY + 0.095, -25.2, 12);
   boxAt(-8.6, -6.4, Y3, Y3 + 0.42, -29.0, -29.85, std('#6c7a6f', 0.9));
   boxAt(-8.6, -6.4, Y3 + 0.42, Y3 + 0.8, -29.65, -29.85, std('#6c7a6f', 0.9));
-  roundTable(-7.5, Y3, -28.1, 0.3, 0.5);
+  roundTable(-7.5, Y3, -28.1, 0.42);
   fig(-9.3, Y3, -29.5, 1.1);
   // vách ngăn trong nhà / sân: tấm polycarbonate mờ khung đen, giữa có cửa kính lùa tự mở khi đi tới
   const DZ0 = -27.6, DZ1 = -28.95, DW = DZ0 - DZ1, frameK = std('#17181a', 0.45, 0.5);
@@ -86,8 +86,17 @@ export function buildFloor3() {
   // ---- sân tầng 3 (theo ảnh): nền gạch xám, mái tôn kèo thép, mặt sau mở ra cây lớn có rèm cuộn,
   // bồn bê tông trồng cây rậm, ghế băng xanh rêu, bàn nhỏ khung inox, ghế gỗ ép, đèn cầu
   // mặt trước nhìn xuống xưởng: tường thấp + kính khung đen + polycarbonate phía trên
-  for (let x = XP; x <= 10; x += 0.12) boxAt(x - 0.012, x + 0.012, Y3, Y3 + 1.0, ZF - 0.2, ZF - 0.22, frameK);   // lan can sắt đen
-  boxAt(XP, 10, Y3 + 0.98, Y3 + 1.02, ZF - 0.18, ZF - 0.24, frameK);
+  noCast(boxAt(XP, 10, Y3, Y3 + 1.02, ZF, ZF - 0.22, M.white));   // tường thấp màu trắng dưới lớp kính
+  // bồn trắng sát tường, cây cau và cây rậm như ảnh
+  const planterW = std('#d3cfc6', 0.9);
+  for (const [a, b] of [[-3.0, -1.7], [0.2, 3.0], [4.4, 6.4], [7.6, 9.6]]) {
+    noCast(boxAt(a, b, Y3, Y3 + 0.42, ZF - 0.22, ZF - 0.8, planterW)); noCast(boxAt(a + 0.05, b - 0.05, Y3 + 0.4, Y3 + 0.43, ZF - 0.27, ZF - 0.75, M.soil));
+    for (let x = a + 0.35; x < b - 0.2; x += 0.75) {
+      const cz = ZF - 0.5;
+      if (R() < 0.5) leafBlob('blade', x, Y3 + 1.15, cz, 0.55, 46, 0.55, [0.24, 0.3], [0.26, 0.38], 0.9);
+      else monsteraBig(x, Y3 + 0.42, cz, rr(0.95, 1.2));
+    }
+  }
   { const pm = plane(10 - XP, 7.3 - Y3 - 1.0, polyM, (XP + 10) / 2, (Y3 + 1.0 + 7.3) / 2, ZF - 0.06); pm.renderOrder = 2; noCast(pm); }
   for (let x = XP; x <= 10.01; x += (10 - XP) / 8) boxAt(x - 0.03, x + 0.03, Y3 + 1.0, 7.3, ZF, ZF - 0.12, frameK);
   for (const y of [Y3 + 1.0, Y3 + 2.4, Y3 + 3.8]) boxAt(XP, 10, y - 0.025, y + 0.025, ZF, ZF - 0.12, frameK);
@@ -148,30 +157,18 @@ export function buildFloor3() {
     box(len, 0.05, 0.42, oliveT, 0, 0.45, 0, g); for (const sx of [-len / 2 + 0.12, len / 2 - 0.12]) box(0.06, 0.45, 0.38, oliveT, sx, 0.225, 0, g);
     box(len, 0.32, 0.04, oliveT, 0, 0.82, -0.2, g).rotation.x = -0.1; for (const sx of [-len / 2 + 0.12, len / 2 - 0.12]) box(0.05, 0.4, 0.04, oliveT, sx, 0.65, -0.19, g);
   };
-  bench(3.4, -29.0, 2.2); bench(7.4, -29.0, 1.8);
-  box(1.0, 0.05, 0.6, oliveT, 0.5, Y3 + 0.74, -28.85); for (const sx of [0.08, 0.92]) box(0.06, 0.72, 0.5, oliveT, sx, Y3 + 0.36, -28.85);
-  // bàn nhỏ khung inox mặt kính mờ / trắng, đặt theo cặp
+  bench(7.4, -29.0, 1.8);
+  // ít bàn ghế cho thoáng: hai cặp ghế gỗ ép thấp, giữa mỗi cặp là bàn nhỏ khung inox
   const sideT = (x, z, h, top) => {
     const g = group(x, Y3, z, rr(-0.05, 0.05)), st = std('#c3c8cb', 0.3, 0.8);
     box(0.46, 0.025, 0.4, top, 0, h, 0, g);
     for (const sx of [-0.215, 0.215]) for (const sz of [-0.185, 0.185]) box(0.018, h, 0.018, st, sx, h / 2, sz, g);
     for (const sz of [-0.185, 0.185]) box(0.44, 0.018, 0.018, st, 0, 0.012, sz, g);
   };
-  const frost = std('#d9e2e2', 0.2, 0.1, { transparent: true, opacity: 0.85 }), whiteTop = std('#ecebe6', 0.5);
-  sideT(2.9, -27.9, 0.45, frost); sideT(3.47, -27.92, 0.45, whiteTop);
-  sideT(5.9, -28.1, 0.48, frost); sideT(6.47, -28.12, 0.48, whiteTop);
-  sideT(0.2, -27.6, 0.78, frost);
-  const tg = fit(group(0, Y3, 0));
-  kermitChair(-2.6, -26.6, Math.PI / 2 + 0.3, tg); kermitChair(-2.7, -27.4, Math.PI / 2 - 0.2, tg); kermitChair(0.9, -26.9, -Math.PI / 2 - 0.4, tg);
-  sideT(-2.0, -27.0, 0.5, std('#c3c8cb', 0.3, 0.8)); sideT(0.4, -26.5, 0.5, frost);
-  const cbx = tmat(TX.concrete, [1.5, 1.5], 0.85, '#b9b8b2');
-  noCast(boxAt(-3.4, -2.3, Y3, Y3 + 0.55, ZF - 0.3, ZF - 0.85, cbx)); noCast(boxAt(-3.35, -2.35, Y3 + 0.52, Y3 + 0.54, ZF - 0.35, ZF - 0.8, M.soil));
-  leafBlob('oval', -2.85, Y3 + 1.35, ZF - 0.58, 0.45, 70, 0.14, [0.22, 0.3], [0.3, 0.42]);
-  rod(V(-2.85, Y3 + 0.54, ZF - 0.58), V(-2.85, Y3 + 1.4, ZF - 0.58), 0.02, M.trunk, null, 6);
-  
-  sideT(2.2, -26.6, 0.5, std('#2c48b4', 0.5));
-  // ghế gỗ ép thấp tựa nghiêng, quay ra phía cây
-  plyChair(-1.4, Y3, -26.2, -0.55); plyChair(-0.6, Y3, -26.4, -0.35); plyChair(8.3, Y3, -26.9, -Math.PI / 2 + 0.5);
+  const frost = std('#d9e2e2', 0.2, 0.1, { transparent: true, opacity: 0.85 });
+  for (const x of [1.4, 5.6]) {
+    plyChair(x - 0.8, Y3, -27.2, Math.PI + 0.25); sideT(x, -27.3, 0.45, frost); plyChair(x + 0.8, Y3, -27.2, Math.PI - 0.25);
+  }
   // đèn cầu trắng treo từ mái
   for (const [x, z, y] of [[1.3, -27.2, Y3 + 2.4], [4.9, -28.4, Y3 + 1.95], [7.8, -27.0, Y3 + 2.3]]) {
     rod(V(x, y + 0.2, z), V(x, 7.05, z), 0.004, frameK, null, 3);

@@ -1,13 +1,10 @@
-// Ngoài trời: vỉa hè, đường, đê cỏ, tranh tường hoa sen, cây, nhà bên cạnh, xe.
-import { T } from '../core.js';
-import { V, add, box, boxAt, cyl, group, live, noCast, plane, quad, rod, std } from '../helpers.js';
+// Ngoài trời: vỉa hè, đường, đê cỏ, tranh tường hoa sen, cây, nhà bên cạnh, ô tô.
+import { V, box, boxAt, cyl, group, noCast, plane, quad, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { tree } from '../props/plants.js';
-import { R, pick, rr } from '../random.js';
-import { TX } from '../textures/index.js';
+import { R, pick } from '../random.js';
 
 export function buildOutside() {
-  live(add(new T.Mesh(new T.SphereGeometry(230, 32, 16), new T.MeshBasicMaterial({ map: TX.sky, side: T.BackSide, fog: false, depthWrite: false })))).userData.sky = true;
   const X0 = -90, X1 = 90;
   noCast(boxAt(X0, X1, -0.06, 0, 0, 3.4, M.pavers));
   noCast(boxAt(X0, X1, -0.1, 0.12, 3.4, 3.6, std('#9a9890', 0.9)));
@@ -46,13 +43,4 @@ export function buildOutside() {
   box(4.4, 0.7, 1.8, std('#6a7075', 0.35, 0.6), 0, 0.62, 0, car);
   box(2.6, 0.62, 1.66, std('#1d2226', 0.15, 0.6), -0.2, 1.28, 0, car);
   for (const sx of [-1.4, 1.4]) for (const sz of [-0.86, 0.86]) { const w = cyl(0.34, 0.34, 0.24, std('#151515', 0.8), sx, 0.34, sz, 16, car); w.rotation.x = Math.PI / 2; }
-  // xe máy trên vỉa hè
-  const bikeCols = ['#1d1f22', '#2c2f33', '#e9e8e4', '#e4d6c4', '#d0d4d6', '#b62d34', '#2c2f33'];
-  [-9.3, -8.4, -5.2, 2.2, 8.7, 9.5, 11.2].forEach((bx, i) => {
-    const b = group(bx, 0, 1.6, -0.35 + rr(-0.1, 0.1));
-    for (const zz of [-0.62, 0.62]) { const w = new T.Mesh(new T.TorusGeometry(0.26, 0.06, 8, 18), std('#151515', 0.8)); w.position.set(0, 0.28, zz); w.rotation.y = Math.PI / 2; b.add(w); }
-    box(0.34, 0.42, 1.0, std(bikeCols[i], 0.4, 0.3), 0, 0.62, 0.05, b);
-    box(0.3, 0.1, 0.6, std('#1a1a1a', 0.7), 0, 0.88, 0.05, b);
-    rod(V(0, 0.5, -0.6), V(0, 1.1, -0.5), 0.02, M.chrome, b); box(0.6, 0.03, 0.03, M.steel, 0, 1.1, -0.5, b);
-  });
 }

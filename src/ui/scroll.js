@@ -12,7 +12,7 @@ export function createScroll(sections) {
     return N - 1;
   }
   function dwell(p) {
-    const i = Math.floor(p), f = p - i, g = Math.min(1, Math.max(0, (f - 0.2) / 0.6));
+    const i = Math.floor(p), f = p - i, g = Math.min(1, Math.max(0, (f - 0.07) / 0.86));
     return Math.min(N - 1, i + g * g * (3 - 2 * g));
   }
   function goTo(i) {

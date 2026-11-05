@@ -22,7 +22,7 @@ export function createHud(stations, scroll) {
       caption.classList.toggle('right', stations[i].side === 'right');
       caption.classList.toggle('panel', stations[i].kind === 'outro');
       void caption.offsetWidth; caption.classList.add('show');
-    }, reduce ? 0 : 260);
+    }, reduce ? 0 : 120);
   }
   return {
     update(p) {

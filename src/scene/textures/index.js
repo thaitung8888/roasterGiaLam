@@ -127,12 +127,18 @@ export function buildTextures() {
     g.fillStyle = '#c9c4ba'; g.fillRect(0, h * 0.86, w, h * 0.06);
     g.strokeStyle = '#2b2f31'; g.lineWidth = 3; for (let x = w * 0.18; x < w * 0.84; x += 14) { g.beginPath(); g.moveTo(x, h * 0.72); g.lineTo(x, h * 0.86); g.stroke(); }
   });
-  // trời
-  TX.sky = canvasTex(16, 256, (g, w, h) => {
-    const gr = g.createLinearGradient(0, 0, 0, h);
-    gr.addColorStop(0, '#93b8c8'); gr.addColorStop(0.42, '#cddfe4'); gr.addColorStop(0.5, '#e4ece9'); gr.addColorStop(1, '#e4ece9');
-    g.fillStyle = gr; g.fillRect(0, 0, w, h);
-  }, { clamp: true });
+  // mây: các đốm mờ nối liền bốn mép để lặp vô tận, màu trời do shader trong atmosphere.js tô
+  TX.clouds = canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#000'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 150; i++) {
+      const x = R() * w, y = R() * h, r = rr(26, 92), a = rr(0.1, 0.34);
+      for (const dx of [-w, 0, w]) for (const dy of [-h, 0, h]) {
+        const gr = g.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r);
+        gr.addColorStop(0, `rgba(255,255,255,${a})`); gr.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = gr; g.fillRect(x + dx - r, y + dy - r, r * 2, r * 2);
+      }
+    }
+  }, { linear: true });
   // lá: xám trắng + kênh alpha, màu xanh do từng lá tự tô
   const leafShape = (g, w, h, body) => {
     g.clearRect(0, 0, w, h); g.save(); body(g, w, h); g.restore();

@@ -2,6 +2,7 @@
 //   camera.pos / camera.look : vị trí camera và điểm nhìn, viết theo toạ độ thiết kế (xem PLAN trong levels.js)
 //   via    : các điểm camera đi ngang qua trước khi tới trạm (lối đi, bậc thang), không dừng
 //   menu   : true thì trạm có nút và chấm "Xem menu"
+//   dusk   : true thì trời chuyển dần sang hoàng hôn khi dừng ở trạm này
 //   side   : chú thích nằm góc trái hay phải
 
 export const STATIONS = [
@@ -28,7 +29,7 @@ export const STATIONS = [
     camera: { pos: [1.7, 1.7, -22], look: [2.3, 1.35, -29.5] },
     title: 'Hạt rang ngay trong quán',
     body: 'Cuối xưởng chia đôi: bên trái là kho hạt, bên phải là phòng rang mở với tường gạch, máy rang trên xe đẩy và sofa da ngồi chờ.' },
-  { id: 'dating', label: 'Góc dating', side: 'left',
+  { id: 'dating', label: 'Góc dating', side: 'left', dusk: true,
     // đi ngược lên đầu xưởng rồi leo cầu thang từ tầng 1 lên dating
     via: [
       { pos: [3.4, 1.65, -16.0], look: [-1.0, 1.9, -8.6] },
@@ -36,7 +37,7 @@ export const STATIONS = [
       { pos: [0.4, 2.15, -8.5], look: [-4.0, 2.6, -8.0] },
       { pos: [-1.2, 2.65, -8.4], look: [-5.0, 2.5, -4.0] }
     ],
-    camera: { pos: [-3.0, 2.6, -7.0], look: [-5.6, 2.3, 0] },
+    camera: { pos: [-3.7, 2.2, -4.6], look: [-5.3, 2.85, 6] },
     title: 'Khung kính lớn nhìn thẳng ra đê',
     body: 'Sàn nâng 1 mét, sơn xanh nước biển nhạt. Ô kính chạy hết chiều ngang, ba bàn hai người sát kính nhìn ra đê.' },
   { id: 'tang-2', label: 'Tầng 2', side: 'right',
@@ -53,16 +54,16 @@ export const STATIONS = [
       { pos: [-9.2, 4.3, -22.6], look: [-9.2, 4.8, -27] },
       { pos: [-9.2, 4.95, -25.3], look: [-7.0, 4.6, -27.5] }
     ],
-    camera: { pos: [-4.3, 4.95, -29.0], look: [-6.6, 3.95, -24.7] },
-    title: 'Dãy bàn 4 chỗ trên tầng 3, có ổ cắm',
-    body: 'Phần trong nhà của tầng 3, lên từ tầng 2 qua vài bậc. Góc yên tĩnh nhất để mở laptop.' },
+    camera: { pos: [-4.9, 4.75, -29.4], look: [-6.6, 3.95, -24.7] },
+    title: 'Quầy làm việc sát mép tầng 3, có ổ cắm',
+    body: 'Bốn ghế bành xám ngồi nhìn xuống cả xưởng, lên từ tầng 2 qua vài bậc. Góc yên tĩnh nhất để mở laptop.' },
   { id: 'san-t3', label: 'Sân tầng 3', side: 'right',
     via: [   // qua cửa kính ra sân
       { pos: [-6.6, 4.95, -27.9], look: [2.0, 4.85, -29.6] },
       { pos: [-4.8, 4.95, -28.3], look: [2.0, 4.9, -28.3] },
       { pos: [-2.4, 4.95, -28.3], look: [6.0, 4.6, -27.2] }
     ],
-    camera: { pos: [0.6, 5.0, -26.6], look: [9, 4.7, -30] },
+    camera: { pos: [-0.6, 5.0, -28.0], look: [8.8, 4.6, -27.2] },
     title: 'Nửa ngoài trời, dưới tán cây lớn',
     body: 'Nằm trên xưởng rang. Mặt sau mở ra tán cây lớn, bồn bê tông trồng cây rậm, ghế băng xanh rêu và ghế gỗ ép.' },
   { id: 'hen-o-xuong', kind: 'outro', label: 'Hẹn ở xưởng', side: 'left',

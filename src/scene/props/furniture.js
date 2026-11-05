@@ -1,4 +1,5 @@
 // Bàn ghế dùng lại ở nhiều khu.
+import { T } from '../core.js';
 import { V, beam, box, cyl, group, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 
@@ -78,6 +79,17 @@ export function stool(x, y, z, parent) {
   const g = group(x, y, z, 0, parent);
   cyl(0.17, 0.17, 0.05, M.woodDark, 0, 0.66, 0, 18, g);
   for (let k = 0; k < 3; k++) { const a = k * 2.094; rod(V(Math.cos(a) * 0.17, 0, Math.sin(a) * 0.17), V(Math.cos(a) * 0.11, 0.64, Math.sin(a) * 0.11), 0.013, M.steel, g); }
+  return g;
+}
+// ghế bành bọc vải xám, lưng cong ôm quanh, chân gỗ ngắn
+export function tubChair(x, y, z, ry, parent) {
+  const g = group(x, y, z, ry, parent), fab = std('#5f5d58', 0.95), r = 0.37, a0 = -0.6, a1 = Math.PI + 0.6;
+  const sh = new T.Shape(); sh.absarc(0, 0, r, a0, a1, false); sh.absarc(0, 0, r - 0.09, a1, a0, true); sh.closePath();
+  const back = new T.Mesh(new T.ExtrudeGeometry(sh, { depth: 0.44, bevelEnabled: true, bevelSize: 0.022, bevelThickness: 0.022, bevelSegments: 2, curveSegments: 14 }), fab);
+  back.rotation.x = -Math.PI / 2; back.position.y = 0.26; g.add(back);
+  cyl(r - 0.03, r - 0.06, 0.2, fab, 0, 0.34, 0, 24, g);
+  cyl(r - 0.02, r - 0.05, 0.08, fab, 0, 0.21, 0, 24, g);
+  for (const sx of [-0.2, 0.2]) for (const sz of [-0.2, 0.2]) rod(V(sx * 1.1, 0, sz * 1.1), V(sx, 0.18, sz), 0.016, M.wood, g, 8);
   return g;
 }
 export function plyChair(x, y, z, ry, parent) {
