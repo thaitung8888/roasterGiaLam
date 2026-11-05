@@ -51,13 +51,6 @@ export function woodChair(x, y, z, ry, parent) {
   box(0.42, 0.34, 0.03, M.woodDark, 0, 0.72, -0.2, g).rotation.x = -0.08;
   return g;
 }
-export function squareTable(x, y, z, parent) {
-  const g = group(x, y, z, 0, parent);
-  box(0.62, 0.03, 0.62, M.blackTop, 0, 0.74, 0, g);
-  cyl(0.03, 0.03, 0.72, M.steel, 0, 0.37, 0, 8, g);
-  box(0.46, 0.02, 0.06, M.steel, 0, 0.01, 0, g); box(0.06, 0.02, 0.46, M.steel, 0, 0.01, 0, g);
-  return g;
-}
 export function roundTable(x, y, z, r = 0.36, h = 0.74, parent) {
   const g = group(x, y, z, 0, parent);
   cyl(r, r, 0.03, M.blackTop, 0, h, 0, 24, g);

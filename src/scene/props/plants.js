@@ -33,15 +33,30 @@ export function spiky(x, y, z, s = 1) {   // phát tài / cau cảnh lá dài
   rod(V(x, top, z), V(x, top + 0.9 * s, z), 0.02 * s, M.trunk);
   for (let k = 0; k < 26; k++) leaf('blade', x, top + rr(0.6, 0.95) * s, z, rr(-1.4, -0.3), R() * 6.28, 0, rr(0.35, 0.5) * s, new T.Color().setHSL(rr(0.22, 0.3), 0.4, rr(0.3, 0.42)));
 }
-export function tree(x, z, h, crown, n, y = 0) {   // cây có tán, thân phân nhánh
-  const top = V(x, y + h * 0.55, z);
-  rod(V(x, y, z), top, 0.09 * h / 5, M.trunk, scene, 8);
-  for (let k = 0; k < 5; k++) {
-    const a = k * 1.26 + rr(-0.3, 0.3), e = V(x + Math.cos(a) * crown * 0.7, y + h * rr(0.75, 0.95), z + Math.sin(a) * crown * 0.7);
-    rod(top, e, 0.05 * h / 5, M.trunk, scene, 6);
-    leafBlob('oval', e.x, e.y, e.z, crown * 0.55, Math.round(n / 5), 0.3 + crown * 0.05);
+// lá to bóng mọc dọc một đoạn cành, cùng kiểu với cây ficus trong nhà; sun: cây ngoài trời sáng và ngả vàng hơn một chút
+function leafBranch(a, b, count, reach, size, sun = 0) {
+  for (let i = 0; i < count; i++) {
+    const p = a.clone().lerp(b, rr(0.15, 1)), yaw = R() * 6.28, r = rr(0.05, reach), young = R() < 0.12;
+    leaf('ficus', p.x + Math.cos(yaw) * r, p.y + rr(-0.14, 0.2), p.z + Math.sin(yaw) * r, rr(0.5, 1.5), Math.PI / 2 - yaw, rr(-0.4, 0.4), size * rr(0.8, 1.2),
+      new T.Color().setHSL(young ? rr(0.2, 0.24) : rr(0.27, 0.32) - sun * 0.02, young ? 0.55 : 0.5, young ? rr(0.38, 0.46) : rr(0.17, 0.28) + sun * 0.05));
   }
-  leafBlob('oval', x, y + h * 0.88, z, crown * 0.6, Math.round(n / 4), 0.3 + crown * 0.05);
+}
+export function tree(x, z, h, crown, n, y = 0) {   // cây tán lớn ngoài trời: thân cong nhẹ, cành vươn lên, lá dày dọc cành
+  const pts = [V(x, y, z)], lx = rr(-0.3, 0.3), lz = rr(-0.3, 0.3), H = h * 0.62;
+  for (let k = 1; k <= 5; k++) { const t = k / 5; pts.push(V(x + lx * t + Math.sin(t * 4) * 0.06, y + t * H, z + lz * t)); }
+  const r0 = 0.03 * h;
+  for (let k = 0; k < 5; k++) rod(pts[k], pts[k + 1], r0 * (1 - k * 0.15), M.trunk, scene, 8);
+  const br = [], N = 9;
+  for (let k = 0; k < N; k++) {
+    const p = pts[2 + k % 4], a = k * 2.4 + rr(-0.3, 0.3), len = crown * rr(0.6, 1), up = h * rr(0.14, 0.3);
+    const e = V(p.x + Math.cos(a) * len, p.y + up, p.z + Math.sin(a) * len);
+    rod(p, e, r0 * 0.42, M.trunk, scene, 6); br.push([p, e]);
+    const a2 = a + rr(-0.7, 0.7), e2 = V(e.x + Math.cos(a2) * crown * rr(0.25, 0.45), e.y + h * rr(0.06, 0.14), e.z + Math.sin(a2) * crown * rr(0.25, 0.45));
+    rod(e, e2, r0 * 0.24, M.trunk, scene, 5); br.push([e, e2]);
+  }
+  br.push([pts[4], V(pts[5].x, pts[5].y + h * 0.3, pts[5].z)]);
+  const per = Math.round(n * 7 / br.length), reach = 0.34 + crown * 0.18;
+  for (const [a, b] of br) leafBranch(a, b, per, reach, 0.28 + crown * 0.02, 1);
 }
 
 // Cây bàng Đài Loan (ficus) dáng cao thanh: thân cong nhẹ, cành vươn lên, lá to bóng mọc dọc cành
@@ -59,14 +74,7 @@ export function ficusTree(x, z, potR = 0.36, potH = 0.48) {
     rod(e, e2, 0.016, M.trunk, null, 5); br.push([e, e2, a2]);
   }
   br.push([pts[4], V(pts[6].x, pts[6].y + 0.9, pts[6].z), 0]);
-  for (const [a, b] of br) {
-    for (let i = 0; i < 70; i++) {
-      const p = a.clone().lerp(b, rr(0.15, 1)), yaw = R() * 6.28, r = rr(0.05, 0.42);
-      const young = R() < 0.12;
-      leaf('ficus', p.x + Math.cos(yaw) * r, p.y + rr(-0.12, 0.18), p.z + Math.sin(yaw) * r, rr(0.5, 1.5), Math.PI / 2 - yaw, rr(-0.4, 0.4), rr(0.22, 0.32),
-        new T.Color().setHSL(young ? rr(0.2, 0.24) : rr(0.27, 0.32), young ? 0.55 : 0.5, young ? rr(0.38, 0.46) : rr(0.17, 0.28)));
-    }
-  }
+  for (const [a, b] of br) leafBranch(a, b, 70, 0.42, 0.27);
 }
 // Cây trong bồn: monstera (lá xẻ thuỳ), môn (lá tim), dương xỉ, trầu bà rủ
 export function monsteraBig(x, y, z, s = 1) {

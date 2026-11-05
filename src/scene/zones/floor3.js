@@ -122,9 +122,9 @@ export function buildFloor3() {
     for (let k = 0; k < 8; k++) {
       const a2 = k * 0.8 + rr(-0.2, 0.2), e = V(mid.x + Math.cos(a2) * rr(2.0, 3.6), rr(5.4, 8.6), mid.z + Math.sin(a2) * rr(2.0, 3.4));
       rod(mid, e, 0.12, M.trunk, null, 7);
-      leafBlob('oval', e.x, e.y, e.z, 1.8, 140, 0.4, [0.2, 0.28], [0.3, 0.44]);
+      leafBlob('ficus', e.x, e.y, e.z, 1.9, 300, 0.44, [0.25, 0.31], [0.2, 0.34]);
     }
-    leafBlob('oval', mid.x, 7.4, mid.z, 2.6, 240, 0.42, [0.2, 0.28], [0.3, 0.44]);
+    leafBlob('ficus', mid.x, 7.4, mid.z, 2.7, 520, 0.44, [0.25, 0.31], [0.2, 0.34]);
     noCast(boxAt(24, 30, 0, 11, -18, -38, std('#f1efea', 0.9)));
     noCast(plane(20, 7.6, M.house, 23.98, 7.2, -28, -Math.PI / 2));
   }
@@ -180,9 +180,9 @@ export function buildFloor3() {
   for (let k = 0; k < 7; k++) {
     const a = k * 0.9 + rr(-0.2, 0.2), e = V(bx + Math.cos(a) * rr(2.5, 4.2), rr(6.5, 9.5), bz + Math.sin(a) * rr(1.8, 3.2) + 0.8);
     rod(top, e, 0.13, M.trunk, scene, 7);
-    leafBlob('oval', e.x, e.y, e.z, 1.9, 150, 0.42, [0.2, 0.28], [0.3, 0.42]);
+    leafBlob('ficus', e.x, e.y, e.z, 2.0, 320, 0.46, [0.25, 0.31], [0.2, 0.34]);
   }
-  leafBlob('oval', bx, 8.8, bz, 3.0, 260, 0.45, [0.2, 0.28], [0.3, 0.42]);
+  leafBlob('ficus', bx, 8.8, bz, 3.1, 560, 0.46, [0.25, 0.31], [0.2, 0.34]);
   noCast(boxAt(-12, 14, 0, 16, -40, -48, std('#f1efea', 0.9)));
   noCast(plane(26, 12, M.house, 1, 9.6, -39.98));
 }

@@ -3,7 +3,7 @@ import { LV } from '../../config/levels.js';
 import { leafBlob } from '../foliage.js';
 import { GLASS, V, box, boxAt, cyl, noCast, plane, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
-import { bistroChair, squareTable } from '../props/furniture.js';
+import { roundTable, woodChair } from '../props/furniture.js';
 import { fig, pothosTrail, spiky } from '../props/plants.js';
 import { rr } from '../random.js';
 
@@ -26,11 +26,11 @@ export function buildDating() {
   rail(Z0 - 0.4, -7.6, 'z'); rail(-5, X1, 'x');
   // 3 bộ bàn hai người sát vách kính + 1 bộ cạnh cầu thang từ tầng 1 lên
   for (const x of [-7.6, -5.0, -2.4]) {
-    squareTable(x, Y, -0.85);
-    bistroChair(x - 0.5, Y, -0.95, Math.PI / 2 + 0.2); bistroChair(x + 0.5, Y, -0.95, -Math.PI / 2 - 0.2);
+    roundTable(x, Y, -0.85);
+    woodChair(x - 0.62, Y, -0.95, Math.PI / 2 + 0.2); woodChair(x + 0.62, Y, -0.95, -Math.PI / 2 - 0.2);
   }
-  squareTable(-1.35, Y, -6.55);   // cạnh đầu cầu thang đi từ tầng 1 lên
-  bistroChair(-1.35, Y, -6.0, Math.PI); bistroChair(-1.9, Y, -6.7, Math.PI / 2 - 0.3);
+  roundTable(-1.35, Y, -6.55);   // cạnh đầu cầu thang đi từ tầng 1 lên
+  woodChair(-1.35, Y, -5.9, Math.PI); woodChair(-2.0, Y, -6.7, Math.PI / 2 - 0.3);
   spiky(-9.5, Y, -0.6, 1.25); fig(-9.3, Y, -3.6, 0.95, M.potClay); spiky(-1.1, Y, -0.6, 1.05);
   // đồ trên bàn sát kính: ly cà phê trên đĩa, cuốn sách, bình hoa nhỏ
   const white = std('#f1eee7', 0.45), coffee = std('#3a2115', 0.3), T0 = Y + 0.755;
