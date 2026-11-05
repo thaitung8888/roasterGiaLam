@@ -67,7 +67,7 @@ export const STATIONS = [
     title: 'Nửa ngoài trời, dưới tán cây lớn',
     body: 'Nằm trên xưởng rang. Mặt sau mở ra tán cây lớn, bồn bê tông trồng cây rậm, ghế băng xanh rêu và ghế gỗ ép.' },
   { id: 'hen-o-xuong', kind: 'outro', label: 'Hẹn ở xưởng', side: 'left',
-    camera: { pos: [7.4, 7.0, -23.2], look: [-3.5, 0.6, -5] },
+    camera: { pos: [9.2, 6.1, -1.3], look: [-2.2, 1.4, -19] },
     eyebrow: 'Hẹn ở xưởng', title: 'Gia Lâm Coffee Roaster',
     fine: 'Bản demo · menu và giá là ví dụ · dựng bởi Thái Thanh Tùng' }
 ];

@@ -1,0 +1,21 @@
+/* Khung xem ảnh thật của quán. */
+.photo {
+  position: fixed; inset: 0; z-index: 30; background: rgba(9, 13, 13, .94); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) max(12px, env(safe-area-inset-right, 0px)) calc(12px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px));
+}
+.photo img { flex: 0 1 auto; min-height: 0; max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 3px; opacity: 1; transition: opacity .25s; }
+.photo.loading img { opacity: 0; }
+.photo.failed img { display: none; }
+.photo.loading::after {
+  content: ""; position: absolute; left: 50%; top: 50%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
+  border: 2px solid rgba(243, 239, 231, .25); border-top-color: var(--teal-lite); animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.photo p { flex: none; margin: 0; max-width: 60ch; text-align: center; font-size: .9rem; line-height: 1.4; color: var(--paper); }
+.photo-close {
+  position: absolute; z-index: 1; top: calc(12px + env(safe-area-inset-top, 0px)); right: max(12px, env(safe-area-inset-right, 0px));
+  border: 0; border-radius: 3px; background: rgba(243, 239, 231, .16); color: var(--paper); font: 500 12px/1 var(--f-mono); padding: 9px 11px; cursor: pointer;
+  display: flex; gap: 6px; align-items: center;
+}
+.photo-close:hover { background: rgba(243, 239, 231, .3); }
+.photo-close svg { width: 12px; height: 12px; stroke: currentColor; stroke-width: 2; fill: none; }

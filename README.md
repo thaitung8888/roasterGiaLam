@@ -23,7 +23,7 @@ gialam-coffee-roaster/
 ├─ index.html                 Khung trang: canvas, màn tải (logo), logo góc, thanh trạm, khung menu
 ├─ public/
 │  ├─ logo.png                Logo GIALAM COFFEE ROASTER (nền trong suốt)
-│  └─ photos/                 Ảnh thật cho từng trạm (bước "mốc hiện ảnh")
+│  └─ photos/                 Ảnh thật hiện khi bấm chấm "Xem ảnh"
 └─ src/
    ├─ main.js                 Điểm vào: dựng đường cuộn và giao diện, rồi tải cảnh 3D
    ├─ env.js                  Màn nhỏ, giảm chuyển động, hàm $ / esc / vnd
@@ -33,7 +33,7 @@ gialam-coffee-roaster/
    │  ├─ stations.js          10 trạm: chữ hiển thị, vị trí camera, điểm đi qua (via)
    │  ├─ menu.js              Menu theo nhóm: [tên, mô tả, giá]
    │  ├─ levels.js            Tỉ lệ mặt bằng PLAN, kích thước xưởng, cao độ các tầng, khối cuối xưởng
-   │  └─ photos.js            Ảnh từng trạm (chưa nối giao diện)
+   │  └─ photos.js            Ảnh thật: vị trí chấm "Xem ảnh" ở từng trạm, chú thích
    │
    ├─ styles/                 CSS tách theo phần, gom trong main.css
    │  ├─ tokens.css           Màu, phông, nền, kiểu chữ chung
@@ -42,6 +42,7 @@ gialam-coffee-roaster/
    │  ├─ caption.css          Chú thích góc dưới (thông tin quán ở màn kết)
    │  ├─ hotspot.css          Chấm "Xem menu"
    │  ├─ menu.css             Khung menu
+   │  ├─ lightbox.css         Khung xem ảnh
    │  ├─ turn.css             Lời nhắc xoay ngang
    │  └─ responsive.css       Điện thoại dọc, điện thoại ngang, màn cảm ứng, giảm chuyển động
    │
@@ -53,7 +54,8 @@ gialam-coffee-roaster/
    │  ├─ menu.js              Khung menu (tab nhóm, Esc để đóng)
    │  ├─ turn.js              Lời nhắc xoay ngang trên điện thoại
    │  ├─ clock.js             Nút Sáng, Chiều, Tối (tự chọn theo giờ Hà Nội) và nút Mưa
-   │  └─ hotspots.js          Chấm "Xem menu" + bấm thẳng vào quầy
+   │  ├─ lightbox.js          Khung xem ảnh toàn màn hình
+   │  └─ hotspots.js          Chấm "Xem menu", chấm "Xem ảnh", bấm thẳng vào quầy
    │
    └─ scene/                  Cảnh 3D
       ├─ index.js             Dựng từng khu theo thứ tự, vòng lặp vẽ
@@ -100,6 +102,8 @@ Quy ước chia lớp giống xom-le-15: **config** chỉ chứa dữ liệu, **
 **Đổi trạm có hoàng hôn**: thêm `dusk: true` cho trạm đó trong `stations.js`.
 
 **Chỉnh màu sáng, chiều, tối**: mỗi màu và độ sáng có ba giá trị theo thứ tự đó, nằm ở đầu `buildAtmosphere()` trong `src/scene/atmosphere.js`. Vệt sáng ban đêm là danh sách `POOLS` cùng file.
+
+**Thêm hoặc đổi ảnh**: chép ảnh vào `public/photos/` (cạnh dài khoảng 2200px là đủ nét), rồi thêm một dòng vào `src/config/photos.js` với đường dẫn, vị trí chấm và chú thích.
 
 **Đổi menu và giá**: sửa `src/config/menu.js`.
 

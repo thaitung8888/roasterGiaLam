@@ -56,6 +56,10 @@
   .caption .info dt { font-size: 9.5px; line-height: 1.7; }
   .caption .fine { font-size: 9.5px; line-height: 1.35; }
 
+  /* ảnh chiếm trọn chiều cao, chú thích nằm cạnh ảnh */
+  .photo { flex-direction: row; gap: 14px; }
+  .photo p { max-width: 24ch; text-align: left; font-size: .8rem; }
+
   /* menu: đầu thẻ và tab thành cột trái, danh sách món chiếm hết phần còn lại */
   .menu { padding: 8px max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px)); }
   .menu-card {

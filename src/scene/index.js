@@ -9,6 +9,7 @@ import { createQuality } from './quality.js';
 import { BUILD_STEPS } from './zones/index.js';
 import { createClock } from '../ui/clock.js';
 import { createHotspots } from '../ui/hotspots.js';
+import { Lightbox } from '../ui/lightbox.js';
 import { Menu } from '../ui/menu.js';
 
 // Bám theo tiến độ cuộn bằng lò xo tới hạn: khởi động êm và dừng êm, tay vuốt giật mấy camera cũng không giật theo.
@@ -52,7 +53,7 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
   });
   function loop(t) {
     requestAnimationFrame(loop);
-    if (Menu.isOpen()) { last = t; return; }
+    if (Menu.isOpen() || Lightbox.isOpen()) { last = t; return; }
     const raw = (t - (last || t)) / 1000, dt = Math.min(0.1, raw);
     const target = scroll.target();
     const moving = cur !== target;
