@@ -5,7 +5,7 @@ import { small } from '../env.js';
 import { SHADOWS, T, lin, scene } from './core.js';
 
 const WARM = '#ffd5a0';
-export const LIGHT = {};   // đèn chung để atmosphere.js đổi màu lúc hoàng hôn
+export const LIGHT = { lamps: [] };   // đèn chung để atmosphere.js đổi theo thời điểm trong ngày
 // [x, y, z, độ sáng, tầm chiếu, màu]
 const CORE = [
   [8.7, 2.5, -14, 0.8, 13, WARM],          // quầy order
@@ -23,7 +23,7 @@ const EXTRA = [
 
 export function buildLights() {
   LIGHT.sky = new T.HemisphereLight(lin('#f2f6f6'), lin('#8a7f6e'), small ? 0.88 : 0.82); scene.add(LIGHT.sky);
-  scene.add(new T.AmbientLight(lin('#ffffff'), 0.12));
+  LIGHT.ambient = new T.AmbientLight(lin('#ffffff'), 0.12); scene.add(LIGHT.ambient);
   const sun = LIGHT.sun = new T.DirectionalLight(lin('#fff2df'), 1.15);
   sun.position.set(-5, 30, 7); sun.target.position.set(1, 0, -13.5); scene.add(sun.target);
   if (SHADOWS) {
@@ -34,6 +34,8 @@ export function buildLights() {
   scene.add(sun);
   (small ? CORE : CORE.concat(EXTRA)).forEach(([x, y, z, i, d, c]) => {
     const l = new T.PointLight(lin(c), i, d, 1.6); l.position.set(x, y, z); scene.add(l);
+    LIGHT.lamps.push(l);
     if (z === -4) LIGHT.dating = l;
+    if (z === -14) LIGHT.bar = l;
   });
 }

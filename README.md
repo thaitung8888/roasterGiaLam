@@ -52,6 +52,7 @@ gialam-coffee-roaster/
    │  ├─ loader.js            Màn tải, chờ phông chữ
    │  ├─ menu.js              Khung menu (tab nhóm, Esc để đóng)
    │  ├─ turn.js              Lời nhắc xoay ngang trên điện thoại
+   │  ├─ clock.js             Nút Sáng, Chiều, Tối; tự chọn theo giờ Hà Nội
    │  └─ hotspots.js          Chấm "Xem menu" + bấm thẳng vào quầy
    │
    └─ scene/                  Cảnh 3D
@@ -62,7 +63,7 @@ gialam-coffee-roaster/
       ├─ random.js            Số ngẫu nhiên có hạt giống (cảnh lần nào cũng giống nhau)
       ├─ materials.js         Vật liệu dùng chung (M.xxx)
       ├─ foliage.js           Lá cây gom vào InstancedMesh, lay trong gió
-      ├─ atmosphere.js        Trời có mây, hoàng hôn ở góc dating, vệt nắng qua kính
+      ├─ atmosphere.js        Sáng, chiều, tối: trời, mây, sao, ánh sáng, vệt sáng lên đèn
       ├─ lights.js            Trời, nắng, đèn điểm (điện thoại dùng ít đèn hơn)
       ├─ plan.js              Co mặt bằng cả cảnh theo PLAN, bàn ghế giữ kích thước thật
       ├─ quality.js           Tự hạ độ phân giải khi máy không theo kịp
@@ -76,7 +77,7 @@ gialam-coffee-roaster/
          ├─ outside.js        Vỉa hè, đường, đê, tranh tường hoa sen, nhà bên
          ├─ shell.js          Vỏ xưởng, mặt tiền, cửa lùa, chữ nổi, mái vì kèo
          ├─ dating.js         Góc dating
-         ├─ dike.js           Người đi bộ và xe đạp trên mặt đê, nhìn từ kính dating
+         ├─ dike.js           Người đi bộ, xe đạp, đèn đường trên mặt đê
          ├─ floor2.js         Tầng 2 + cầu thang thép từ tầng 1
          ├─ bar.js            Quầy order
          ├─ camping.js        Khu camping, cột 4 đèn tuýp, cây ficus
@@ -96,7 +97,9 @@ Quy ước chia lớp giống xom-le-15: **config** chỉ chứa dữ liệu, **
 
 **Camera đi qua cầu thang hoặc lối đi**: thêm điểm vào `via` của trạm đích. Camera đi ngang các điểm này mà không dừng lại.
 
-**Đổi trạm có hoàng hôn**: thêm `dusk: true` cho trạm đó trong `stations.js`. Màu trời và ánh sáng nằm trong `src/scene/atmosphere.js`.
+**Đổi trạm có hoàng hôn**: thêm `dusk: true` cho trạm đó trong `stations.js`.
+
+**Chỉnh màu sáng, chiều, tối**: mỗi màu và độ sáng có ba giá trị theo thứ tự đó, nằm ở đầu `buildAtmosphere()` trong `src/scene/atmosphere.js`. Vệt sáng ban đêm là danh sách `POOLS` cùng file.
 
 **Đổi menu và giá**: sửa `src/config/menu.js`.
 

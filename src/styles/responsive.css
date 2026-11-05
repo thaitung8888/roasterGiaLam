@@ -30,6 +30,8 @@
   .brand b { font-size: 14px; }
   .brand small { display: none; }
   .meter { top: calc(13px + env(safe-area-inset-top, 0px)); font-size: 11px; }
+  .clock { top: calc(6px + env(safe-area-inset-top, 0px)); }
+  .clock button { padding: 6px 8px; font-size: 10.5px; }
   .rail { gap: 0; }
   .rail button { padding: 3px 0; }
   .rail .lbl { display: none; }

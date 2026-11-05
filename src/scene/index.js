@@ -1,12 +1,13 @@
 // Khởi động cảnh: dựng từng khu (có thanh tải), rồi chạy vòng lặp vẽ.
 import { STATIONS } from '../config/stations.js';
 import { reduce } from '../env.js';
-import { setMood } from './atmosphere.js';
+import { setMood, setTime } from './atmosphere.js';
 import { createRig } from './cameraRig.js';
 import { SHADOWS, camera, initCore, renderer, runFrame, scene } from './core.js';
 import { toPlan } from './helpers.js';
 import { createQuality } from './quality.js';
 import { BUILD_STEPS } from './zones/index.js';
+import { createClock } from '../ui/clock.js';
 import { createHotspots } from '../ui/hotspots.js';
 import { Menu } from '../ui/menu.js';
 
@@ -39,6 +40,7 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
       try {
         if (i < BUILD_STEPS.length) { BUILD_STEPS[i++](); onProgress(0.08 + 0.87 * i / BUILD_STEPS.length); requestAnimationFrame(next); return; }
         hs = createHotspots();
+        createClock(setTime);
         rig.fit(); scroll.measure(); cur = scroll.target(); rig.place(cur);
         renderer.compile(scene, camera);
         // cảnh tĩnh và không vật chuyển động nào đổ bóng: tính bóng một lần rồi dùng lại

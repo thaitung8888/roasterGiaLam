@@ -99,7 +99,7 @@ export function buildShell() {
   noCast(plane(x1 - x0 + 0.4, 0.88, std('#cfd6d6', 0.3, 0.2, { transparent: true, opacity: 0.3, side: T.DoubleSide }), 0, RY + 0.55, RZ));
   const lt = letterTex(), LW = 11.8, LH = LW * 216 / 2048;
   const back = new T.MeshStandardMaterial({ map: lt, alphaTest: 0.5, color: lin('#565d92'), roughness: 0.55, metalness: 0.15 });
-  const face = new T.MeshStandardMaterial({ map: lt, alphaTest: 0.5, color: lin('#c2c6ee'), roughness: 0.45, metalness: 0.1, emissive: lin('#2a2f55'), emissiveIntensity: 0.25 });
+  const face = M.signFace = new T.MeshStandardMaterial({ map: lt, alphaTest: 0.5, color: lin('#c2c6ee'), roughness: 0.45, metalness: 0.1, emissive: lin('#2a2f55'), emissiveIntensity: 0.25 });
   for (let k = 0; k <= 8; k++) { const m = new T.Mesh(new T.PlaneGeometry(LW, LH), k === 8 ? face : back); m.position.set(1.5, RY + LH / 2 - 0.02 - (8 - k) * 0.008, k * 0.03); keep(noCast(add(m))); }
   // bồn cây chân tường
   const planterM = std('#c3c4be', 0.9);

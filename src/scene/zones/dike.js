@@ -1,8 +1,9 @@
-// Mặt đê có người: vài người đi bộ và xe đạp lướt qua, nhìn từ kính dating thấy dáng in trên nền trời.
+// Mặt đê có người: vài người đi bộ và xe đạp lướt qua, nhìn từ kính dating thấy dáng in trên nền trời. Ban đêm có đèn đường.
 // Chỉ vẽ khi camera ở gần góc dating, các trạm khác không phải trả chi phí này.
 import { mood } from '../atmosphere.js';
-import { T, onFrame } from '../core.js';
+import { T, lin, onFrame } from '../core.js';
 import { V, add, box, cyl, group, live, rod, std } from '../helpers.js';
+import { TX } from '../textures/index.js';
 
 const Y = 4.42, X0 = -48, X1 = 48;
 
@@ -34,8 +35,15 @@ export function buildDike() {
     return { ...f, v, x, step: x };
   });
   add(all);
+  // đèn đường chỉ hiện ban đêm, đứng sau đỉnh đê nên ban ngày ven đê vẫn như cũ
+  const street = live(group()), glowM = new T.MeshBasicMaterial({ map: TX.glow, color: lin('#ffc98a'), transparent: true, blending: T.AdditiveBlending, depthWrite: false, fog: false, toneMapped: false });
+  for (let x = -40; x <= 40; x += 16) {
+    rod(V(x, Y, 20.6), V(x, Y + 5.2, 20.6), 0.05, std('#14161a', 0.6, 0.4), street, 6);
+    const head = new T.Mesh(new T.PlaneGeometry(2.4, 2.4), glowM); head.position.set(x, Y + 5.2, 20.5); head.rotation.y = Math.PI; street.add(head);
+  }
+  add(street);
   onFrame((t, dt) => {
-    all.visible = mood.near;
+    all.visible = mood.near; street.visible = mood.night;
     if (!mood.near) return;
     for (const p of items) {
       p.x += p.v * dt;
