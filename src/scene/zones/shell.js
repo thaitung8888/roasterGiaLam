@@ -1,8 +1,8 @@
 // Vỏ xưởng: sàn, tường, mặt tiền (kính, cửa lùa, chữ nổi), mái vì kèo, quạt hút, điều hoà, ống gió.
-import { HALL } from '../../config/levels.js';
+import { HALL, PLAN } from '../../config/levels.js';
 import { T, camera, lin, onFrame, scene } from '../core.js';
 import { leafBlob } from '../foliage.js';
-import { GLASS, V, add, beam, box, boxAt, cyl, group, live, noCast, plane, quad, rod, std } from '../helpers.js';
+import { GLASS, V, add, beam, box, boxAt, cyl, fit, group, keep, live, noCast, plane, quad, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { monstera } from '../props/plants.js';
 import { R, rr } from '../random.js';
@@ -62,7 +62,7 @@ export function buildShell() {
   skinRegion(x0 - 0.2, XL, M.corrGreen); skinRegion(XL, x1 + 0.2, M.facadeGreen);
   const pipe = std('#8e9a95', 0.5, 0.3);
   for (const x of [XL - 0.12, x1 + 0.05]) rod(V(x, 0, 0.17), V(x, PT - 0.1, 0.17), 0.055, pipe, scene, 10);
-  noCast(plane(2.0, 0.85, new T.MeshStandardMaterial({ map: TX.graffiti, roughness: 0.9 }), -9.0, 0.44, 0.09));
+  keep(noCast(plane(2.0, 0.85, new T.MeshStandardMaterial({ map: TX.graffiti, roughness: 0.9 }), -9.0, 0.44, 0.09)));
   // ô kính dài góc dating, khung đen dày
   noCast(plane(W.x1 - W.x0, W.y1 - W.y0, GLASS(), (W.x0 + W.x1) / 2, (W.y0 + W.y1) / 2, -0.08));
   boxAt(W.x0 - 0.05, W.x1 + 0.05, W.y0 - 0.05, W.y0, 0.1, -0.2, M.steel); boxAt(W.x0 - 0.05, W.x1 + 0.05, W.y1, W.y1 + 0.05, 0.1, -0.2, M.steel);
@@ -74,7 +74,7 @@ export function buildShell() {
   boxAt(D.x0, D.x1, 2.42, 2.48, 0.0, -0.18, M.steel);
   for (const x of [D.x0, DL, DR, D.x1]) boxAt(x - 0.035, x + 0.035, 0, D.y1, 0.1, -0.18, M.steel);
   boxAt(D.x0 + 0.2, DR + 0.1, 2.5, 2.57, -0.21, -0.33, M.steel);   // ray treo cánh cửa phía trong
-  const door = live(group((DL + DR) / 2, 0, -0.27));
+  const door = fit(live(group((DL + DR) / 2, 0, -0.27)));
   plane(leafW - 0.06, 2.36, GLASS(), 0, 1.21, 0, 0, door);
   box(leafW, 0.06, 0.05, M.steel, 0, 2.42, 0, door); box(leafW, 0.08, 0.05, M.steel, 0, 0.04, 0, door);
   for (const xx of [-leafW / 2 + 0.03, leafW / 2 - 0.03]) box(0.06, 2.44, 0.05, M.steel, xx, 1.22, 0, door);
@@ -82,7 +82,7 @@ export function buildShell() {
   for (const xx of [-leafW / 2 + 0.25, leafW / 2 - 0.25]) cyl(0.035, 0.035, 0.04, M.steel, xx, 2.5, 0, 10, door).rotation.x = Math.PI / 2;
   let open = 0;
   onFrame((t, dt) => {
-    const want = camera.position.z < 5.5 && camera.position.z > -3.5 && Math.abs(camera.position.x - (DL + DR) / 2) < 4.5 ? 1 : 0;
+    const cx = camera.position.x / PLAN, cz = camera.position.z / PLAN, want = cz < 5.5 && cz > -3.5 && Math.abs(cx - (DL + DR) / 2) < 4.5 ? 1 : 0;
     open += (want - open) * Math.min(1, dt * 2.2);
     door.position.x = (DL + DR) / 2 - open * (leafW - 0.1);
   });
@@ -100,7 +100,7 @@ export function buildShell() {
   const lt = letterTex(), LW = 11.8, LH = LW * 216 / 2048;
   const back = new T.MeshStandardMaterial({ map: lt, alphaTest: 0.5, color: lin('#565d92'), roughness: 0.55, metalness: 0.15 });
   const face = new T.MeshStandardMaterial({ map: lt, alphaTest: 0.5, color: lin('#c2c6ee'), roughness: 0.45, metalness: 0.1, emissive: lin('#2a2f55'), emissiveIntensity: 0.25 });
-  for (let k = 0; k <= 8; k++) { const m = new T.Mesh(new T.PlaneGeometry(LW, LH), k === 8 ? face : back); m.position.set(1.5, RY + LH / 2 - 0.02 - (8 - k) * 0.008, k * 0.03); noCast(add(m)); }
+  for (let k = 0; k <= 8; k++) { const m = new T.Mesh(new T.PlaneGeometry(LW, LH), k === 8 ? face : back); m.position.set(1.5, RY + LH / 2 - 0.02 - (8 - k) * 0.008, k * 0.03); keep(noCast(add(m))); }
   // bồn cây chân tường
   const planterM = std('#c3c4be', 0.9);
   for (const [a, b] of [[XL + 0.25, D.x0 - 0.2], [D.x1 + 0.2, x1 + 0.1]]) {

@@ -2,16 +2,36 @@
 import { STATIONS } from '../config/stations.js';
 import { reduce } from '../env.js';
 import { createRig } from './cameraRig.js';
-import { camera, initCore, renderer, runFrame, scene } from './core.js';
+import { SHADOWS, camera, initCore, renderer, runFrame, scene } from './core.js';
+import { toPlan } from './helpers.js';
+import { createQuality } from './quality.js';
 import { BUILD_STEPS } from './zones/index.js';
 import { createHotspots } from '../ui/hotspots.js';
 import { Menu } from '../ui/menu.js';
 
+// Bám theo tiến độ cuộn bằng lò xo tới hạn: khởi động êm và dừng êm, tay vuốt giật mấy camera cũng không giật theo.
+const SMOOTH = 0.26;
+function follow(cur, target, s, dt) {
+  const o = 2 / SMOOTH, x = o * dt, e = 1 / (1 + x + 0.48 * x * x + 0.235 * x * x * x), d = cur - target, tmp = (s.v + o * d) * dt;
+  s.v = (s.v - o * tmp) * e;
+  return target + (d + tmp) * e;
+}
+// Vẽ một lần sau màn tải, kể cả thứ ngoài khung hình: texture và shader lên GPU sẵn, cú cuộn đầu không bị khựng.
+function warmUp() {
+  const off = [];
+  scene.traverse(o => { if (o.isMesh && o.frustumCulled) { o.frustumCulled = false; off.push(o); } });
+  renderer.render(scene, camera);
+  off.forEach(o => { o.frustumCulled = true; });
+}
+const IDLE_MS = 32;   // camera đứng yên: chỉ vẽ khoảng 30 hình/giây cho quạt, cửa, đỡ nóng máy
+
 export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
   initCore(canvas);
   const rig = createRig(STATIONS);
-  addEventListener('resize', () => { rig.fit(); scroll.measure(); });
-  let cur = 0, last = 0, hs;
+  addEventListener('resize', () => rig.fit());
+  const quality = createQuality();
+  const spring = { v: 0 };
+  let cur = 0, last = 0, drawn = 0, hs;
   return new Promise((resolve, reject) => {
     let i = 0;
     (function next() {
@@ -20,6 +40,9 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
         hs = createHotspots();
         rig.fit(); scroll.measure(); cur = scroll.target(); rig.place(cur);
         renderer.compile(scene, camera);
+        // cảnh tĩnh và không vật chuyển động nào đổ bóng: tính bóng một lần rồi dùng lại
+        if (SHADOWS) { renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true; }
+        warmUp();
         onReady(); requestAnimationFrame(loop); resolve();
       } catch (err) { reject(err); }
     })();
@@ -27,13 +50,18 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
   function loop(t) {
     requestAnimationFrame(loop);
     if (Menu.isOpen()) { last = t; return; }
-    const dt = Math.min(0.1, (t - (last || t)) / 1000); last = t;
+    const raw = (t - (last || t)) / 1000, dt = Math.min(0.1, raw);
     const target = scroll.target();
-    cur += (target - cur) * (reduce ? 1 : 1 - Math.exp(-dt * 4.2));
-    if (Math.abs(target - cur) < 1e-4) cur = target;
+    const moving = cur !== target;
+    if (!moving && rig.still() && t - drawn < IDLE_MS && !(import.meta.env.DEV && window.__cam)) return;
+    last = t; drawn = t;
+    if (reduce) cur = target;
+    else cur = follow(cur, target, spring, dt);
+    if (Math.abs(target - cur) < 2e-4 && Math.abs(spring.v) < 2e-3) { cur = target; spring.v = 0; }
+    if (moving) quality.sample(raw);
     rig.place(cur); hud.update(cur);
     // góc máy thử khi so với ảnh thật (chỉ khi chạy npm run dev): gõ window.__cam = { pos: [x, y, z], look: [x, y, z] } trong console
-    if (import.meta.env.DEV && window.__cam) { camera.position.set(...window.__cam.pos); camera.lookAt(...window.__cam.look); }
+    if (import.meta.env.DEV && window.__cam) { camera.position.copy(toPlan(...window.__cam.pos)); camera.lookAt(toPlan(...window.__cam.look)); }
     runFrame(t, dt);
     hs.update(cur);
     renderer.render(scene, camera);

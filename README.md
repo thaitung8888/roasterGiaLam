@@ -32,7 +32,7 @@ gialam-coffee-roaster/
    │  ├─ shop.js              Địa chỉ, giờ mở cửa, giá, wifi
    │  ├─ stations.js          10 trạm: chữ hiển thị, vị trí camera, điểm đi qua (via)
    │  ├─ menu.js              Menu theo nhóm: [tên, mô tả, giá]
-   │  ├─ levels.js            Kích thước xưởng, cao độ các tầng, khối cuối xưởng
+   │  ├─ levels.js            Tỉ lệ mặt bằng PLAN, kích thước xưởng, cao độ các tầng, khối cuối xưởng
    │  └─ photos.js            Ảnh từng trạm (chưa nối giao diện)
    │
    ├─ styles/                 CSS tách theo phần, gom trong main.css
@@ -42,7 +42,8 @@ gialam-coffee-roaster/
    │  ├─ caption.css          Chú thích góc dưới (thông tin quán ở màn kết)
    │  ├─ hotspot.css          Chấm "Xem menu"
    │  ├─ menu.css             Khung menu
-   │  └─ responsive.css       Điện thoại, giảm chuyển động
+   │  ├─ turn.css             Lời nhắc xoay ngang
+   │  └─ responsive.css       Điện thoại dọc, điện thoại ngang, màn cảm ứng, giảm chuyển động
    │
    ├─ ui/                     Giao diện HTML (không dính tới 3D)
    │  ├─ sections.js          Tạo <section> và HTML chú thích từ stations.js
@@ -50,6 +51,7 @@ gialam-coffee-roaster/
    │  ├─ hud.js               Phần trăm, thanh trạm, đổi chú thích
    │  ├─ loader.js            Màn tải, chờ phông chữ
    │  ├─ menu.js              Khung menu (tab nhóm, Esc để đóng)
+   │  ├─ turn.js              Lời nhắc xoay ngang trên điện thoại
    │  └─ hotspots.js          Chấm "Xem menu" + bấm thẳng vào quầy
    │
    └─ scene/                  Cảnh 3D
@@ -60,7 +62,9 @@ gialam-coffee-roaster/
       ├─ random.js            Số ngẫu nhiên có hạt giống (cảnh lần nào cũng giống nhau)
       ├─ materials.js         Vật liệu dùng chung (M.xxx)
       ├─ foliage.js           Lá cây gom vào InstancedMesh
-      ├─ lights.js            Trời, nắng, đèn vàng ấm
+      ├─ lights.js            Trời, nắng, đèn điểm (điện thoại dùng ít đèn hơn)
+      ├─ plan.js              Co mặt bằng cả cảnh theo PLAN, bàn ghế giữ kích thước thật
+      ├─ quality.js           Tự hạ độ phân giải khi máy không theo kịp
       ├─ merge.js             Gộp khối tĩnh cùng vật liệu, UV theo mét
       ├─ textures/            Texture vẽ bằng canvas: tường, sàn, gạch, cỏ, lá, chữ nổi
       ├─ props/
@@ -84,7 +88,9 @@ Quy ước chia lớp giống xom-le-15: **config** chỉ chứa dữ liệu, **
 
 **Đổi chữ ở một trạm**: sửa `title` / `body` trong `src/config/stations.js`.
 
-**Chỉnh góc máy**: sửa `camera.pos` (vị trí) và `camera.look` (điểm nhìn) của trạm. Trục toạ độ: `x` từ -10 (tường trái) tới 10 (tường phải, phía quầy); `z` từ 0 (mặt tiền) tới -30 (tường sau); `y` là chiều cao. Khi chạy `npm run dev`, gõ `window.__cam = { pos: [x, y, z], look: [x, y, z] }` trong console để thử một góc máy bất kỳ.
+**Đổi kích thước quán**: sửa `PLAN` trong `src/config/levels.js` (0.85 là chiều dài và rộng còn 85%). Chiều cao giữ nguyên. Toạ độ trong `zones/` và `stations.js` vẫn là toạ độ thiết kế, nên không cần sửa từng số.
+
+**Chỉnh góc máy**: sửa `camera.pos` (vị trí) và `camera.look` (điểm nhìn) của trạm. Trục toạ độ thiết kế: `x` từ -10 (tường trái) tới 10 (tường phải, phía quầy); `z` từ 0 (mặt tiền) tới -30 (tường sau); `y` là chiều cao. Khi chạy `npm run dev`, gõ `window.__cam = { pos: [x, y, z], look: [x, y, z] }` trong console để thử một góc máy bất kỳ.
 
 **Camera đi qua cầu thang hoặc lối đi**: thêm điểm vào `via` của trạm đích. Camera đi ngang các điểm này mà không dừng lại.
 
@@ -92,7 +98,7 @@ Quy ước chia lớp giống xom-le-15: **config** chỉ chứa dữ liệu, **
 
 **Thông tin quán, wifi**: sửa `src/config/shop.js`.
 
-**Thêm một khu mới**: tạo file trong `src/scene/zones/`, export hàm `buildTenKhu()`, rồi thêm vào `BUILD_STEPS` trong `zones/index.js`. Hiệu ứng chạy mỗi khung hình (cửa lùa, quạt…) thì đăng ký bằng `onFrame(fn)` từ `scene/core.js`. Vật chuyển động hoặc bấm được thì bọc bằng `live()`, để bước gộp mesh bỏ qua.
+**Thêm một khu mới**: tạo file trong `src/scene/zones/`, export hàm `buildTenKhu()`, rồi thêm vào `BUILD_STEPS` trong `zones/index.js`. Hiệu ứng chạy mỗi khung hình (cửa lùa, quạt…) thì đăng ký bằng `onFrame(fn)` từ `scene/core.js`. Vật chuyển động hoặc bấm được thì bọc bằng `live()`, để bước gộp mesh bỏ qua. Khi mặt bằng co, vật dựng bằng `group()` giữ nguyên kích thước thật; hình in và quả cầu thì bọc bằng `keep()`, còn cánh cửa hoặc nhóm dùng toạ độ tuyệt đối thì bọc bằng `fit()`.
 
 ## Đưa lên mạng (Vercel)
 

@@ -8,7 +8,74 @@
   .caption.right .eyebrow, .caption.right .acts { justify-content: flex-start; }
   .brand small { display: none; }
 }
+/* màn cảm ứng: buông tay gần trạm nào thì trang tự trôi về đúng trạm đó */
+@media (pointer: coarse) {
+  html { scroll-snap-type: y proximity; }
+  .stop { scroll-snap-align: center; }
+  /* làm mờ nền phải tính lại mỗi khung hình, rất nặng với điện thoại */
+  .caption.panel { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(14, 20, 19, .9); }
+  .menu { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(9, 13, 13, .78); }
+}
+
+/* điện thoại xoay ngang: chiều cao chỉ khoảng 360–430px, mọi thứ gọn lại để nhường chỗ cho cảnh */
+@media (max-height: 520px) and (orientation: landscape) {
+  .stop { min-height: 150vh; }
+  .stop.hero { padding-block: 0 9vh; }
+  .hero-copy { gap: 6px; max-width: 26rem; }
+  .hero h1 { font-size: clamp(1.5rem, 8.4vh, 2.1rem); max-width: 16ch; }
+  .hero .lede { font-size: .8rem; line-height: 1.4; max-width: 44ch; }
+  .hint { margin-top: 2px; font-size: 10px; }
+  .hint i { height: 16px; }
+  .eyebrow { font-size: 10px; }
+
+  .brand { top: calc(8px + env(safe-area-inset-top, 0px)); gap: 7px; }
+  .brand .mark { width: 26px; height: 26px; font-size: 10px; }
+  .brand b { font-size: 14px; }
+  .brand small { display: none; }
+  .meter { top: calc(13px + env(safe-area-inset-top, 0px)); font-size: 11px; }
+  .rail { gap: 0; }
+  .rail button { padding: 3px 0; }
+  .rail .lbl { display: none; }
+  .rail .tick { width: 10px; }
+  .rail button.on .tick { width: 20px; }
+
+  .caption, .caption.right { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); width: min(20rem, 42vw); gap: 3px; }
+  .caption.right { right: max(44px, calc(env(safe-area-inset-right, 0px) + 28px)); }
+  .caption .eyebrow { font-size: 10px; }
+  .caption h2 { font-size: 1rem; }
+  .caption p:not(.eyebrow) { font-size: .74rem; line-height: 1.38; }
+  .caption .acts { margin-top: 3px; }
+  .caption .btn { padding: 7px 11px; font-size: 12px; }
+
+  /* bảng thông tin cuối: chia hai cột để không đè lên logo */
+  .caption.panel {
+    width: min(37rem, calc(100vw - 96px)); padding: 12px 14px; bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); column-gap: 18px; row-gap: 4px; align-content: start;
+  }
+  .caption.panel > :not(.info) { grid-column: 1; }
+  .caption.panel .info { grid-column: 2; grid-row: 1 / span 4; margin: 0; gap: 2px 10px; font-size: 11.5px; line-height: 1.35; }
+  .caption .info dt { font-size: 9.5px; line-height: 1.7; }
+  .caption .fine { font-size: 9.5px; line-height: 1.35; }
+
+  /* menu: đầu thẻ và tab thành cột trái, danh sách món chiếm hết phần còn lại */
+  .menu { padding: 8px max(10px, env(safe-area-inset-right, 0px)) 8px max(10px, env(safe-area-inset-left, 0px)); }
+  .menu-card {
+    width: min(50rem, 100%); height: 100%;
+    display: grid; grid-template-columns: minmax(0, 12.5rem) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+  .menu-head { grid-column: 1; grid-row: 1; padding: 12px 14px 10px; gap: 2px; }
+  .menu-head .eyebrow { display: none; }
+  .menu-head h2 { font-size: 1.4rem; }
+  .menu-head p:not(.eyebrow) { font-size: .72rem; line-height: 1.35; }
+  .menu-close { top: 10px; right: 10px; padding: 6px 8px; }
+  .menu-tabs { grid-column: 1; grid-row: 2 / span 2; flex-direction: column; gap: 0; padding: 4px 8px; overflow-x: hidden; overflow-y: auto; border-bottom: 0; border-right: 1px solid rgba(23, 32, 31, .12); }
+  .menu-tabs button { flex: none; text-align: left; padding: 9px 8px; border-bottom: 0; border-left: 2px solid transparent; margin: 0; }
+  .menu-tabs button[aria-selected="true"] { border-left-color: var(--teal); }
+  .menu-body { grid-column: 2; grid-row: 1 / span 2; padding: 12px 16px 6px; gap: 14px; }
+  .menu-sec h3 { font-size: 1rem; }
+  .menu-foot { grid-column: 2; grid-row: 3; margin: 0; padding: 6px 16px 8px; font-size: 9.5px; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .hint i, .hs .dot { animation: none; }
+  .hint i, .hs .dot, .turn-phone .phone { animation: none; }
   .caption { transition: none; }
 }

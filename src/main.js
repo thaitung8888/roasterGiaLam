@@ -10,7 +10,9 @@ import { finishLoad, fontsReady, setLoad } from './ui/loader.js';
 import { Menu } from './ui/menu.js';
 import { createScroll } from './ui/scroll.js';
 import { renderTrack } from './ui/sections.js';
+import { createTurnPrompt } from './ui/turn.js';
 
+createTurnPrompt();
 const sections = renderTrack(STATIONS, $('track'));
 const scroll = createScroll(sections);
 const hud = createHud(STATIONS, scroll);

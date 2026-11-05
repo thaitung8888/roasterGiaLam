@@ -13,11 +13,15 @@ export const runFrame = (t, dt) => { for (const f of frameFns) f(t, dt); };
 export const lin = h => new T.Color(h).convertSRGBToLinear();
 // vật thể bấm được trong cảnh (khối vô hình trùm quầy order để mở menu)
 export const PICK = {};
+// kích thước canvas: CSS giữ canvas ở chiều cao lớn nhất, nên thanh địa chỉ ẩn hiện không làm đổi số này
+export const view = { w: innerWidth, h: innerHeight };
+export function measureView() { view.w = renderer.domElement.clientWidth; view.h = renderer.domElement.clientHeight; }
 
 export function initCore(canvas) {
   renderer = new T.WebGLRenderer({ canvas, antialias: devicePixelRatio < 2, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.4 : 1.75));
-  renderer.setSize(innerWidth, innerHeight);
+  measureView();
+  renderer.setSize(view.w, view.h, false);
   renderer.outputEncoding = T.sRGBEncoding;
   renderer.toneMapping = T.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.02;
@@ -26,5 +30,5 @@ export function initCore(canvas) {
   maxAniso = renderer.capabilities.getMaxAnisotropy();
   scene = new T.Scene();
   scene.fog = new T.Fog(lin('#dfe7e6'), 55, 170);
-  camera = new T.PerspectiveCamera(55, innerWidth / innerHeight, 0.05, 260);
+  camera = new T.PerspectiveCamera(55, view.w / view.h, 0.05, 260);
 }

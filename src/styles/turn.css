@@ -1,0 +1,13 @@
+/* Lời nhắc xoay ngang trên điện thoại. */
+.turn {
+  position: fixed; inset: 0; z-index: 40; background: var(--char); color: var(--paper);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center;
+  padding: calc(24px + env(safe-area-inset-top, 0px)) 28px calc(24px + env(safe-area-inset-bottom, 0px));
+}
+.turn h2 { font-size: 1.5rem; }
+.turn p { margin: 0 0 12px; max-width: 26ch; font-size: .95rem; line-height: 1.5; opacity: .85; }
+.turn .btn { align-self: center; }
+.turn-phone { width: 88px; height: 88px; margin-bottom: 6px; fill: none; stroke: var(--teal-lite); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.turn-phone .phone { transform-origin: 32px 32px; animation: turn 2.6s ease-in-out infinite; }
+.turn-phone .arc { opacity: .5; stroke-width: 2; }
+@keyframes turn { 0%, 18% { transform: rotate(0); } 52%, 82% { transform: rotate(90deg); } 100% { transform: rotate(0); } }

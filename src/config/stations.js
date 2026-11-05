@@ -1,5 +1,5 @@
 // Các trạm dừng khi cuộn, theo thứ tự camera đi qua.
-//   camera.pos / camera.look : vị trí camera và điểm nhìn
+//   camera.pos / camera.look : vị trí camera và điểm nhìn, viết theo toạ độ thiết kế (xem PLAN trong levels.js)
 //   via    : các điểm camera đi ngang qua trước khi tới trạm (lối đi, bậc thang), không dừng
 //   menu   : true thì trạm có nút và chấm "Xem menu"
 //   side   : chú thích nằm góc trái hay phải
@@ -17,15 +17,15 @@ export const STATIONS = [
     title: 'Cửa kính, bên trong mát điều hoà',
     body: 'Ô tô đỗ ngay trước cửa, xe máy để trên vỉa hè. Quán không nhận chó mèo.' },
   { id: 'quay', label: 'Quầy order', side: 'left', menu: true,
-    camera: { pos: [0.4, 2.8, -8.4], look: [8.4, 1.1, -13.6] },
+    camera: { pos: [4.6, 1.6, -7.2], look: [8.2, 1.25, -15.5] },
     title: 'Quầy gỗ xanh, máy pha và tủ bánh',
     body: 'Bấm vào quầy để xem menu. Có bánh ngọt, thanh toán chuyển khoản.' },
-  { id: 'camping', label: 'Khu camping', side: 'right',
-    camera: { pos: [5.2, 1.75, -23.8], look: [-1.2, 2.0, -12.6] },
+  { id: 'camping', label: 'Khu camping', side: 'left',
+    camera: { pos: [6.0, 1.5, -15], look: [-6, 2.7, -13.6] },
     title: 'Ghế xếp dã ngoại quanh gốc cây giữa xưởng',
     body: 'Vài bộ ghế xếp đặt rải rác, bàn nhôm gấp. Cột giữa có 4 đèn rọi ra 4 phía, bồn cây xanh chạy dọc dưới tầng 2.' },
   { id: 'xuong-rang', label: 'Xưởng rang', side: 'right',
-    camera: { pos: [1.3, 1.8, -21.5], look: [1.9, 1.3, -29.5] },
+    camera: { pos: [1.7, 1.7, -22], look: [2.3, 1.35, -29.5] },
     title: 'Hạt rang ngay trong quán',
     body: 'Cuối xưởng chia đôi: bên trái là kho hạt, bên phải là phòng rang mở với tường gạch, máy rang trên xe đẩy và sofa da ngồi chờ.' },
   { id: 'dating', label: 'Góc dating', side: 'left',
@@ -53,16 +53,16 @@ export const STATIONS = [
       { pos: [-9.2, 4.3, -22.6], look: [-9.2, 4.8, -27] },
       { pos: [-9.2, 4.95, -25.3], look: [-7.0, 4.6, -27.5] }
     ],
-    camera: { pos: [-4.4, 4.85, -28.7], look: [-7.4, 3.95, -25.1] },
+    camera: { pos: [-4.3, 4.95, -29.0], look: [-6.6, 3.95, -24.7] },
     title: 'Dãy bàn 4 chỗ trên tầng 3, có ổ cắm',
     body: 'Phần trong nhà của tầng 3, lên từ tầng 2 qua vài bậc. Góc yên tĩnh nhất để mở laptop.' },
-  { id: 'san-t3', label: 'Sân tầng 3', side: 'left',
+  { id: 'san-t3', label: 'Sân tầng 3', side: 'right',
     via: [   // qua cửa kính ra sân
       { pos: [-6.6, 4.95, -27.9], look: [2.0, 4.85, -29.6] },
       { pos: [-4.8, 4.95, -28.3], look: [2.0, 4.9, -28.3] },
       { pos: [-2.4, 4.95, -28.3], look: [6.0, 4.6, -27.2] }
     ],
-    camera: { pos: [5.4, 5.0, -25.95], look: [3.0, 4.55, -32.0] },
+    camera: { pos: [0.6, 5.0, -26.6], look: [9, 4.7, -30] },
     title: 'Nửa ngoài trời, dưới tán cây lớn',
     body: 'Nằm trên xưởng rang. Mặt sau mở ra tán cây lớn, bồn bê tông trồng cây rậm, ghế băng xanh rêu và ghế gỗ ép.' },
   { id: 'hen-o-xuong', kind: 'outro', label: 'Hẹn ở xưởng', side: 'left',

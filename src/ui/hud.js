@@ -12,7 +12,7 @@ export function createHud(stations, scroll) {
     b.addEventListener('click', () => scroll.goTo(i));
     li.appendChild(b); rail.appendChild(li); return b;
   });
-  let timer = 0, active = -1;
+  let timer = 0, active = -1, pct = '';
   function swap(i) {
     clearTimeout(timer); caption.classList.remove('show');
     const html = captionHtml(stations[i], i);
@@ -26,7 +26,8 @@ export function createHud(stations, scroll) {
   }
   return {
     update(p) {
-      meter.textContent = String(Math.round(p / (N - 1) * 100)).padStart(2, '0') + '%';
+      const text = String(Math.round(p / (N - 1) * 100)).padStart(2, '0') + '%';
+      if (text !== pct) meter.textContent = pct = text;
       const a = Math.round(p);
       if (a === active) return;
       active = a;

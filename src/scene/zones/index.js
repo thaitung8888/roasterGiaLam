@@ -3,6 +3,7 @@ import { flushFoliage } from '../foliage.js';
 import { buildLights } from '../lights.js';
 import { buildMaterials } from '../materials.js';
 import { mergeStatic } from '../merge.js';
+import { shrinkPlan } from '../plan.js';
 import { buildTextures } from '../textures/index.js';
 import { buildBar } from './bar.js';
 import { buildCamping } from './camping.js';
@@ -13,4 +14,4 @@ import { buildOutside } from './outside.js';
 import { buildRoastery } from './roastery.js';
 import { buildShell } from './shell.js';
 
-export const BUILD_STEPS = [buildTextures, buildMaterials, buildOutside, buildShell, buildDating, buildFloor2, buildBar, buildCamping, buildRoastery, buildFloor3, flushFoliage, buildLights, mergeStatic];
+export const BUILD_STEPS = [buildTextures, buildMaterials, buildOutside, buildShell, buildDating, buildFloor2, buildBar, buildCamping, buildRoastery, buildFloor3, flushFoliage, buildLights, shrinkPlan, mergeStatic];

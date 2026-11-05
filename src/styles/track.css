@@ -2,7 +2,7 @@
 /* đường cuộn */
 main { position: relative; z-index: 2; }
 .stop { min-height: 170vh; }
-.stop.hero { min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; padding-block: 0 12vh; }
+.stop.hero { box-sizing: border-box; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end; padding-block: 0 12vh; }
 .stop.outro { min-height: 110vh; }
 .hero-copy { display: flex; flex-direction: column; gap: 14px; max-width: 42rem; min-width: 0; text-shadow: 0 2px 18px rgba(0, 0, 0, .45); }
 .hero h1 { font-size: clamp(2.3rem, 6vw, 4.7rem); max-width: 13ch; }

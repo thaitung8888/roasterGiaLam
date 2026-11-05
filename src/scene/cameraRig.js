@@ -1,7 +1,7 @@
 // Đường bay camera qua các trạm (và các điểm via), cộng chút liếc theo chuột.
 import { reduce } from '../env.js';
-import { T, camera, renderer } from './core.js';
-import { UP, V } from './helpers.js';
+import { T, camera, measureView, renderer, view } from './core.js';
+import { UP, toPlan, V } from './helpers.js';
 
 export function createRig(stations) {
   const N = stations.length;
@@ -13,12 +13,12 @@ export function createRig(stations) {
     idx = [];
     stations.forEach(s => { (s.via || []).forEach(v => pts.push(v)); idx.push(pts.length); pts.push(cam(s)); });
     M1 = pts.length - 1;
-    posC = new T.CatmullRomCurve3(pts.map(c => V(...c.pos)), false, 'centripetal');
-    lookC = new T.CatmullRomCurve3(pts.map(c => V(...c.look)), false, 'centripetal');
+    posC = new T.CatmullRomCurve3(pts.map(c => toPlan(...c.pos)), false, 'centripetal');
+    lookC = new T.CatmullRomCurve3(pts.map(c => toPlan(...c.look)), false, 'centripetal');
   }
-  build(innerWidth / innerHeight < 0.8);
+  build(view.w / view.h < 0.8);
   const p = V(0, 0, 0), l = V(0, 0, 0), fwd = V(0, 0, 0), right = V(0, 0, 0);
-  let mx = 0, my = 0, sx = 0, sy = 0;
+  let mx = 0, my = 0, sx = 0, sy = 0, fitted = false;
   addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; } });
   return {
     place(progress) {
@@ -27,16 +27,23 @@ export function createRig(stations) {
       posC.getPoint(t, p); lookC.getPoint(t, l);
       if (!reduce) {
         sx += (mx - sx) * 0.05; sy += (my - sy) * 0.05;
+        if (Math.abs(mx - sx) + Math.abs(my - sy) < 0.002) { sx = mx; sy = my; }
         fwd.subVectors(l, p).normalize(); right.crossVectors(fwd, UP).normalize();
         const d = p.distanceTo(l);
         l.addScaledVector(right, sx * d * 0.08).addScaledVector(UP, -sy * d * 0.045);
       }
       camera.position.copy(p); camera.lookAt(l);
     },
+    // chuột đã dừng và camera liếc xong: không cần vẽ lại vì chuyển động của camera nữa
+    still: () => reduce || (sx === mx && sy === my),
     fit() {
-      const a = innerWidth / innerHeight; build(a < 0.8);
-      camera.aspect = a; camera.fov = a < 0.8 ? 74 : a < 1.2 ? 64 : 56; camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth, innerHeight);
+      const { w, h } = view; measureView();
+      if (w === view.w && h === view.h && fitted) return;
+      fitted = true;
+      const a = view.w / view.h; build(a < 0.8);
+      // màn ngang điện thoại rất dài: thu góc dọc để hai mép hình không bị kéo giãn
+      camera.aspect = a; camera.fov = a < 0.8 ? 74 : a < 1.2 ? 64 : a < 1.9 ? 56 : 48; camera.updateProjectionMatrix();
+      renderer.setSize(view.w, view.h, false);
     }
   };
 }

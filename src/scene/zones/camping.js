@@ -1,5 +1,4 @@
 // Khu camping giữa xưởng: cột có 4 đèn tuýp, cây ficus, 4 bộ ghế xếp đặt rải rác.
-import { T, lin, scene } from '../core.js';
 import { V, boxAt, glow, group, noCast, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { campChair, kermitChair, lowTable } from '../props/furniture.js';
@@ -18,7 +17,6 @@ export function buildCamping() {
     rod(V(cx, hy - 0.02, cz), base, 0.02, lampM, null, 6);
     noCast(rod(base.clone().addScaledVector(dir, 0.06), tip, 0.022, tubeM, null, 10));
     for (const q of [base, tip]) rod(q.clone().addScaledVector(dir, -0.03), q.clone().addScaledVector(dir, 0.06), 0.03, capM, null, 10);
-    const pl = new T.PointLight(lin('#eef3ff'), 0.35, 10, 1.6); pl.position.copy(base.clone().lerp(tip, 0.5)); scene.add(pl);
   });
   ficusTree(cx, cz + 0.62);
   // chỉ 4 bộ bàn ghế đặt thoải mái quanh xưởng, mỗi bộ xoay một hướng

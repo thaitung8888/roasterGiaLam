@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#121817">
   <title>Gia Lâm Coffee Roaster</title>
   <meta name="description" content="Cuộn để đi vào Gia Lâm Coffee Roaster, xưởng cà phê ven đê Ngọc Thụy, dựng 3D bằng Three.js.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +46,16 @@
       <div class="menu-body" id="menuBody"></div>
       <p class="menu-foot">Bản demo: tên món và giá là ví dụ, sẽ thay bằng menu thật của quán.</p>
     </div>
+  </div>
+
+  <div class="turn" id="turn" hidden role="dialog" aria-labelledby="turnTitle" aria-describedby="turnBody">
+    <svg class="turn-phone" viewBox="0 0 64 64" aria-hidden="true">
+      <g class="phone"><rect x="20" y="6" width="24" height="52" rx="4"/><path d="M29 51h6"/></g>
+      <path class="arc" d="M8 22a26 26 0 0 1 12-13M56 42a26 26 0 0 1-12 13"/>
+    </svg>
+    <h2 id="turnTitle">Xoay ngang điện thoại</h2>
+    <p id="turnBody">Màn hình ngang cho bạn thấy trọn không gian của quán.</p>
+    <button class="btn ghost" id="turnSkip" type="button">Vẫn xem màn dọc</button>
   </div>
 
   <script type="module" src="/src/main.js"></script>

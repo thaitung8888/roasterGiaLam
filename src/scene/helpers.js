@@ -1,7 +1,10 @@
 // Hàm dựng nhanh: vật liệu, hộp, trụ, mặt phẳng, thanh nối hai điểm, nhóm.
+import { PLAN } from '../config/levels.js';
 import { T, lin, scene } from './core.js';
 
 export const V = (x, y, z) => new T.Vector3(x, y, z);
+// đổi toạ độ thiết kế sang toạ độ thật (xem PLAN trong levels.js)
+export const toPlan = (x, y, z) => V(x * PLAN, y, z * PLAN);
 export const MC = {};
 export function std(color, rough = 0.85, metal = 0, extra) {
   const key = color + '|' + rough + '|' + metal;
@@ -44,4 +47,6 @@ export function quad(a, b, c, d, mat, parent) {
 }
 export function group(x = 0, y = 0, z = 0, ry = 0, parent) { const g = new T.Group(); g.position.set(x, y, z); g.rotation.y = ry; return add(g, parent); }
 export const live = o => { o.userData.live = true; return o; };     // không gộp, còn chuyển động hoặc cần bấm
+export const keep = o => { o.userData.keep = true; return o; };     // giữ nguyên kích thước khi mặt bằng co (chữ, hình in, quả cầu)
+export const fit = o => { o.userData.fit = true; return o; };       // nhóm co theo mặt bằng (cánh cửa, nhóm dùng toạ độ tuyệt đối)
 export const noCast = o => { o.userData.noCast = true; return o; }; // không đổ bóng (tường, mái)

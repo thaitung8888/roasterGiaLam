@@ -1,8 +1,27 @@
-// Ánh sáng chung: trời, nắng (đổ bóng), đèn vàng ấm ở quầy, xưởng rang, tầng trên.
+// Ánh sáng chung: trời, nắng (đổ bóng), đèn điểm cho từng khu.
+// Mỗi đèn điểm được tính lại cho từng điểm ảnh trên mọi bề mặt, nên đây là phần nặng nhất của khung hình:
+// giữ danh sách thật ngắn, điện thoại chỉ dùng nhóm CORE và bù bằng ánh sáng trời.
+import { small } from '../env.js';
 import { SHADOWS, T, lin, scene } from './core.js';
 
+const WARM = '#ffd5a0';
+// [x, y, z, độ sáng, tầm chiếu, màu]
+const CORE = [
+  [8.7, 2.5, -14, 0.8, 13, WARM],          // quầy order
+  [2.2, 2.6, -27.2, 0.85, 7, WARM],        // xưởng rang
+  [0.8, 4.7, -17.5, 0.9, 12, '#eef3ff'],   // 4 đèn tuýp giữa xưởng
+  [-8.5, 4.6, -17, 0.5, 14, WARM],         // tầng 2
+  [2.5, 6.2, -27.6, 0.45, 9, WARM]         // sân tầng 3
+];
+const EXTRA = [
+  [-1.4, 2.0, -28.2, 0.55, 6, '#d9f2e6'],  // kho hạt
+  [-1.8, 2.4, -24.6, 0.25, 6, WARM],       // trước kho
+  [-6, 5.3, -26.5, 0.4, 7, WARM],          // phòng làm việc
+  [-5, 3.4, -4, 0.3, 10, WARM]             // góc dating
+];
+
 export function buildLights() {
-  scene.add(new T.HemisphereLight(lin('#f2f6f6'), lin('#8a7f6e'), 0.82));
+  scene.add(new T.HemisphereLight(lin('#f2f6f6'), lin('#8a7f6e'), small ? 0.95 : 0.82));
   scene.add(new T.AmbientLight(lin('#ffffff'), 0.12));
   const sun = new T.DirectionalLight(lin('#fff2df'), 1.15);
   sun.position.set(-5, 30, 7); sun.target.position.set(1, 0, -13.5); scene.add(sun.target);
@@ -12,9 +31,7 @@ export function buildLights() {
     sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
   }
   scene.add(sun);
-  const warm = '#ffd5a0';
-  [[9.4, 1.95, -10.5, 0.3, 5], [9.4, 1.95, -17.5, 0.3, 5], [8.4, 2.8, -14, 0.5, 11], [2.2, 2.6, -27.2, 0.85, 7], [3.6, 2.4, -28.8, 0.35, 5], [-1.8, 2.4, -24.6, 0.25, 6], [-8.5, 4.6, -13, 0.35, 10], [-8.5, 4.6, -21, 0.35, 10],
-   [2.5, 6.2, -27.6, 0.45, 9], [-6, 5.3, -26.5, 0.4, 7], [-5, 3.4, -4, 0.3, 10]].forEach(([x, y, z, i, d]) => {
-    const l = new T.PointLight(lin(warm), i, d, 1.6); l.position.set(x, y, z); scene.add(l);
+  (small ? CORE : CORE.concat(EXTRA)).forEach(([x, y, z, i, d, c]) => {
+    const l = new T.PointLight(lin(c), i, d, 1.6); l.position.set(x, y, z); scene.add(l);
   });
 }

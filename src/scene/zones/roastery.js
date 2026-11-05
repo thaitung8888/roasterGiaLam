@@ -1,7 +1,7 @@
 // Cuối xưởng tầng 1: kho hạt (vách kính ám xanh) bên trái, xưởng rang mở bên phải, nhà vệ sinh.
 import { BACK, HALL, LV } from '../../config/levels.js';
-import { T, lin, onFrame, scene } from '../core.js';
-import { GLASS, V, add, box, boxAt, cyl, glow, group, live, noCast, plane, rod, std, tmat } from '../helpers.js';
+import { T, lin, onFrame } from '../core.js';
+import { GLASS, V, add, box, boxAt, cyl, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
 import { campChair, stool } from '../props/furniture.js';
 import { monsteraBig } from '../props/plants.js';
@@ -34,7 +34,6 @@ export function buildRoastery() {
   noCast(boxAt(RX0, RS, RH - 0.02, RH, kz, z1, std('#26282b', 0.7, 0.3)));
   noCast(rod(V(-0.5, 0.9, z1 + 0.06), V(-0.5, 2.25, z1 + 0.06), 0.025, glow('#f2f6ff', 2.2), null, 10));   // đèn tuýp dọc
   boxAt(-0.53, -0.47, 0.85, 0.9, z1 + 0.02, z1 + 0.09, std('#d9dcde', 0.4, 0.5)); boxAt(-0.53, -0.47, 2.25, 2.3, z1 + 0.02, z1 + 0.09, std('#d9dcde', 0.4, 0.5));
-  const kl = new T.PointLight(lin('#d9f2e6'), 0.55, 6, 1.6); kl.position.set(-1.4, 2.0, -28.2); scene.add(kl);
   for (const [px, pz] of [[-2.7, -29.2], [-1.4, -29.3]]) {
     const pal = group(px, 0, pz, rr(-0.06, 0.06));
     for (const zz of [-0.38, 0, 0.38]) box(1.0, 0.09, 0.1, M.wood, 0, 0.045, zz, pal);
@@ -78,7 +77,7 @@ export function buildRoastery() {
     g.strokeStyle = '#2c48b4'; g.beginPath(); g.moveTo(18, h - 40); g.bezierCurveTo(70, 50, 130, 60, w - 14, 90); g.stroke();
     g.fillStyle = '#222'; g.font = '600 13px sans-serif'; g.fillText('BT 92°  ·  FC 9:40  ·  DROP 11:20', 26, h - 5);
   }, { clamp: true });
-  noCast(plane(1.1, 0.7, new T.MeshStandardMaterial({ map: board, roughness: 0.4 }), RS + 0.11, 1.65, -27.9, Math.PI / 2));
+  keep(noCast(plane(1.1, 0.7, new T.MeshStandardMaterial({ map: board, roughness: 0.4 }), RS + 0.11, 1.65, -27.9, Math.PI / 2)));
   boxAt(RS + 0.09, RS + 0.13, 1.28, 1.3, -27.35, -28.45, std('#9aa0a2', 0.4, 0.5));
   // bao tải đay in chữ treo trên tường gạch
   [[0.95, 2.0, 'ARABICA', '#2f8f4e'], [1.95, 2.05, 'ROBUSTA', '#6e4a2c']].forEach(([x, y, t, c]) => {
@@ -92,7 +91,7 @@ export function buildRoastery() {
       g.font = '500 12px sans-serif'; g.fillText('VIETNAM · 60 KG', w / 2, h * 0.76);
       g.fillStyle = 'rgba(60,40,20,.25)'; g.fillRect(0, 0, w, 6); g.fillRect(0, h - 8, w, 8);
     }, { clamp: true });
-    const s = plane(0.82, 1.1, new T.MeshStandardMaterial({ map: tex, roughness: 1, side: T.DoubleSide }), x, y, z1 + 0.06);
+    const s = keep(plane(0.82, 1.1, new T.MeshStandardMaterial({ map: tex, roughness: 1, side: T.DoubleSide }), x, y, z1 + 0.06));
     s.rotation.z = rr(-0.04, 0.04);
   });
   // máy rang chính trên xe đẩy xanh (góc phải trong cùng)
@@ -157,7 +156,7 @@ export function buildRoastery() {
   box(0.4, 0.56, 0.06, std('#c9a06a', 0.95), 3.75, 0.28, -27.75).rotation.y = 0.5;
   for (let k = 0; k < 2; k++) { const b = new T.Mesh(new T.SphereGeometry(0.26, 14, 10), std('#ecebe6', 0.95)); b.scale.set(1, 1.15, 0.8); b.position.set(4.3, 0.3 + k * 0.4, -27.45 + k * 0.08); add(b); }
   // sofa da đen trên đế gỗ: lệch về bên trái phòng, đặt thẳng
-  const sofa = group(1.45, 0, -26.9, 0), leather = std('#141416', 0.42, 0.05);
+  const sofa = group(1.72, 0, -26.9, 0), leather = std('#141416', 0.42, 0.05);
   box(2.2, 0.05, 0.92, M.wood, 0, 0.3, 0, sofa);
   for (const sx of [-1.0, 1.0]) for (const sz of [-0.38, 0.38]) rod(V(sx, 0, sz), V(sx * 0.95, 0.28, sz * 0.9), 0.015, dark, sofa, 6);
   box(2.0, 0.04, 0.04, dark, 0, 0.08, 0.38, sofa); box(2.0, 0.04, 0.04, dark, 0, 0.08, -0.38, sofa);

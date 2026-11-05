@@ -1,8 +1,8 @@
 // Tầng 3: tường sau, phòng làm việc (bàn xanh ngọc), vách kính + cửa lùa tự mở, sân nửa ngoài trời, hai cây lớn.
-import { BACK, HALL, LV } from '../../config/levels.js';
+import { BACK, HALL, LV, PLAN } from '../../config/levels.js';
 import { T, camera, lin, onFrame, scene } from '../core.js';
 import { leafBlob } from '../foliage.js';
-import { GLASS, V, add, beam, box, boxAt, cyl, glow, group, live, noCast, plane, rod, std, tmat } from '../helpers.js';
+import { GLASS, V, add, beam, box, boxAt, cyl, fit, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
 import { kermitChair, plyChair, roundTable, stool } from '../props/furniture.js';
 import { alocasia, fern, fig, monsteraBig, pothosTrail } from '../props/plants.js';
@@ -40,7 +40,7 @@ export function buildFloor3() {
   }
   for (const x of [-7.1, -5.1]) {
     rod(V(x, Y3 + 1.75, -25.15), V(x, HALL.eave - 0.4, -25.15), 0.004, M.steel, scene, 3);
-    const gl = new T.Mesh(new T.SphereGeometry(0.16, 16, 12), M.lamp); gl.position.set(x, Y3 + 1.6, -25.15); noCast(add(gl));
+    const gl = new T.Mesh(new T.SphereGeometry(0.16, 16, 12), M.lamp); gl.position.set(x, Y3 + 1.6, -25.15); keep(noCast(add(gl)));
   }
   // (bỏ tủ sách) góc tường: đèn tuýp đứng + quạt cây như ảnh
   cyl(0.12, 0.12, 0.02, std('#1b1c1e', 0.5, 0.5), -9.55, Y3 + 0.01, -27.9, 16);
@@ -72,14 +72,14 @@ export function buildFloor3() {
   boxAt(XP - 0.06, XP + 0.06, Y3 + 2.44, Y3 + 2.58, ZF, z1, frameK); boxAt(XP - 0.04, XP + 0.04, Y3 + 4.6 - 0.03, Y3 + 4.6 + 0.03, ZF, z1, frameK);
   for (const z of [DZ0, DZ1]) boxAt(XP - 0.05, XP + 0.05, Y3, Y3 + 2.5, z - 0.035, z + 0.035, frameK);
   boxAt(XP + 0.06, XP + 0.12, Y3 + 2.52, Y3 + 2.6, DZ0 + 0.1, z1 + 0.3, frameK);   // ray treo cửa lùa
-  const tdoor = live(group(XP + 0.09, Y3, (DZ0 + DZ1) / 2));
+  const tdoor = fit(live(group(XP + 0.09, Y3, (DZ0 + DZ1) / 2)));
   const dg = plane(DW - 0.06, 2.42, GLASS(), 0, 1.23, 0, Math.PI / 2, tdoor); dg.renderOrder = 2;
   box(0.05, 0.06, DW, frameK, 0, 2.46, 0, tdoor); box(0.05, 0.08, DW, frameK, 0, 0.04, 0, tdoor);
   for (const zz of [-DW / 2 + 0.03, DW / 2 - 0.03]) box(0.05, 2.48, 0.06, frameK, 0, 1.24, zz, tdoor);
   for (const xx of [-0.05, 0.05]) box(0.025, 0.9, 0.025, M.chrome, xx, 1.1, DW / 2 - 0.14, tdoor);
   let tOpen = 0;
   onFrame((t, dt) => {
-    const c = camera.position, near = Math.abs(c.y - (Y3 + 1.6)) < 1.2 && Math.hypot(c.x - XP, c.z - (DZ0 + DZ1) / 2) < 3.2 ? 1 : 0;
+    const c = camera.position, near = Math.abs(c.y - (Y3 + 1.6)) < 1.2 && Math.hypot(c.x / PLAN - XP, c.z / PLAN - (DZ0 + DZ1) / 2) < 3.2 ? 1 : 0;
     tOpen += (near - tOpen) * Math.min(1, dt * 2.4);
     tdoor.position.z = (DZ0 + DZ1) / 2 - tOpen * (DW - 0.08);
   });
@@ -158,10 +158,10 @@ export function buildFloor3() {
     for (const sz of [-0.185, 0.185]) box(0.44, 0.018, 0.018, st, 0, 0.012, sz, g);
   };
   const frost = std('#d9e2e2', 0.2, 0.1, { transparent: true, opacity: 0.85 }), whiteTop = std('#ecebe6', 0.5);
-  sideT(2.9, -27.9, 0.45, frost); sideT(3.37, -27.92, 0.45, whiteTop);
-  sideT(5.9, -28.1, 0.48, frost); sideT(6.37, -28.12, 0.48, whiteTop);
+  sideT(2.9, -27.9, 0.45, frost); sideT(3.47, -27.92, 0.45, whiteTop);
+  sideT(5.9, -28.1, 0.48, frost); sideT(6.47, -28.12, 0.48, whiteTop);
   sideT(0.2, -27.6, 0.78, frost);
-  const tg = group(0, Y3, 0);
+  const tg = fit(group(0, Y3, 0));
   kermitChair(-2.6, -26.6, Math.PI / 2 + 0.3, tg); kermitChair(-2.7, -27.4, Math.PI / 2 - 0.2, tg); kermitChair(0.9, -26.9, -Math.PI / 2 - 0.4, tg);
   sideT(-2.0, -27.0, 0.5, std('#c3c8cb', 0.3, 0.8)); sideT(0.4, -26.5, 0.5, frost);
   const cbx = tmat(TX.concrete, [1.5, 1.5], 0.85, '#b9b8b2');
@@ -175,7 +175,7 @@ export function buildFloor3() {
   // đèn cầu trắng treo từ mái
   for (const [x, z, y] of [[1.3, -27.2, Y3 + 2.4], [4.9, -28.4, Y3 + 1.95], [7.8, -27.0, Y3 + 2.3]]) {
     rod(V(x, y + 0.2, z), V(x, 7.05, z), 0.004, frameK, null, 3);
-    const gl = new T.Mesh(new T.SphereGeometry(0.26, 20, 14), std('#f3f1ea', 0.6, 0, { emissive: lin('#fff3dc'), emissiveIntensity: 0.55 })); gl.position.set(x, y, z); noCast(add(gl));
+    const gl = new T.Mesh(new T.SphereGeometry(0.26, 20, 14), std('#f3f1ea', 0.6, 0, { emissive: lin('#fff3dc'), emissiveIntensity: 0.55 })); gl.position.set(x, y, z); keep(noCast(add(gl)));
   }
   // cây lớn phía sau xưởng + nhà trắng phía xa
   const bx = 2, bz = -34.5, top = V(bx, 4.6, bz);

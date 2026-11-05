@@ -7,7 +7,7 @@ import { R, pick, rr } from '../random.js';
 import { TX } from '../textures/index.js';
 
 export function buildOutside() {
-  live(add(new T.Mesh(new T.SphereGeometry(230, 32, 16), new T.MeshBasicMaterial({ map: TX.sky, side: T.BackSide, fog: false, depthWrite: false }))));
+  live(add(new T.Mesh(new T.SphereGeometry(230, 32, 16), new T.MeshBasicMaterial({ map: TX.sky, side: T.BackSide, fog: false, depthWrite: false })))).userData.sky = true;
   const X0 = -90, X1 = 90;
   noCast(boxAt(X0, X1, -0.06, 0, 0, 3.4, M.pavers));
   noCast(boxAt(X0, X1, -0.1, 0.12, 3.4, 3.6, std('#9a9890', 0.9)));

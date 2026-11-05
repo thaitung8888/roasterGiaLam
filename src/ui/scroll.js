@@ -3,7 +3,7 @@ import { reduce } from '../env.js';
 
 export function createScroll(sections) {
   const N = sections.length;
-  let centers = [];
+  let centers = [], last = 0, w = innerWidth;
   const measure = () => { centers = sections.map(s => s.getBoundingClientRect().top + scrollY + s.offsetHeight / 2); };
   function raw() {
     const ref = scrollY + innerHeight / 2;
@@ -19,6 +19,15 @@ export function createScroll(sections) {
     const s = sections[i];
     scrollTo({ top: Math.max(0, s.getBoundingClientRect().top + scrollY + s.offsetHeight / 2 - innerHeight / 2), behavior: reduce ? 'auto' : 'smooth' });
   }
-  addEventListener('resize', measure); measure();
-  return { N, measure, target: () => dwell(raw()), goTo };
+  // xoay máy làm chiều cao các đoạn đổi theo: đưa cuộn về đúng chỗ đang xem trong quán
+  function restore(p) {
+    const i = Math.min(N - 2, Math.floor(p)), ref = centers[i] + (p - i) * (centers[i + 1] - centers[i]);
+    scrollTo({ top: Math.max(0, ref - innerHeight / 2), behavior: 'instant' });
+  }
+  addEventListener('resize', () => {
+    measure();
+    if (innerWidth !== w) { w = innerWidth; restore(last); }
+  });
+  measure();
+  return { N, measure, target: () => dwell(last = raw()), goTo };
 }
