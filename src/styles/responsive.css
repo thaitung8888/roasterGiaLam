@@ -1,0 +1,14 @@
+/* Điện thoại và chế độ giảm chuyển động. */
+@media (max-width: 720px) {
+  .rail .lbl { display: none; }
+  .rail { gap: 2px; }
+  .rail .tick { width: 10px; }
+  .rail button.on .tick { width: 20px; }
+  .caption, .caption.right { left: max(16px, env(safe-area-inset-left, 0px)); right: auto; width: calc(100vw - 64px); text-align: left; align-items: flex-start; }
+  .caption.right .eyebrow, .caption.right .acts { justify-content: flex-start; }
+  .brand small { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hint i, .hs .dot { animation: none; }
+  .caption { transition: none; }
+}

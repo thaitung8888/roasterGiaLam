@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gia Lâm Coffee Roaster</title>
+  <meta name="description" content="Cuộn để đi vào Gia Lâm Coffee Roaster, xưởng cà phê ven đê Ngọc Thụy, dựng 3D bằng Three.js.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Be+Vietnam+Pro:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Bebas+Neue&display=swap">
+  <link rel="icon" href="/logo.png">
+</head>
+<body>
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="shade"></div>
+
+  <div class="loader" id="loader" role="status" aria-live="polite">
+    <img class="l-logo" alt="Gia Lâm Coffee Roaster" width="520" height="382" src="/logo.png">
+    <div class="bar"><i id="loadbar"></i></div>
+    <span id="loadpct">Đang rang hạt · 0%</span>
+  </div>
+
+  <a class="brand" href="#ven-de" aria-label="Gia Lâm Coffee Roaster, về đầu trang">
+    <span class="mark" aria-hidden="true">GL</span>
+    <span class="words"><b>Gia Lâm</b><small>Coffee Roaster · Ngọc Thụy</small></span>
+  </a>
+  <div class="meter" id="meter" aria-hidden="true">00%</div>
+  <div class="caption" id="caption" aria-live="polite"></div>
+  <ul class="rail" id="rail" aria-label="Các khu trong quán"></ul>
+  <button class="hs" id="hsMenu" type="button" tabindex="-1" aria-label="Xem menu ở quầy order"><span class="dot"></span><span class="tag">Xem menu</span></button>
+
+  <main id="track"></main>
+
+  <div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+    <div class="menu-card">
+      <header class="menu-head">
+        <p class="eyebrow">Quầy order · Gia Lâm Coffee Roaster</p>
+        <h2 id="menuTitle">Menu</h2>
+        <p>Cà phê pha từ hạt rang ngay tại xưởng của quán. Gọi món tại quầy, nhận chuyển khoản.</p>
+        <button class="menu-close" id="menuClose" type="button">Đóng
+          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9m0-9l-9 9"/></svg>
+        </button>
+      </header>
+      <nav class="menu-tabs" id="menuTabs" role="tablist" aria-label="Nhóm món"></nav>
+      <div class="menu-body" id="menuBody"></div>
+      <p class="menu-foot">Bản demo: tên món và giá là ví dụ, sẽ thay bằng menu thật của quán.</p>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+/* Chú thích cố định ở góc dưới. */
+/* chú thích cố định ở góc dưới */
+.caption {
+  position: fixed; z-index: 3; bottom: calc(26px + env(safe-area-inset-bottom, 0px)); left: max(20px, env(safe-area-inset-left, 0px));
+  width: min(23rem, calc(100vw - 72px)); display: flex; flex-direction: column; gap: 7px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6), 0 2px 16px rgba(0, 0, 0, .55);
+  opacity: 0; transform: translateY(8px); transition: opacity .35s ease, transform .35s ease; pointer-events: none;
+}
+.caption.right { left: auto; right: max(20px, env(safe-area-inset-right, 0px)); text-align: right; align-items: flex-end; }
+.caption.show { opacity: 1; transform: none; }
+.caption.show .btn, .caption.show .copy { pointer-events: auto; }
+.caption .eyebrow { font-size: 11px; }
+.caption.right .eyebrow { justify-content: flex-end; }
+.caption .eyebrow .num { text-shadow: none; }
+.caption h2 { font-size: clamp(1.15rem, 1.8vw, 1.45rem); line-height: 1.12; }
+.caption p:not(.eyebrow) { margin: 0; font-size: .88rem; line-height: 1.5; opacity: .88; max-width: 38ch; }
+.caption .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.caption .btn { text-shadow: none; }
+.caption.right .acts { justify-content: flex-end; }
+.caption .info { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; margin: 4px 0 2px; font: 400 13px/1.45 var(--f-body); }
+.caption .info dt { color: var(--mist); font: 500 10.5px/1.9 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+.caption.panel { background: rgba(14, 20, 19, .8); padding: 16px 18px; border-radius: 6px; text-shadow: none; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.caption .info dd { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.caption .copy { border: 0; border-radius: 2px; background: rgba(243, 239, 231, .14); color: var(--paper); font: 500 11px/1 var(--f-mono); padding: 4px 7px; cursor: pointer; text-shadow: none; }
+.caption .copy:hover { background: rgba(243, 239, 231, .28); }
+.caption .fine { font: 400 11px/1.5 var(--f-mono); color: var(--mist); letter-spacing: .03em; margin-top: 2px; }

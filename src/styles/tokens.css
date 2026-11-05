@@ -1,0 +1,57 @@
+/* Màu, phông chữ, nền chung và kiểu chữ dùng chung. */
+/* Bố cục: cảnh 3D phủ kín màn hình, chữ nằm ở góc dưới theo từng trạm, thanh trạm bên phải.
+   Một giao diện duy nhất (cảnh ban ngày + lớp chữ tối), không đổi theo theme. */
+:root {
+  --char: #121817;       /* nền tối, hơi ngả xanh rêu */
+  --paper: #f3efe7;      /* giấy menu */
+  --cement: #b8ab9b;     /* tấm xi măng ốp tường */
+  --teal: #1d93a3;       /* quầy gỗ xanh */
+  --teal-deep: #0c5560;
+  --teal-lite: #7fd6e0;  /* chữ nhấn trên nền tối */
+  --cobalt: #2c48b4;     /* ghế camping */
+  --ink: #17201f;
+  --ink-soft: #55625f;
+  --mist: #a6b5b2;
+  --line: rgba(243, 239, 231, .18);
+  --f-display: "Bricolage Grotesque", "Be Vietnam Pro", system-ui, sans-serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+html { background: var(--char); }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--char); color: var(--paper);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.shade {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 130% 95% at 50% 42%, transparent 58%, rgba(8, 12, 12, .42)),
+    linear-gradient(to top, rgba(9, 13, 13, .86), rgba(9, 13, 13, .36) 26%, transparent 46%);
+}
+.shade::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(9, 13, 13, .6), rgba(9, 13, 13, .3) 38%, transparent 62%); opacity: 0; transition: opacity .5s; }
+body.at-hero .shade::after { opacity: 1; }
+body.no-webgl .shade {
+  background: radial-gradient(circle at 70% 30%, rgba(29, 147, 163, .45), transparent 50%), radial-gradient(circle at 20% 80%, rgba(44, 72, 180, .35), transparent 45%), var(--char);
+}
+
+/* chữ dùng chung */
+.eyebrow {
+  margin: 0; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font: 500 12px/1.3 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal-lite);
+}
+.eyebrow .num { background: var(--teal-lite); color: var(--ink); padding: 3px 6px 2px; border-radius: 2px; }
+h1, h2 { margin: 0; text-wrap: balance; font-family: var(--f-display); font-weight: 800; letter-spacing: -.02em; line-height: 1.04; }
+.btn {
+  align-self: flex-start; border: 0; border-radius: 3px; padding: 10px 14px; cursor: pointer;
+  background: var(--teal-lite); color: var(--ink); font: 600 13px/1 var(--f-body);
+}
+.btn:hover { background: var(--paper); }
+.btn.ghost { background: transparent; color: var(--paper); box-shadow: inset 0 0 0 1px var(--line); }
+.btn.ghost:hover { box-shadow: inset 0 0 0 1px var(--paper); }
+.btn:focus-visible, button:focus-visible, a:focus-visible { outline: 2px solid var(--teal-lite); outline-offset: 3px; }
