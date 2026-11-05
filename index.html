@@ -26,10 +26,13 @@
     <span class="words"><b>Gia Lâm</b><small>Coffee Roaster · Ngọc Thụy</small></span>
   </a>
   <div class="meter" id="meter" aria-hidden="true">00%</div>
-  <div class="clock" id="clock" role="radiogroup" aria-label="Thời điểm trong ngày" hidden>
-    <button type="button" role="radio" data-time="day" aria-checked="false">Sáng</button>
-    <button type="button" role="radio" data-time="dusk" aria-checked="false">Chiều</button>
-    <button type="button" role="radio" data-time="night" aria-checked="false">Tối</button>
+  <div class="skyctl" id="skyctl" hidden>
+    <div class="clock" id="clock" role="radiogroup" aria-label="Thời điểm trong ngày">
+      <button type="button" role="radio" data-time="day" aria-checked="false">Sáng</button>
+      <button type="button" role="radio" data-time="dusk" aria-checked="false">Chiều</button>
+      <button type="button" role="radio" data-time="night" aria-checked="false">Tối</button>
+    </div>
+    <div class="clock"><button type="button" id="rainBtn" aria-pressed="false">Mưa</button></div>
   </div>
   <div class="caption" id="caption" aria-live="polite"></div>
   <ul class="rail" id="rail" aria-label="Các khu trong quán"></ul>

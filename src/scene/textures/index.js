@@ -101,15 +101,6 @@ export function buildTextures() {
     for (let i = 0; i < w; i += 4) { g.fillStyle = 'rgba(70,50,25,.25)'; g.fillRect(i, 0, 1.5, h); g.fillRect(0, i, w, 1.5); }
   });
   // vỏ mặt tiền: tấm xanh xám nhạt, sáng dần lên phía trên (1 lần lặp = 2.4 m ngang × cả chiều cao)
-  TX.facade = canvasTex(512, 1024, (g, w, h) => {
-    const gr = g.createLinearGradient(0, h, 0, 0);
-    gr.addColorStop(0, '#839d8f'); gr.addColorStop(0.45, '#9ab4a6'); gr.addColorStop(1, '#b0c6bb');
-    g.fillStyle = gr; g.fillRect(0, 0, w, h);
-    for (let x = 0; x < w; x += 6) { g.fillStyle = `rgba(255,255,255,${(x / 6) % 2 ? 0.035 : 0})`; g.fillRect(x, 0, 3, h); }
-    for (let i = 0; i < 7; i++) { const x = R() * w, ww = rr(20, 90), sg = g.createLinearGradient(x, 0, x + ww, 0); sg.addColorStop(0, 'rgba(255,255,255,0)'); sg.addColorStop(0.5, `rgba(255,255,255,${rr(0.05, 0.12)})`); sg.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = sg; g.fillRect(x, 0, ww, h); }
-    const dirt = g.createLinearGradient(0, h, 0, h * 0.8); dirt.addColorStop(0, 'rgba(60,70,55,.25)'); dirt.addColorStop(1, 'rgba(60,70,55,0)'); g.fillStyle = dirt; g.fillRect(0, h * 0.8, w, h * 0.2);
-    g.fillStyle = 'rgba(40,55,48,.35)'; g.fillRect(0, 0, 2, h); g.fillRect(w / 2, 0, 2, h);
-  });
   TX.graffiti = canvasTex(512, 256, (g, w, h) => {
     g.fillStyle = '#e9e8e2'; g.fillRect(0, 0, w, h); mottle(g, w, h, 6, 0.05);
     g.lineCap = 'round';
@@ -127,6 +118,21 @@ export function buildTextures() {
     g.fillStyle = '#c9c4ba'; g.fillRect(0, h * 0.86, w, h * 0.06);
     g.strokeStyle = '#2b2f31'; g.lineWidth = 3; for (let x = w * 0.18; x < w * 0.84; x += 14) { g.beginPath(); g.moveTo(x, h * 0.72); g.lineTo(x, h * 0.86); g.stroke(); }
   });
+  // giọt nước trên kính: kênh đỏ là giọt đọng, kênh xanh lá là vệt nước chảy, lặp được cả hai chiều
+  TX.drops = canvasTex(512, 512, (g, w, h) => {
+    g.fillStyle = '#000'; g.fillRect(0, 0, w, h); g.globalCompositeOperation = 'lighter';
+    for (let i = 0; i < 420; i++) {
+      const x = R() * w, y = R() * h, r = rr(1.2, 4.6);
+      g.fillStyle = `rgb(${Math.round(rr(120, 255))},0,0)`; g.beginPath(); g.ellipse(x, y, r * 0.8, r, 0, 0, 7); g.fill();
+    }
+    for (let i = 0; i < 46; i++) {
+      const x = R() * w, y = R() * h, len = rr(70, 210), gr = g.createLinearGradient(0, y, 0, y + len);
+      gr.addColorStop(0, 'rgba(0,255,0,0)'); gr.addColorStop(0.75, 'rgba(0,190,0,.8)'); gr.addColorStop(1, 'rgb(0,255,0)');
+      g.fillStyle = gr;
+      for (const dy of [0, -h]) { g.fillRect(x, y + dy, rr(1.4, 2.8), len); g.beginPath(); g.arc(x + 1, y + dy + len, 3.2, 0, 7); g.fill(); }
+    }
+    g.globalCompositeOperation = 'source-over';
+  }, { linear: true });
   // vầng sáng tròn dùng cho vệt đèn ban đêm
   TX.glow = canvasTex(128, 128, (g, w, h) => {
     const gr = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);

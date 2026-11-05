@@ -7,12 +7,13 @@ import { R, rr } from './random.js';
 export const FOL = {};
 // gió: đầu lá lay trong shader, chân lá đứng yên, mỗi lá lệch nhịp theo vị trí nên cả tán không lắc đều tăm tắp
 const wind = { value: 0 };
+export const gust = { value: 1 };   // độ mạnh của gió, atmosphere.js tăng lên khi mưa
 function sway(shader) {
-  shader.uniforms.uWind = wind;
-  shader.vertexShader = 'uniform float uWind;\n' + shader.vertexShader.replace('#include <begin_vertex>', `
+  shader.uniforms.uWind = wind; shader.uniforms.uGust = gust;
+  shader.vertexShader = 'uniform float uWind, uGust;\n' + shader.vertexShader.replace('#include <begin_vertex>', `
     vec3 transformed = vec3(position);
     float phase = instanceMatrix[3].x * 0.9 + instanceMatrix[3].z * 1.3 + instanceMatrix[3].y * 0.7;
-    float gust = sin(uWind * 1.3 + phase) * 0.6 + sin(uWind * 2.9 + phase * 1.7) * 0.4;
+    float gust = (sin(uWind * 1.3 + phase) * 0.6 + sin(uWind * 2.9 + phase * 1.7) * 0.4) * uGust;
     transformed.z += gust * 0.17 * (position.y + 0.02);
     transformed.x += gust * 0.07 * (position.y + 0.02);`);
 }

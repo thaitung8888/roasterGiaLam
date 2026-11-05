@@ -43,8 +43,8 @@ export function buildDike() {
   }
   add(street);
   onFrame((t, dt) => {
-    all.visible = mood.near; street.visible = mood.night;
-    if (!mood.near) return;
+    all.visible = mood.near && !mood.rain; street.visible = mood.night;
+    if (!all.visible) return;
     for (const p of items) {
       p.x += p.v * dt;
       if (p.x > X1) p.x = X0; else if (p.x < X0) p.x = X1;

@@ -32,7 +32,7 @@ export function buildShell() {
     onFrame((t, dt) => { blades.rotation.z += dt * 5; });
   }
   // mặt tiền (theo ảnh chụp từ mặt đường): một ô kính dài lệch trái, cửa kính lớn bên phải,
-  // vỏ ngoài tấm xanh xám nhạt, đỉnh phẳng có lan can và chữ nổi. Mặt trong vẫn là tấm xi măng.
+  // vỏ ngoài tôn sóng xanh đậm, đỉnh phẳng có lan can và chữ nổi. Mặt trong vẫn là tấm xi măng.
   const fz0 = 0.05, fz1 = -0.22, F = M.panelFacade, PT = HALL.parapet, XL = -7.6;
   const W = { x0: -9.8, x1: -0.6, y0: 1.8, y1: 3.95 }, D = { x0: 3.0, x1: 8.0, y1: 3.0, c: 5.5 };   // W: ô kính khu dating liền một tấm, chạy hết chiều ngang, cao như cũ
   noCast(boxAt(x0, W.x0, 0, 6.4, fz0, fz1, F));
@@ -46,7 +46,7 @@ export function buildShell() {
     const sh = new T.Shape(); sh.moveTo(x0 - 0.2, eave); sh.lineTo(x1 + 0.2, eave); sh.lineTo(0, ridge + 0.05); sh.closePath();
     const m = new T.Mesh(new T.ShapeGeometry(sh), M.corrSide); m.position.z = z; noCast(add(m));
   }
-  // lớp vỏ ngoài: phần trái tôn sóng xanh, còn lại tấm phẳng xanh xám
+  // lớp vỏ ngoài: tôn sóng màu đậm chạy hết mặt tiền
   const skin = (a, b, c, d, mat) => noCast(plane(b - a, d - c, mat, (a + b) / 2, (c + d) / 2, 0.075));
   const holes = [W, { x0: D.x0, x1: D.x1, y0: 0, y1: D.y1 }];
   const skinRegion = (a, b, mat) => {   // phủ vỏ ngoài một dải, chừa các ô kính và cửa
@@ -59,7 +59,7 @@ export function buildShell() {
       if (y < PT) skin(s0, s1, y, PT, mat);
     }
   };
-  skinRegion(x0 - 0.2, XL, M.corrGreen); skinRegion(XL, x1 + 0.2, M.facadeGreen);
+  skinRegion(x0 - 0.2, x1 + 0.2, M.corrGreen);
   const pipe = std('#8e9a95', 0.5, 0.3);
   for (const x of [XL - 0.12, x1 + 0.05]) rod(V(x, 0, 0.17), V(x, PT - 0.1, 0.17), 0.055, pipe, scene, 10);
   keep(noCast(plane(2.0, 0.85, new T.MeshStandardMaterial({ map: TX.graffiti, roughness: 0.9 }), -9.0, 0.44, 0.09)));

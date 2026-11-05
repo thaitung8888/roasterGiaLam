@@ -1,5 +1,4 @@
 // Vật liệu dùng chung (M.xxx). Vật liệu có tile là texture lặp theo mét thật.
-import { HALL } from '../config/levels.js';
 import { T, lin } from './core.js';
 import { leafKind } from './foliage.js';
 import { glow, std, tmat } from './helpers.js';
@@ -37,7 +36,6 @@ export function buildMaterials() {
   M.ply = tmat(TX.ply, [0.8, 0.8], 0.7);
   M.jute = tmat(TX.jute, [0.3, 0.3], 1);
   M.house = tmat(TX.house, [4, 3.2], 0.9, '#ffffff', { emissiveMap: TX.houseLit, emissive: lin('#ffffff'), emissiveIntensity: 0 });
-  M.facadeGreen = tmat(TX.facade, [2.4, HALL.parapet], 0.4, '#ffffff', { metalness: 0.15 });
   M.corrGreen = tmat(TX.corr, [0.4, 1], 0.45, '#a3c4b2', { metalness: 0.3 });
   M.skyLight = glow('#f4f8f8', 1.0); M.skyLight.side = T.DoubleSide;
   M.lamp = glow('#ffd9a0', 1.4);

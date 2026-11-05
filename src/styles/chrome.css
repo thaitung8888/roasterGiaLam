@@ -16,17 +16,18 @@
   font: 500 12px/1 var(--f-mono); color: var(--paper); letter-spacing: .08em; font-variant-numeric: tabular-nums;
   text-shadow: 0 1px 6px rgba(0, 0, 0, .5);
 }
-/* nút chọn thời điểm trong ngày */
-.clock {
+/* nút chọn thời điểm trong ngày và thời tiết */
+.skyctl {
   position: fixed; z-index: 5; top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(max(16px, env(safe-area-inset-right, 0px)) + 46px);
-  display: flex; gap: 1px; padding: 2px; border-radius: 4px; background: rgba(14, 20, 19, .55);
+  display: flex; gap: 5px;
 }
+.clock { display: flex; gap: 1px; padding: 2px; border-radius: 4px; background: rgba(14, 20, 19, .55); }
 .clock button {
   border: 0; border-radius: 3px; background: none; color: var(--paper); opacity: .78; cursor: pointer;
   font: 500 11px/1 var(--f-body); padding: 7px 9px;
 }
 .clock button:hover { opacity: 1; }
-.clock button[aria-checked="true"] { background: var(--teal-lite); color: var(--ink); opacity: 1; }
+.clock button[aria-checked="true"], .clock button[aria-pressed="true"] { background: var(--teal-lite); color: var(--ink); opacity: 1; }
 .rail {
   position: fixed; z-index: 5; right: max(16px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 0; list-style: none;
