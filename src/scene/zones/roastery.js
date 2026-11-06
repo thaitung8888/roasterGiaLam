@@ -1,11 +1,11 @@
 // Cuối xưởng tầng 1: kho hạt (vách kính ám xanh) bên trái, xưởng rang mở bên phải, nhà vệ sinh.
 import { BACK, HALL, LV } from '../../config/levels.js';
 import { T, lin, onFrame } from '../core.js';
-import { GLASS, V, add, box, boxAt, cyl, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
+import { V, add, box, boxAt, cyl, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
-import { campChair, stool } from '../props/furniture.js';
+import { campChair } from '../props/furniture.js';
 import { monsteraBig } from '../props/plants.js';
-import { R, pick, rr } from '../random.js';
+import { pick, rr } from '../random.js';
 import { canvasTex } from '../textures/canvas.js';
 import { TX } from '../textures/index.js';
 
@@ -53,10 +53,10 @@ export function buildRoastery() {
   for (let x = RS + 0.45; x < RX1 - 0.2; x += 0.7) noCast(boxAt(x - 0.04, x + 0.04, RH - 0.2, RH - 0.02, ZF - 0.2, z1, dark));
   noCast(boxAt(RS, RX1, RH - 0.24, RH - 0.02, -27.4, -27.55, dark));
   rod(V(RS + 0.2, RH - 0.3, -26.2), V(RX1 - 0.2, RH - 0.3, -26.2), 0.02, std('#3a3d40', 0.5, 0.5), null, 6);
-  for (const [bx, bz] of [[1.6, -27.0], [3.4, -28.6]]) {
-    const bulb = new T.Mesh(new T.SphereGeometry(0.06, 12, 8), glow('#ffe3b0', 1.8)); bulb.position.set(bx, RH - 0.45, bz); noCast(add(bulb));
-    rod(V(bx, RH - 0.4, bz), V(bx, RH - 0.02, bz), 0.006, dark, null, 4);
-    cyl(0.02, 0.03, 0.06, dark, bx, RH - 0.39, bz, 8);
+  // đèn rọi nhỏ gắn trần, mặt đèn sáng vàng
+  for (const bx of [1.15, 2.5, 3.85]) {
+    cyl(0.05, 0.06, 0.15, dark, bx, RH - 0.3, -27.55, 12);
+    cyl(0.045, 0.045, 0.012, glow('#ffd9a0', 2), bx, RH - 0.382, -27.55, 12);
   }
   // tường: gạch thô ở trong cùng, tôn kẽm sáng phía trước hai bên
   const brickM = tmat(TX.brick, [2.4, 1.2], 0.95), RW = RX1 - RS, RC = (RS + RX1) / 2;
@@ -64,21 +64,10 @@ export function buildRoastery() {
   const bz0 = ZF - 1.0, bL = bz0 - z1, bc = (bz0 + z1) / 2;
   noCast(plane(bL, RH, brickM, RS + 0.09, RH / 2, bc, Math.PI / 2));
   noCast(plane(bL, RH, brickM, RX1 - 0.02, RH / 2, bc, -Math.PI / 2));
-  const zinc = tmat(TX.corr, [0.25, 1], 0.35, '#e3e7e8', { metalness: 0.55 });
+  const zinc = tmat(TX.corr, [0.25, 1], 0.45, '#b9ab98', { metalness: 0.4 });
   noCast(plane(1.0, RH, zinc, RS + 0.095, RH / 2, ZF - 0.5, Math.PI / 2));
   noCast(plane(1.0, RH, zinc, RX1 - 0.025, RH / 2, ZF - 0.5, -Math.PI / 2));
   boxAt(RS + 0.09, RS + 0.12, 0.25, 2.6, -26.65, -26.67, std('#d9dcde', 0.4, 0.5));
-  // bảng trắng ghi đường cong rang trên vách chia
-  const board = canvasTex(256, 160, (g, w, h) => {
-    g.fillStyle = '#f6f6f2'; g.fillRect(0, 0, w, h);
-    g.strokeStyle = '#c8ccd0'; g.lineWidth = 1; for (let x = 20; x < w; x += 24) { g.beginPath(); g.moveTo(x, 12); g.lineTo(x, h - 20); g.stroke(); }
-    g.strokeStyle = '#333'; g.lineWidth = 2; g.beginPath(); g.moveTo(18, 12); g.lineTo(18, h - 20); g.lineTo(w - 10, h - 20); g.stroke();
-    g.strokeStyle = '#c43a2f'; g.lineWidth = 3; g.beginPath(); g.moveTo(18, 40); g.quadraticCurveTo(50, h - 30, 80, h - 60); g.bezierCurveTo(130, 70, 180, 50, w - 14, 34); g.stroke();
-    g.strokeStyle = '#2c48b4'; g.beginPath(); g.moveTo(18, h - 40); g.bezierCurveTo(70, 50, 130, 60, w - 14, 90); g.stroke();
-    g.fillStyle = '#222'; g.font = '600 13px sans-serif'; g.fillText('BT 92°  ·  FC 9:40  ·  DROP 11:20', 26, h - 5);
-  }, { clamp: true });
-  keep(noCast(plane(1.1, 0.7, new T.MeshStandardMaterial({ map: board, roughness: 0.4 }), RS + 0.11, 1.65, -27.9, Math.PI / 2)));
-  boxAt(RS + 0.09, RS + 0.13, 1.28, 1.3, -27.35, -28.45, std('#9aa0a2', 0.4, 0.5));
   // bao tải đay in chữ treo trên tường gạch
   [[0.95, 2.0, 'ARABICA', '#2f8f4e'], [1.95, 2.05, 'ROBUSTA', '#6e4a2c']].forEach(([x, y, t, c]) => {
     const tex = canvasTex(160, 224, (g, w, h) => {
@@ -94,16 +83,15 @@ export function buildRoastery() {
     const s = keep(plane(0.82, 1.1, new T.MeshStandardMaterial({ map: tex, roughness: 1, side: T.DoubleSide }), x, y, z1 + 0.06));
     s.rotation.z = rr(-0.04, 0.04);
   });
-  // máy rang chính trên xe đẩy xanh (góc phải trong cùng)
-  const cart = group(3.9, 0, -29.25, 0), blue = std('#4f80b5', 0.5, 0.3);
-  box(0.95, 0.06, 0.6, blue, 0, 0.72, 0, cart); box(0.95, 0.05, 0.6, blue, 0, 0.18, 0, cart);
-  box(0.92, 0.5, 0.02, std('#5d8fc4', 0.5, 0.2), 0, 0.45, 0.29, cart);
-  for (const sx of [-0.44, 0.44]) for (const sz of [-0.27, 0.27]) { box(0.04, 0.72, 0.04, blue, sx, 0.42, sz, cart); cyl(0.04, 0.04, 0.03, dark, sx, 0.04, sz, 10, cart).rotation.z = Math.PI / 2; }
-  for (let k = 0; k < 3; k++) box(0.22, 0.12, 0.3, std(pick(['#e9e6dc', '#c79a62', '#2b2d30']), 0.7), -0.25 + k * 0.25, 0.27, 0, cart);
+  // máy rang màu xanh rêu trên chân thép (góc phải trong cùng), thùng xanh nhạt phía trước
+  const cart = group(3.9, 0, -29.25, 0), green = std('#2c4437', 0.45, 0.35);
+  box(0.8, 0.05, 0.56, dark, 0, 0.72, 0, cart);
+  for (const sx of [-0.36, 0.36]) for (const sz of [-0.24, 0.24]) box(0.05, 0.72, 0.05, dark, sx, 0.36, sz, cart);
+  box(0.72, 0.4, 0.48, std('#7da0c4', 0.55), 3.25, 0.2, -28.6).rotation.y = 0.12;
   const ro = group(0, 0.75, -0.02, 0, cart);
-  box(0.62, 0.55, 0.48, std('#1a1b1d', 0.4, 0.5), 0, 0.275, 0, ro);
+  box(0.62, 0.55, 0.48, green, 0, 0.275, 0, ro);
   const dr = cyl(0.2, 0.2, 0.42, M.chrome, 0, 0.62, 0.02, 20, ro); dr.rotation.x = Math.PI / 2;
-  cyl(0.21, 0.21, 0.03, std('#1a1b1d', 0.4, 0.5), 0, 0.62, 0.24, 20, ro).rotation.x = Math.PI / 2;
+  cyl(0.21, 0.21, 0.03, green, 0, 0.62, 0.24, 20, ro).rotation.x = Math.PI / 2;
   cyl(0.07, 0.07, 0.02, glow('#ff9a4a', 0.8), 0, 0.62, 0.26, 14, ro).rotation.x = Math.PI / 2;
   cyl(0.18, 0.05, 0.28, M.chrome, 0, 1.0, -0.05, 16, ro); cyl(0.05, 0.05, 0.1, M.chrome, 0, 0.84, -0.05, 10, ro);
   cyl(0.26, 0.26, 0.08, M.chrome, -0.36, 0.3, 0.28, 22, ro); box(0.06, 0.06, 0.18, dark, -0.15, 0.35, 0.2, ro);
@@ -111,12 +99,6 @@ export function buildRoastery() {
   onFrame((t, dt) => { stir.rotation.y += dt * 1.2; });
   box(0.2, 0.14, 0.03, std('#c9a24a', 0.4, 0.6), 0.2, 0.4, 0.245, ro);
   box(0.12, 0.09, 0.02, glow('#7fd6e0', 0.6), 0.2, 0.42, 0.262, ro);
-  cyl(0.065, 0.065, 0.48, std('#c8262c', 0.45, 0.1), 4.45, 0.24, -28.55, 14); cyl(0.02, 0.02, 0.06, dark, 4.45, 0.51, -28.55, 8);
-  // pallet bao hạt sống cạnh máy rang
-  const pal = group(2.85, 0, -29.45, 0.08);
-  for (const z of [-0.35, 0, 0.35]) box(0.9, 0.08, 0.1, M.wood, 0, 0.04, z, pal);
-  for (let k = 0; k < 6; k++) box(0.14, 0.03, 0.85, M.wood, -0.38 + k * 0.152, 0.095, 0, pal);
-  for (let k = 0; k < 3; k++) { const b = box(0.8, 0.26, 0.5, M.jute, rr(-0.04, 0.04), 0.24 + k * 0.26, rr(-0.05, 0.05), pal); b.rotation.y = rr(-0.15, 0.15); b.scale.set(1, 1, 1 - k * 0.06); }
   // máy rang mẫu trên bàn vàng
   const yt = group(1.55, 0, -29.3, 0), yellow = std('#d9a93a', 0.6);
   box(1.2, 0.05, 0.62, yellow, 0, 0.74, 0, yt); box(1.15, 0.03, 0.55, yellow, 0, 0.25, 0, yt);
@@ -124,37 +106,18 @@ export function buildRoastery() {
   box(0.55, 0.42, 0.42, std('#e9e8e3', 0.4, 0.3), 0.15, 0.98, -0.02, yt);
   box(0.42, 0.28, 0.01, std('#2a2420', 0.2, 0.3, { emissive: lin('#ff9a50'), emissiveIntensity: 0.18 }), 0.15, 1.0, 0.195, yt);
   box(0.55, 0.06, 0.02, std('#c43a2f', 0.5), 0.15, 0.8, 0.2, yt); box(0.48, 0.05, 0.36, dark, 0.15, 0.79, -0.02, yt);
-  box(0.36, 0.14, 0.28, std('#f1efe9', 0.6), -0.38, 0.84, 0.05, yt); box(0.3, 0.18, 0.22, std('#e9eef0', 0.3, 0, { transparent: true, opacity: 0.8 }), -0.42, 0.86, -0.15, yt);
-  for (let k = 0; k < 4; k++) cyl(0.035, 0.035, 0.08, std(pick(['#5a3a22', '#c49a5a', '#ece6da']), 0.6), -0.1 - k * 0.09, 0.81, 0.2, 10, yt);
-  box(0.16, 0.03, 0.16, std('#2b2d30', 0.5, 0.3), 0.5, 0.78, 0.14, yt);   // cân điện tử
-  box(0.3, 0.2, 0.25, std('#c79a62', 0.9), -0.3, 0.37, 0.05, yt);
-  box(0.25, 0.22, 0.25, std('#e7e4dc', 0.9), 0.25, 0.38, 0.0, yt);
-  // kệ lưới bên phải: túi hạt rang, hũ thuỷ tinh, sổ ghi mẻ rang
-  const sh = group(RX1 - 0.25, 0, -27.65, -Math.PI / 2), wire = std('#2a2c2f', 0.5, 0.6);
-  for (const sx of [-0.55, 0.55]) for (const sz of [-0.16, 0.16]) box(0.025, 1.9, 0.025, wire, sx, 0.95, sz, sh);
-  [0.35, 0.85, 1.35, 1.85].forEach((y, row) => {
-    box(1.12, 0.02, 0.36, wire, 0, y, 0, sh);
-    for (let x = -0.48; x < 0.5; x += rr(0.12, 0.17)) {
-      if (row === 0) box(0.14, 0.24, 0.22, M.jute, x, y + 0.13, 0, sh);
-      else if (row === 1) { cyl(0.05, 0.05, 0.18, GLASS(), x, y + 0.1, 0, 12, sh); cyl(0.045, 0.045, rr(0.06, 0.15), std('#4a2c1a', 0.9), x, y + 0.05, 0, 10, sh); }
-      else if (row === 2) box(0.1, 0.17, 0.07, std(pick(['#c9a36a', '#f1efe8', '#a9d9c5', '#cfe3ef']), 0.8), x, y + 0.095, 0, sh);
-      else if (R() < 0.6) box(0.04, 0.24, 0.18, std(pick(['#2c48b4', '#c96a3a', '#e8d3a8', '#1d93a3']), 0.8), x, y + 0.13, 0, sh);
-    }
-  });
+  box(0.34, 0.14, 0.26, std('#f1efe9', 0.6), -0.38, 0.84, 0.05, yt);
   // ống bạc mềm: từ máy rang chính vắt ngang tường gạch rồi buông xuống; ống đen từ máy mẫu lên trần
   const flex = (pts, r, mat) => noCast(add(new T.Mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts), 60, r, 12), mat)));
   const silver = std('#c8ccce', 0.35, 0.75);
   flex([V(3.9, 1.85, -29.3), V(3.7, 2.45, -29.6), V(3.0, 2.62, -29.75), V(1.6, 2.6, -29.78), V(0.75, 2.42, -29.78), V(0.55, 1.9, -29.7), V(0.8, 1.05, -29.55), V(0.95, 0.4, -29.15), V(0.75, 0.12, -28.8)], 0.075, silver);
   flex([V(1.75, 1.2, -29.4), V(1.75, 1.9, -29.6), V(2.1, 2.6, -29.75), V(2.6, 2.95, -29.6)], 0.06, dark);
-  flex([V(3.9, 1.85, -29.3), V(4.1, 2.4, -29.5), V(4.25, 2.95, -29.3)], 0.07, silver);
-  // phuy nước xanh, ghế xếp hồng, ghế đẩu, thùng các-tông, bao hạt trắng
+  // phuy nước xanh, ghế xếp hồng, thùng các-tông, bao hạt trắng
   cyl(0.22, 0.22, 0.62, std('#3c8fc2', 0.5), 0.72, 0.31, -28.6, 20); cyl(0.2, 0.2, 0.02, std('#2f7aa6', 0.5), 0.72, 0.625, -28.6, 20);
   campChair(2.7, -28.55, 0.35, '#e7a0b2');
-  stool(3.35, 0, -28.35);
   box(0.5, 0.4, 0.4, std('#c49a62', 0.95), 4.15, 0.2, -28.05).rotation.y = 0.2;
-  box(0.42, 0.34, 0.36, std('#b88e58', 0.95), 4.12, 0.57, -28.1).rotation.y = -0.1;
   box(0.4, 0.56, 0.06, std('#c9a06a', 0.95), 3.75, 0.28, -27.75).rotation.y = 0.5;
-  for (let k = 0; k < 2; k++) { const b = new T.Mesh(new T.SphereGeometry(0.26, 14, 10), std('#ecebe6', 0.95)); b.scale.set(1, 1.15, 0.8); b.position.set(4.3, 0.3 + k * 0.4, -27.45 + k * 0.08); add(b); }
+  const bag = new T.Mesh(new T.SphereGeometry(0.28, 14, 10), std('#e6e1d6', 0.95)); bag.scale.set(1, 1.2, 0.8); bag.position.set(4.3, 0.32, -27.45); add(bag);
   // sofa da đen trên đế gỗ: lệch về bên trái phòng, đặt thẳng
   const sofa = group(1.72, 0, -26.9, 0), leather = std('#141416', 0.42, 0.05);
   box(2.2, 0.05, 0.92, M.wood, 0, 0.3, 0, sofa);
@@ -175,7 +138,25 @@ export function buildRoastery() {
   // monstera chậu đen góc phải phía trước
   cyl(0.24, 0.2, 0.42, std('#1b1c1e', 0.6), 4.2, 0.21, -26.75, 18); cyl(0.22, 0.22, 0.02, M.soil, 4.2, 0.41, -26.75, 16);
   monsteraBig(4.2, 0.42, -26.75, 1.25);
-  cyl(0.05, 0.05, 0.18, std('#2a7fd4', 0.4), 4.5, 0.09, -26.1, 10);
+  // ánh sáng giả cho phòng: vầng vàng trên tường và sàn, bóng mềm dưới đồ vật và ở mép trần.
+  // Đều là tấm hình gộp chung một lệnh vẽ, không phải đèn thật.
+  const glowM = new T.MeshBasicMaterial({ map: TX.glow, color: lin('#ff9f58'), transparent: true, opacity: 0.15, blending: T.AdditiveBlending, depthWrite: false, fog: false, toneMapped: false });
+  noCast(plane(5.4, 3.4, glowM, RC, 1.55, z1 + 0.03));
+  noCast(plane(5.4, 5, glowM, RC, 0.012, -27.6)).rotation.x = -Math.PI / 2;
+  for (const [x, ry] of [[RS + 0.11, Math.PI / 2], [RX1 - 0.04, -Math.PI / 2]]) noCast(plane(3.6, 3, glowM, x, 1.5, -28.2, ry));
+  const blob = canvasTex(128, 128, (g, w, h) => {
+    const gr = g.createRadialGradient(w / 2, h / 2, w * 0.12, w / 2, h / 2, w / 2);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }, { clamp: true });
+  const shadeM = new T.MeshBasicMaterial({ map: blob, color: lin('#1c0f08'), transparent: true, opacity: 0.62, depthWrite: false, fog: false });
+  for (const [x, z, w, d] of [[1.72, -26.9, 3.3, 1.9], [1.75, -25.8, 1.7, 1.1], [4.2, -26.75, 1.1, 1.1], [1.55, -29.3, 1.9, 1.1], [3.9, -29.25, 1.5, 1.1], [0.72, -28.6, 0.9, 0.9]]) noCast(plane(w, d, shadeM, x, 0.016, z)).rotation.x = -Math.PI / 2;
+  const fade = canvasTex(8, 128, (g, w, h) => {
+    const gr = g.createLinearGradient(0, 0, 0, h);
+    gr.addColorStop(0, 'rgba(0,0,0,.85)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }, { clamp: true });
+  const fadeM = new T.MeshBasicMaterial({ map: fade, color: lin('#1c0f08'), transparent: true, depthWrite: false, fog: false });
+  noCast(plane(RW, 1.3, fadeM, RC, RH - 0.65, z1 + 0.06));
+  noCast(plane(bL, 1.3, fadeM, RS + 0.12, RH - 0.65, bc, Math.PI / 2)); noCast(plane(bL, 1.3, fadeM, RX1 - 0.05, RH - 0.65, bc, -Math.PI / 2));
   // nhà vệ sinh
   noCast(boxAt(4.7, 10, 0, Y3 - 0.25, ZF, ZF - 0.12, M.white));
   for (const x of [6.0, 8.4]) { boxAt(x - 0.45, x + 0.45, 0, 2.1, ZF + 0.02, ZF - 0.13, M.wood); boxAt(x + 0.3, x + 0.36, 1.0, 1.06, ZF + 0.05, ZF + 0.02, M.chrome); }

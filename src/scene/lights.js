@@ -9,7 +9,7 @@ export const LIGHT = { lamps: [] };   // đèn chung để atmosphere.js đổi 
 // [x, y, z, độ sáng, tầm chiếu, màu]
 const CORE = [
   [8.7, 2.5, -14, 0.8, 13, WARM],          // quầy order
-  [2.2, 2.6, -27.2, 0.85, 7, WARM],        // xưởng rang
+  [2.5, 2.5, -27.4, 1.15, 7.5, '#ffb574'],  // xưởng rang
   [0.8, 4.7, -17.5, 0.9, 12, '#eef3ff'],   // 4 đèn tuýp giữa xưởng
   [-8.5, 4.6, -17, 0.5, 14, WARM],         // tầng 2
   [2.5, 6.2, -27.6, 0.45, 9, WARM],        // sân tầng 3

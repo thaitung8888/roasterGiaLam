@@ -190,10 +190,10 @@ export function buildTextures() {
   }), { clamp: true });
   // gạch thô xám nâu, mạch vữa đậm (1 lần lặp = 2.4 m × 1.2 m)
   TX.brick = canvasTex(512, 256, (g, w, h) => {
-    g.fillStyle = '#3e3935'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#4c3d33'; g.fillRect(0, 0, w, h);
     const bw = 48, bh = 16;
     for (let y = 0, row = 0; y < h; y += bh, row++) for (let x = -bw; x < w; x += bw) {
-      const ox = row % 2 ? bw / 2 : 0, c = pick(['#7a6a5c', '#6b5d52', '#86766a', '#5f544b', '#8f7f70', '#71655b', '#9a8a7a']);
+      const ox = row % 2 ? bw / 2 : 0, c = pick(['#86664e', '#745642', '#937258', '#664e3e', '#9e7d60', '#7d5f49', '#a88a6c']);
       g.fillStyle = c; g.fillRect(x + ox + 2, y + 2, bw - 4, bh - 3);
       g.fillStyle = `rgba(0,0,0,${rr(0.05, 0.22)})`; g.fillRect(x + ox + 2, y + bh - 5, bw - 4, 3);
       if (R() < 0.3) { g.fillStyle = 'rgba(255,255,255,.08)'; g.fillRect(x + ox + rr(4, 30), y + 3, rr(6, 14), 4); }

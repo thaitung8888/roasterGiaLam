@@ -26,7 +26,7 @@ export const STATIONS = [
     title: 'Ghế xếp dã ngoại quanh gốc cây giữa xưởng',
     body: 'Vài bộ ghế xếp đặt rải rác, bàn nhôm gấp, bồn cây xanh chạy dọc dưới tầng 2.' },
   { id: 'xuong-rang', label: 'Xưởng rang', side: 'right',
-    camera: { pos: [1.7, 1.7, -22], look: [2.3, 1.35, -29.5] },
+    camera: { pos: [2.5, 1.5, -21.4], look: [2.5, 1.35, -29.5] },
     title: 'Hạt rang ngay trong quán',
     body: 'Phòng rang mở với tường gạch.' },
   { id: 'dating', label: 'Góc dating', side: 'left', dusk: true,

@@ -12,7 +12,6 @@ export function buildMaterials() {
   M.blackTop = std('#1e1f21', 0.6);
   M.woodDark = std('#2f2925', 0.7);
   M.wood = std('#a07a52', 0.65);
-  M.cushion = std('#6e8695', 0.8);
   M.trunk = std('#5d5146', 0.9);
   M.potConc = std('#b9b6ae', 0.9);
   M.potClay = std('#a9805e', 0.85);
@@ -23,7 +22,7 @@ export function buildMaterials() {
   M.corrSide = tmat(TX.corr, [0.4, 1], 0.45, '#ffffff', { metalness: 0.45, side: T.DoubleSide });
   M.foil = tmat(TX.foil, [1.6, 1.6], 0.55, '#ffffff', { metalness: 0.25, side: T.DoubleSide });
   M.roofTop = tmat(TX.corr, [0.4, 1], 0.5, '#8e9396', { metalness: 0.4, side: T.DoubleSide });
-  M.concrete = tmat(TX.concrete, [4, 4], 0.45);
+  M.concrete = tmat(TX.concrete, [4, 4], 0.38, '#d6bf9f');
   M.terrazzo = tmat(TX.terrazzo, [2.5, 2.5], 0.35, '#ffffff', { metalness: 0.05 });
   M.epoxy = tmat(TX.epoxy, [3, 3], 0.5);
   M.tiles = tmat(TX.tiles, [1.2, 1.2], 0.6);

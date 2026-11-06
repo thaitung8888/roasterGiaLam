@@ -3,7 +3,7 @@ import { BACK, LV } from '../../config/levels.js';
 import { T, lin } from '../core.js';
 import { V, add, box, boxAt, cyl, noCast, plane, quad, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
-import { bistroChair, roundTable, woodChair } from '../props/furniture.js';
+import { roundTable, woodChair } from '../props/furniture.js';
 import { fig, planterRow } from '../props/plants.js';
 
 export function buildFloor2() {
@@ -73,15 +73,15 @@ export function buildFloor2() {
   const olive = std('#6f7a4a', 0.75);
   box(0.5, 0.05, 1.2, olive, -3.85, 0.45, -22.3); for (const z of [-21.8, -22.8]) box(0.44, 0.42, 0.06, olive, -3.85, 0.21, z);
   box(0.7, 0.05, 1.0, olive, -3.05, 0.74, -22.25); for (const z of [-21.85, -22.65]) box(0.62, 0.72, 0.06, olive, -3.05, 0.36, z);
-  // bàn tròn dọc lan can, bàn vuông sát tường
-  // còn một nửa: 2 bàn tròn sát lan can, 2 bàn nhỏ sát tường, đặt so le cho thoáng
-  for (const z of [-12.2, -17.6]) {
-    roundTable(-5.85, Y, z);
-    woodChair(-6.45, Y, z + 0.1, Math.PI / 2); woodChair(-5.85, Y, z - 0.62, 0);
+  // toàn bộ bàn ghế màu đen: ba bộ cách đều nhau dọc lan can kính, hai bộ nhỏ sát tường đặt so le
+  const black = M.blackTop;
+  for (const z of [-11.5, -16.5, -21.5]) {
+    roundTable(-5.85, Y, z, 0.36, 0.74, null, black);
+    woodChair(-6.45, Y, z + 0.1, Math.PI / 2, null, black); woodChair(-5.85, Y, z - 0.62, 0, null, black);
   }
   for (const z of [-14.9, -20.0]) {
-    roundTable(-9.25, Y, z, 0.3);
-    bistroChair(-8.6, Y, z, -Math.PI / 2); bistroChair(-9.3, Y, z + 0.62, Math.PI);
+    roundTable(-9.25, Y, z, 0.3, 0.74, null, black);
+    woodChair(-8.6, Y, z, -Math.PI / 2, null, black); woodChair(-9.3, Y, z + 0.62, Math.PI, null, black);
   }
   fig(-9.45, Y, -11.0, 1.35); fig(-9.4, Y, -18.0, 1.15); fig(-9.4, Y, -22.5, 1.3);
   // đèn tường

@@ -1,7 +1,7 @@
 // Góc dating: sàn nâng 1 m, kính liền chạy hết chiều ngang, 3 bàn sát kính + 1 bàn cạnh cầu thang, dây lá rủ hai đầu kính.
 import { LV } from '../../config/levels.js';
 import { leafBlob } from '../foliage.js';
-import { GLASS, V, box, boxAt, cyl, noCast, plane, rod, std } from '../helpers.js';
+import { GLASS, V, box, boxAt, cyl, group, noCast, plane, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { roundTable, woodChair } from '../props/furniture.js';
 import { fig, pothosTrail, spiky } from '../props/plants.js';
@@ -32,6 +32,13 @@ export function buildDating() {
   roundTable(-1.35, Y, -6.55);   // cạnh đầu cầu thang đi từ tầng 1 lên
   woodChair(-1.35, Y, -5.9, Math.PI); woodChair(-2.0, Y, -6.7, Math.PI / 2 - 0.3);
   spiky(-9.5, Y, -0.6, 1.25); fig(-9.3, Y, -3.6, 0.95, M.potClay); spiky(-1.1, Y, -0.6, 1.05);
+  // bàn dài màu vàng: đầu bàn áp vào tường khối tầng 2, thân bàn vươn ra phòng, hai ghế đối diện hai ghế
+  const yellow = std('#d99a12', 0.55), tx = -6.75, tz = -8.28, tw = 0.8, td = 2.0, table = group(tx, Y, tz);
+  box(tw, 0.04, td, yellow, 0, 0.74, 0, table);
+  for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(0.05, 0.72, 0.05, yellow, sx * (tw / 2 - 0.06), 0.36, sz * (td / 2 - 0.06), table);
+  for (const dz of [-0.59, 0.59]) {
+    woodChair(tx - 0.64, Y, tz + dz, Math.PI / 2 + dz * 0.08); woodChair(tx + 0.64, Y, tz + dz, -Math.PI / 2 + dz * 0.08);
+  }
   // đồ trên bàn sát kính: ly cà phê trên đĩa, cuốn sách, bình hoa nhỏ
   const white = std('#f1eee7', 0.45), coffee = std('#3a2115', 0.3), T0 = Y + 0.755;
   for (const [x, dx] of [[-7.6, -0.14], [-7.6, 0.14], [-5.0, 0.13], [-2.4, -0.13], [-2.4, 0.13]]) {

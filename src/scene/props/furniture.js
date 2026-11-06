@@ -36,26 +36,18 @@ export function lowTable(x, z, ry, color, parent) {
   for (const sx of [-0.25, 0.25]) for (const sz of [-0.17, 0.17]) rod(V(sx, 0, sz), V(sx, 0.35, sz), 0.01, M.chrome, g);
   return g;
 }
-export function bistroChair(x, y, z, ry, parent) {
+export function woodChair(x, y, z, ry, parent, mat = M.woodDark) {
   const g = group(x, y, z, ry, parent);
-  for (const sx of [-0.18, 0.18]) for (const sz of [-0.18, 0.18]) rod(V(sx * 1.08, 0, sz * 1.08), V(sx, 0.45, sz), 0.012, M.steel, g);
-  box(0.42, 0.06, 0.42, M.cushion, 0, 0.48, 0, g);
-  for (const sx of [-0.18, 0.18]) rod(V(sx, 0.45, -0.19), V(sx, 0.86, -0.24), 0.012, M.steel, g);
-  box(0.4, 0.2, 0.025, M.wood, 0, 0.8, -0.235, g).rotation.x = -0.12;
+  for (const sx of [-0.18, 0.18]) for (const sz of [-0.18, 0.18]) box(0.035, 0.45, 0.035, mat, sx, 0.225, sz, g);
+  box(0.42, 0.04, 0.42, mat, 0, 0.47, 0, g);
+  box(0.42, 0.34, 0.03, mat, 0, 0.72, -0.2, g).rotation.x = -0.08;
   return g;
 }
-export function woodChair(x, y, z, ry, parent) {
-  const g = group(x, y, z, ry, parent);
-  for (const sx of [-0.18, 0.18]) for (const sz of [-0.18, 0.18]) box(0.035, 0.45, 0.035, M.woodDark, sx, 0.225, sz, g);
-  box(0.42, 0.04, 0.42, M.woodDark, 0, 0.47, 0, g);
-  box(0.42, 0.34, 0.03, M.woodDark, 0, 0.72, -0.2, g).rotation.x = -0.08;
-  return g;
-}
-export function roundTable(x, y, z, r = 0.36, h = 0.74, parent) {
+export function roundTable(x, y, z, r = 0.36, h = 0.74, parent, legs = M.chrome) {
   const g = group(x, y, z, 0, parent);
   cyl(r, r, 0.03, M.blackTop, 0, h, 0, 24, g);
-  cyl(0.028, 0.028, h, M.chrome, 0, h / 2, 0, 8, g);
-  for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.4; beam(V(0, 0.02, 0), V(Math.cos(a) * 0.3, 0.02, Math.sin(a) * 0.3), 0.05, 0.025, M.chrome, g); }
+  cyl(0.028, 0.028, h, legs, 0, h / 2, 0, 8, g);
+  for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.4; beam(V(0, 0.02, 0), V(Math.cos(a) * 0.3, 0.02, Math.sin(a) * 0.3), 0.05, 0.025, legs, g); }
   return g;
 }
 export function barStool(x, z, parent, ry = 0) {
