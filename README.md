@@ -69,9 +69,11 @@ gialam-coffee-roaster/
       ├─ lights.js            Trời, nắng, đèn điểm (điện thoại dùng ít đèn hơn)
       ├─ plan.js              Co mặt bằng cả cảnh theo PLAN, bàn ghế giữ kích thước thật
       ├─ quality.js           Tự hạ độ phân giải khi máy không theo kịp
+      ├─ fx.js                Phản chiếu môi trường, vệt nắng qua mái, bụi sáng, hơi nước
       ├─ merge.js             Gộp khối tĩnh cùng vật liệu, UV theo mét
       ├─ textures/            Texture vẽ bằng canvas: tường, sàn, gạch, cỏ, lá, chữ nổi
       ├─ props/
+      │  ├─ shadow.js         Bóng mềm dưới bàn ghế, chậu cây (thay bóng thật trên điện thoại)
       │  ├─ furniture.js      Ghế xếp, ghế quầy, bàn tròn, bàn nhôm, ghế gỗ ép…
       │  └─ plants.js         Bàng Singapore, ficus, monstera, môn, dương xỉ, bồn cây
       └─ zones/               ★ Mỗi khu trong quán một file

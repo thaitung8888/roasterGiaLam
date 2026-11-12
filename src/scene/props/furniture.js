@@ -2,9 +2,11 @@
 import { T } from '../core.js';
 import { V, beam, box, cyl, group, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
+import { shadow } from './shadow.js';
 
 export function campChair(x, z, ry, fabric, parent) {
   const g = group(x, 0, z, ry, parent), fab = std(fabric, 0.92);
+  shadow(0.8, 0.8, 0, 0, 0, g);
   for (const s of [-1, 1]) {
     rod(V(s * 0.27, 0, 0.24), V(s * 0.27, 0.44, -0.2), 0.012, M.steel, g);
     rod(V(s * 0.27, 0, -0.24), V(s * 0.27, 0.44, 0.2), 0.012, M.steel, g);
@@ -19,6 +21,7 @@ export function campChair(x, z, ry, fabric, parent) {
 }
 export function kermitChair(x, z, ry, parent) {
   const g = group(x, 0, z, ry, parent), fab = std('#232427', 0.9);
+  shadow(0.8, 0.8, 0, 0, 0, g);
   for (const s of [-1, 1]) {
     rod(V(s * 0.27, 0, 0.22), V(s * 0.27, 0.42, -0.18), 0.013, M.steel, g);
     rod(V(s * 0.27, 0, -0.22), V(s * 0.27, 0.42, 0.18), 0.013, M.steel, g);
@@ -32,12 +35,14 @@ export function kermitChair(x, z, ry, parent) {
 }
 export function lowTable(x, z, ry, color, parent) {
   const g = group(x, 0, z, ry, parent), top = std(color, 0.4, 0.5);
+  shadow(0.85, 0.65, 0, 0, 0, g);
   box(0.56, 0.025, 0.4, top, 0, 0.36, 0, g);
   for (const sx of [-0.25, 0.25]) for (const sz of [-0.17, 0.17]) rod(V(sx, 0, sz), V(sx, 0.35, sz), 0.01, M.chrome, g);
   return g;
 }
 export function woodChair(x, y, z, ry, parent, mat = M.woodDark) {
   const g = group(x, y, z, ry, parent);
+  shadow(0.66, 0.66, 0, 0, 0, g);
   for (const sx of [-0.18, 0.18]) for (const sz of [-0.18, 0.18]) box(0.035, 0.45, 0.035, mat, sx, 0.225, sz, g);
   box(0.42, 0.04, 0.42, mat, 0, 0.47, 0, g);
   box(0.42, 0.34, 0.03, mat, 0, 0.72, -0.2, g).rotation.x = -0.08;
@@ -45,6 +50,7 @@ export function woodChair(x, y, z, ry, parent, mat = M.woodDark) {
 }
 export function roundTable(x, y, z, r = 0.36, h = 0.74, parent, legs = M.chrome) {
   const g = group(x, y, z, 0, parent);
+  shadow(r * 3, r * 3, 0, 0, 0, g);
   cyl(r, r, 0.03, M.blackTop, 0, h, 0, 24, g);
   cyl(0.028, 0.028, h, legs, 0, h / 2, 0, 8, g);
   for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.4; beam(V(0, 0.02, 0), V(Math.cos(a) * 0.3, 0.02, Math.sin(a) * 0.3), 0.05, 0.025, legs, g); }
@@ -52,6 +58,7 @@ export function roundTable(x, y, z, r = 0.36, h = 0.74, parent, legs = M.chrome)
 }
 export function barStool(x, z, parent, ry = 0) {
   const g = group(x, 0, z, ry, parent), fr = std('#3a3d40', 0.5, 0.5);
+  shadow(0.58, 0.58, 0, 0, 0, g);
   for (const sx of [-0.15, 0.15]) for (const sz of [-0.15, 0.15]) rod(V(sx * 1.18, 0, sz * 1.18), V(sx, 0.72, sz), 0.011, fr, g);
   box(0.36, 0.025, 0.34, std('#26282b', 0.6), 0, 0.735, 0, g);
   for (const sz of [-0.165, 0.165]) box(0.36, 0.015, 0.015, fr, 0, 0.26, sz, g);
@@ -62,6 +69,7 @@ export function barStool(x, z, parent, ry = 0) {
 }
 export function stool(x, y, z, parent) {
   const g = group(x, y, z, 0, parent);
+  shadow(0.52, 0.52, 0, 0, 0, g);
   cyl(0.17, 0.17, 0.05, M.woodDark, 0, 0.66, 0, 18, g);
   for (let k = 0; k < 3; k++) { const a = k * 2.094; rod(V(Math.cos(a) * 0.17, 0, Math.sin(a) * 0.17), V(Math.cos(a) * 0.11, 0.64, Math.sin(a) * 0.11), 0.013, M.steel, g); }
   return g;
@@ -69,6 +77,7 @@ export function stool(x, y, z, parent) {
 // ghế bành bọc vải xám, lưng cong ôm quanh, chân gỗ ngắn
 export function tubChair(x, y, z, ry, parent) {
   const g = group(x, y, z, ry, parent), fab = std('#5f5d58', 0.95), r = 0.37, a0 = -0.6, a1 = Math.PI + 0.6;
+  shadow(1.05, 1.05, 0, 0, 0, g);
   const sh = new T.Shape(); sh.absarc(0, 0, r, a0, a1, false); sh.absarc(0, 0, r - 0.09, a1, a0, true); sh.closePath();
   const back = new T.Mesh(new T.ExtrudeGeometry(sh, { depth: 0.44, bevelEnabled: true, bevelSize: 0.022, bevelThickness: 0.022, bevelSegments: 2, curveSegments: 14 }), fab);
   back.rotation.x = -Math.PI / 2; back.position.y = 0.26; g.add(back);
@@ -79,6 +88,7 @@ export function tubChair(x, y, z, ry, parent) {
 }
 export function plyChair(x, y, z, ry, parent) {
   const g = group(x, y, z, ry, parent);
+  shadow(0.8, 0.95, 0, 0, 0, g);
   box(0.5, 0.04, 0.5, M.ply, 0, 0.38, 0, g);
   for (const s of [-1, 1]) box(0.035, 0.38, 0.5, M.ply, s * 0.23, 0.19, 0, g);
   box(0.5, 0.25, 0.03, M.ply, 0, 0.26, 0.24, g);

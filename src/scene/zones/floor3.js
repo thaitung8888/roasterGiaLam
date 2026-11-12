@@ -6,6 +6,7 @@ import { GLASS, V, add, beam, box, boxAt, cyl, fit, group, keep, live, noCast, p
 import { M } from '../materials.js';
 import { plyChair, roundTable, tubChair } from '../props/furniture.js';
 import { alocasia, fern, fig, monsteraBig, pot, pothosTrail } from '../props/plants.js';
+import { shadow } from '../props/shadow.js';
 import { R, rr } from '../random.js';
 import { canvasTex } from '../textures/canvas.js';
 import { TX } from '../textures/index.js';
@@ -153,14 +154,14 @@ export function buildFloor3() {
   // ghế băng gỗ sơn xanh rêu có tựa + bàn rêu
   const oliveT = std('#69744a', 0.75);
   const bench = (x, z, len) => {
-    const g = group(x, Y3, z);
+    const g = group(x, Y3, z); shadow(len + 0.5, 0.95, 0, 0, 0, g);
     box(len, 0.05, 0.42, oliveT, 0, 0.45, 0, g); for (const sx of [-len / 2 + 0.12, len / 2 - 0.12]) box(0.06, 0.45, 0.38, oliveT, sx, 0.225, 0, g);
     box(len, 0.32, 0.04, oliveT, 0, 0.82, -0.2, g).rotation.x = -0.1; for (const sx of [-len / 2 + 0.12, len / 2 - 0.12]) box(0.05, 0.4, 0.04, oliveT, sx, 0.65, -0.19, g);
   };
   bench(7.4, -29.0, 1.8);
   // ít bàn ghế cho thoáng: hai cặp ghế gỗ ép thấp, giữa mỗi cặp là bàn nhỏ khung inox
   const sideT = (x, z, h, top) => {
-    const g = group(x, Y3, z, rr(-0.05, 0.05)), st = std('#c3c8cb', 0.3, 0.8);
+    const g = group(x, Y3, z, rr(-0.05, 0.05)), st = std('#c3c8cb', 0.3, 0.8); shadow(0.75, 0.7, 0, 0, 0, g);
     box(0.46, 0.025, 0.4, top, 0, h, 0, g);
     for (const sx of [-0.215, 0.215]) for (const sz of [-0.185, 0.185]) box(0.018, h, 0.018, st, sx, h / 2, sz, g);
     for (const sz of [-0.185, 0.185]) box(0.44, 0.018, 0.018, st, 0, 0.012, sz, g);

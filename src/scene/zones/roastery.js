@@ -144,11 +144,7 @@ export function buildRoastery() {
   noCast(plane(5.4, 3.4, glowM, RC, 1.55, z1 + 0.03));
   noCast(plane(5.4, 5, glowM, RC, 0.012, -27.6)).rotation.x = -Math.PI / 2;
   for (const [x, ry] of [[RS + 0.11, Math.PI / 2], [RX1 - 0.04, -Math.PI / 2]]) noCast(plane(3.6, 3, glowM, x, 1.5, -28.2, ry));
-  const blob = canvasTex(128, 128, (g, w, h) => {
-    const gr = g.createRadialGradient(w / 2, h / 2, w * 0.12, w / 2, h / 2, w / 2);
-    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
-  }, { clamp: true });
-  const shadeM = new T.MeshBasicMaterial({ map: blob, color: lin('#1c0f08'), transparent: true, opacity: 0.62, depthWrite: false, fog: false });
+  const shadeM = new T.MeshBasicMaterial({ map: TX.blob, color: lin('#1c0f08'), transparent: true, opacity: 0.62, depthWrite: false, fog: false });
   for (const [x, z, w, d] of [[1.72, -26.9, 3.3, 1.9], [1.75, -25.8, 1.7, 1.1], [4.2, -26.75, 1.1, 1.1], [1.55, -29.3, 1.9, 1.1], [3.9, -29.25, 1.5, 1.1], [0.72, -28.6, 0.9, 0.9]]) noCast(plane(w, d, shadeM, x, 0.016, z)).rotation.x = -Math.PI / 2;
   const fade = canvasTex(8, 128, (g, w, h) => {
     const gr = g.createLinearGradient(0, 0, 0, h);

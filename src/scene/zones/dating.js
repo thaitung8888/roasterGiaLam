@@ -5,6 +5,7 @@ import { GLASS, V, box, boxAt, cyl, group, noCast, plane, rod, std } from '../he
 import { M } from '../materials.js';
 import { roundTable, woodChair } from '../props/furniture.js';
 import { fig, pothosTrail, spiky } from '../props/plants.js';
+import { shadow } from '../props/shadow.js';
 import { rr } from '../random.js';
 
 export function buildDating() {
@@ -34,7 +35,7 @@ export function buildDating() {
   spiky(-9.5, Y, -0.6, 1.25); fig(-9.3, Y, -3.6, 0.95, M.potClay); spiky(-1.1, Y, -0.6, 1.05);
   // bàn dài màu vàng: đầu bàn áp vào tường khối tầng 2, thân bàn vươn ra phòng, hai ghế đối diện hai ghế
   const yellow = std('#d99a12', 0.55), tx = -6.75, tz = -8.28, tw = 0.8, td = 2.0, table = group(tx, Y, tz);
-  box(tw, 0.04, td, yellow, 0, 0.74, 0, table);
+  box(tw, 0.04, td, yellow, 0, 0.74, 0, table); shadow(1.3, 2.6, 0, 0, 0, table);
   for (const sx of [-1, 1]) for (const sz of [-1, 1]) box(0.05, 0.72, 0.05, yellow, sx * (tw / 2 - 0.06), 0.36, sz * (td / 2 - 0.06), table);
   for (const dz of [-0.59, 0.59]) {
     woodChair(tx - 0.64, Y, tz + dz, Math.PI / 2 + dz * 0.08); woodChair(tx + 0.64, Y, tz + dz, -Math.PI / 2 + dz * 0.08);

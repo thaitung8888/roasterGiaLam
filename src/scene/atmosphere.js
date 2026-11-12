@@ -6,6 +6,7 @@ import { STATIONS } from '../config/stations.js';
 import { reduce, small } from '../env.js';
 import { T, camera, lin, onFrame, scene } from './core.js';
 import { gust } from './foliage.js';
+import { tuneFx } from './fx.js';
 import { add, live, noCast, plane } from './helpers.js';
 import { LIGHT } from './lights.js';
 import { M } from './materials.js';
@@ -182,6 +183,7 @@ export function buildAtmosphere() {
   const sunC = C('#fff2df', '#ff9d5c', '#8ea6d6'), skyC = C('#f2f6f6', '#ffb98c', '#6d7da6'), groundC = C('#8a7f6e', '#6a4638', '#5a4232');
   const fogC = C('#dfe7e6', '#f2b98c', '#0d1420'), grassC = C('#ffffff', '#bda678', '#7f9186'), patchC = C('#ffe7c4', '#ff9a4e', '#000000');
   const roofC = [M.skyLight.color.clone(), M.skyLight.color.clone(), lin('#1a2333')], signC = C('#2a2f55', '#6a5a4a', '#fff0c8');
+  const shaftC = C('#fff1d6', '#ffb070', '#000000');
   // khi mưa: màu đèn trời và sương theo từng mốc, mặt đường tối và bóng nước
   const fogRainC = C('#a7b1ba', '#9a8f92', '#0a0f18'), skyRainC = C('#b4bfca', '#b09a98', '#5a6a8c'), tintC = C('#d5dde5', '#e0c9ba', '#8797b0');
   const wet = [[M.pavers, lin('#ffffff'), lin('#7f8488'), 0.9, 0.34], [M.asphalt, lin('#ffffff'), lin('#6c7176'), 0.95, 0.3]];
@@ -222,6 +224,7 @@ export function buildAtmosphere() {
     col(lines.material.uniforms.uTint.value, tintC); lines.material.uniforms.uAlpha.value = r * 0.56;
     col(drops.material.uniforms.uTint.value, tintC); drops.material.uniforms.uRain.value = r;
     gust.value = 1 + r * 0.9;
+    tuneFx(num([0.84, 1, 0]) * (1 - 0.85 * r), num([1, 0.8, 0.16]) * (1 - 0.25 * r), r, col(tmp, shaftC));
   };
 
   onFrame((t, dt) => {

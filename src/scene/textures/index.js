@@ -133,6 +133,11 @@ export function buildTextures() {
     }
     g.globalCompositeOperation = 'source-over';
   }, { linear: true });
+  // đốm tối mờ dần ra mép, dùng làm bóng mềm dưới đồ vật
+  TX.blob = canvasTex(128, 128, (g, w, h) => {
+    const gr = g.createRadialGradient(w / 2, h / 2, w * 0.1, w / 2, h / 2, w / 2);
+    gr.addColorStop(0, 'rgba(0,0,0,1)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  }, { clamp: true });
   // vầng sáng tròn dùng cho vệt đèn ban đêm
   TX.glow = canvasTex(128, 128, (g, w, h) => {
     const gr = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);

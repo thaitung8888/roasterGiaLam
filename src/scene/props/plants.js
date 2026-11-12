@@ -4,8 +4,12 @@ import { leaf, leafBlob } from '../foliage.js';
 import { V, boxAt, cyl, noCast, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { R, rr } from '../random.js';
+import { shadow } from './shadow.js';
 
-export function pot(x, y, z, r, h, mat) { cyl(r, r * 0.8, h, mat || M.potConc, x, y + h / 2, z, 18); cyl(r * 0.92, r * 0.92, 0.02, M.soil, x, y + h - 0.03, z, 16); }
+export function pot(x, y, z, r, h, mat) {
+  shadow(r * 3.6, r * 3.6, x, y, z);
+  cyl(r, r * 0.8, h, mat || M.potConc, x, y + h / 2, z, 18); cyl(r * 0.92, r * 0.92, 0.02, M.soil, x, y + h - 0.03, z, 16);
+}
 export function fig(x, y, z, s = 1, potMat) {   // bàng Singapore
   pot(x, y, z, 0.24 * s, 0.42 * s, potMat);
   const top = y + 0.42 * s;
@@ -42,6 +46,7 @@ function leafBranch(a, b, count, reach, size, sun = 0) {
   }
 }
 export function tree(x, z, h, crown, n, y = 0) {   // cây tán lớn ngoài trời: thân cong nhẹ, cành vươn lên, lá dày dọc cành
+  shadow(crown * 2.9, crown * 2.9, x, y + 0.035, z);   // bóng tán cây trên mặt đất
   const pts = [V(x, y, z)], lx = rr(-0.3, 0.3), lz = rr(-0.3, 0.3), H = h * 0.62;
   for (let k = 1; k <= 5; k++) { const t = k / 5; pts.push(V(x + lx * t + Math.sin(t * 4) * 0.06, y + t * H, z + lz * t)); }
   const r0 = 0.03 * h;

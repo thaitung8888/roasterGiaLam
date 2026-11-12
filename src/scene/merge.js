@@ -43,7 +43,7 @@ export function mergeStatic() {
     geo.computeBoundingSphere();
     const mesh = new T.Mesh(geo, m);
     mesh.castShadow = SHADOWS && cast; mesh.receiveShadow = SHADOWS && !m.isMeshBasicMaterial;
-    if (m.transparent) mesh.renderOrder = 2;
+    if (m.transparent) mesh.renderOrder = m.userData.order || 2;
     scene.add(mesh);
   }
 }

@@ -2,6 +2,7 @@
 import { V, box, boxAt, cyl, group, noCast, plane, quad, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { tree } from '../props/plants.js';
+import { shadow } from '../props/shadow.js';
 import { R, pick } from '../random.js';
 
 export function buildOutside() {
@@ -39,7 +40,7 @@ export function buildOutside() {
     boxAt(a + 0.3, b - 0.35, 0, 2.9, -0.5, -0.38, std(i % 2 ? '#7c8790' : '#5d676d', 0.6, 0.4));
   });
   // ô tô đỗ trước cửa
-  const car = group(-15.5, 0, 4.6, 0.02);
+  const car = group(-15.5, 0, 4.6, 0.02); shadow(5.6, 2.9, 0, 0, 0, car);
   box(4.4, 0.7, 1.8, std('#6a7075', 0.35, 0.6), 0, 0.62, 0, car);
   box(2.6, 0.62, 1.66, std('#1d2226', 0.15, 0.6), -0.2, 1.28, 0, car);
   for (const sx of [-1.4, 1.4]) for (const sz of [-0.86, 0.86]) { const w = cyl(0.34, 0.34, 0.24, std('#151515', 0.8), sx, 0.34, sz, 16, car); w.rotation.x = Math.PI / 2; }

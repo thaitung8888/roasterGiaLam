@@ -1,6 +1,7 @@
 // Thứ tự dựng các khu. Thêm khu mới: tạo file trong zones/, export hàm buildXxx(), thêm vào đây.
 import { buildAtmosphere } from '../atmosphere.js';
 import { flushFoliage } from '../foliage.js';
+import { buildFx } from '../fx.js';
 import { buildLights } from '../lights.js';
 import { buildMaterials } from '../materials.js';
 import { mergeStatic } from '../merge.js';
@@ -16,4 +17,4 @@ import { buildOutside } from './outside.js';
 import { buildRoastery } from './roastery.js';
 import { buildShell } from './shell.js';
 
-export const BUILD_STEPS = [buildTextures, buildMaterials, buildOutside, buildShell, buildDating, buildFloor2, buildBar, buildCamping, buildRoastery, buildFloor3, buildDike, flushFoliage, buildLights, buildAtmosphere, shrinkPlan, mergeStatic];
+export const BUILD_STEPS = [buildTextures, buildMaterials, buildOutside, buildShell, buildDating, buildFloor2, buildBar, buildCamping, buildRoastery, buildFloor3, buildDike, flushFoliage, buildLights, buildAtmosphere, buildFx, shrinkPlan, mergeStatic];
