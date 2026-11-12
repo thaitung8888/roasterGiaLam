@@ -8,13 +8,13 @@ export const PHOTOS = {
     { src: 'photos/cafe3.jpg', at: [4.6, 11.2, 0.1], text: 'Biển hiệu của quán lúc chiều tối' }
   ],
   quay: [
-    { src: 'photos/cafe5.jpg', at: [7.6, 1.75, -14.2], text: 'Quầy pha: máy Faema và các máy xay hạt' }
+    { src: 'photos/cafe5.jpg', at: [9.6, 2.55, -18.6], text: 'Quầy pha: máy Faema và các máy xay hạt' }
   ],
   camping: [
     { src: 'photos/cafe2.jpg', at: [0.8, 2.9, -16.9], text: 'Cây giữa xưởng, ban ngày và lúc lên đèn' }
   ],
   'xuong-rang': [
-    { src: 'photos/cafe4.jpg', at: [3.9, 1.75, -29.25], text: 'Máy rang của xưởng' },
+    { src: 'photos/cafe4.jpg', at: [4.5, 1.45, -29.3], text: 'Máy rang của xưởng' },
     { src: 'photos/cafe1.jpg', at: [1.45, 2.0, -29.9], text: 'Hạt của tháng: Ethiopia Bench Maji Gesha' }
   ],
   dating: [

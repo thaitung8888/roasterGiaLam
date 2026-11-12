@@ -12,6 +12,7 @@ const WET = [];   // mặt đường, vỉa hè: chỉ phản chiếu khi mưa
 const time = { value: 0 };
 let stripeM;
 const steamMs = [];
+export const STEAM = {};   // hơi nước có thể đổi độ dày theo tương tác (máy rang)
 
 // ---- phản chiếu môi trường: dựng một "căn xưởng" tối giản rồi cho three.js lọc thành texture phản chiếu
 function envTexture() {
@@ -95,10 +96,11 @@ function steam(x, y, z, w, h, alpha) {
   m.userData.alpha = alpha;
   const mesh = new T.Mesh(g, m); mesh.position.set(x, y, z); mesh.renderOrder = 4; mesh.frustumCulled = false;
   live(add(mesh)); steamMs.push(m);
+  return m;
 }
 function buildSteam() {
   steam(7.74, 1.53, -14.05, 0.34, 0.6, 1.5);      // máy pha ở quầy
-  steam(3.54, 1.14, -28.97, 0.6, 1.0, 1.25);      // khay làm nguội của máy rang
+  STEAM.roaster = steam(3.54, 1.14, -28.97, 0.6, 1.0, 1.25);   // khay làm nguội của máy rang
   for (const x of [-7.74, -4.87, -2.53]) steam(x, 1.845, -0.82, 0.1, 0.24, 1.6);   // ly cà phê nóng ở bàn sát kính dating
 }
 
@@ -112,5 +114,5 @@ export function tuneFx(sunK, envK, rainK, sunColor) {
   for (const [m, k] of ENV) m.envMapIntensity = k * envK;
   for (const m of WET) m.envMapIntensity = rainK * envK * 0.9;
   stripeM.color.copy(sunColor); stripeM.opacity = sunK * 0.5; stripeM.visible = sunK > 0.01;
-  for (const m of steamMs) { m.uniforms.uColor.value.copy(WHITE).multiplyScalar(0.45 + 0.55 * envK); m.uniforms.uAlpha.value = m.userData.alpha; }
+  for (const m of steamMs) { m.uniforms.uColor.value.copy(WHITE).multiplyScalar(0.45 + 0.55 * envK); m.uniforms.uAlpha.value = m.userData.alpha * (m.userData.boost ?? 1); }
 }

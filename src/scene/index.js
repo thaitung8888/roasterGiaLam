@@ -3,11 +3,14 @@ import { STATIONS } from '../config/stations.js';
 import { reduce } from '../env.js';
 import { setMood, setRain, setTime } from './atmosphere.js';
 import { createRig } from './cameraRig.js';
-import { SHADOWS, camera, initCore, renderer, runFrame, scene } from './core.js';
+import { PICK, SHADOWS, camera, initCore, renderer, runFrame, scene } from './core.js';
+import { addPick, exploreBusy, exploreUpdate, initExplore } from './explore.js';
 import { toPlan } from './helpers.js';
 import { createQuality } from './quality.js';
 import { BUILD_STEPS } from './zones/index.js';
+import { Bench } from '../ui/bench.js';
 import { createClock } from '../ui/clock.js';
+import { createHint } from '../ui/hint.js';
 import { createHotspots } from '../ui/hotspots.js';
 import { Lightbox } from '../ui/lightbox.js';
 import { Menu } from '../ui/menu.js';
@@ -34,13 +37,15 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
   addEventListener('resize', () => rig.fit());
   const quality = createQuality();
   const spring = { v: 0 };
-  let cur = 0, last = 0, drawn = 0, hs;
+  let cur = 0, last = 0, drawn = 0, hs, hint;
   return new Promise((resolve, reject) => {
     let i = 0;
     (function next() {
       try {
         if (i < BUILD_STEPS.length) { BUILD_STEPS[i++](); onProgress(0.08 + 0.87 * i / BUILD_STEPS.length); requestAnimationFrame(next); return; }
-        hs = createHotspots();
+        hs = createHotspots(); hint = createHint(); initExplore();
+        // vật nhỏ nằm trong khối quầy phải thêm trước khối quầy
+        addPick(PICK.espresso, () => Bench.show('brew')); addPick(PICK.roaster, () => Bench.show('roast')); addPick(PICK.menu, () => Menu.show());
         createClock(setTime, setRain);
         rig.fit(); scroll.measure(); cur = scroll.target(); rig.place(cur);
         renderer.compile(scene, camera);
@@ -56,14 +61,15 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
     if (Menu.isOpen() || Lightbox.isOpen()) { last = t; return; }
     const raw = (t - (last || t)) / 1000, dt = Math.min(0.1, raw);
     const target = scroll.target();
-    const moving = cur !== target;
+    const moving = cur !== target || exploreBusy();
     if (!moving && rig.still() && t - drawn < IDLE_MS && !(import.meta.env.DEV && window.__cam)) return;
     last = t; drawn = t;
     if (reduce) cur = target;
     else cur = follow(cur, target, spring, dt);
     if (Math.abs(target - cur) < 2e-4 && Math.abs(spring.v) < 2e-3) { cur = target; spring.v = 0; }
     if (moving) quality.sample(raw);
-    rig.place(cur); hud.update(cur); setMood(cur);
+    exploreUpdate(dt);
+    rig.place(cur); hud.update(cur); setMood(cur); hint.update(cur);
     // góc máy thử khi so với ảnh thật (chỉ khi chạy npm run dev): gõ window.__cam = { pos: [x, y, z], look: [x, y, z] } trong console
     if (import.meta.env.DEV && window.__cam) { camera.position.copy(toPlan(...window.__cam.pos)); camera.lookAt(toPlan(...window.__cam.look)); }
     runFrame(t, dt);

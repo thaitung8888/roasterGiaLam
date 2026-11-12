@@ -4,6 +4,7 @@ import { leaf, leafBlob } from '../foliage.js';
 import { GLASS, V, add, box, boxAt, cyl, glow, group, live, noCast, plane, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { barStool } from '../props/furniture.js';
+import { buildBrew } from '../brew.js';
 import { fig, pot } from '../props/plants.js';
 import { shadow } from '../props/shadow.js';
 import { R, pick, rr } from '../random.js';
@@ -246,4 +247,7 @@ export function buildBar() {
   shadow(2.8, 4.2, 7.3, 0, -10.05); shadow(1.9, 2.2, 7.25, 0, -12.1); shadow(1.6, 10.4, 7.25, 0, (ZP + ZE) / 2); shadow(1.3, 1.3, 9.25, 0, -21.7);
   // khối bấm vô hình để mở menu
   PICK.menu = live(boxAt(6.3, 8.35, 0, 1.45, Z0, ZE, new T.MeshBasicMaterial({ visible: false })));
+  // khối bấm vô hình quanh máy pha và chỗ đặt ly khi người xem pha thử một ly
+  PICK.espresso = live(boxAt(7.2, 8.1, H, H + 0.75, -13.7, -14.7, new T.MeshBasicMaterial({ visible: false })));
+  buildBrew(H);
 }

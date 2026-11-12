@@ -1,0 +1,38 @@
+/* Bảng tương tác (pha một ly, rang một mẻ) và gợi ý kéo để nhìn quanh. */
+.bench {
+  position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: min(23rem, calc(100vw - 32px)); max-height: calc(100vh - 96px); overflow-y: auto;
+  display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border-radius: 6px;
+  background: rgba(14, 20, 19, .9); color: var(--paper);
+}
+.bench h2 { font-size: 1.35rem; }
+.bench p { margin: 0; font-size: .88rem; line-height: 1.5; }
+.bench .eyebrow { font-size: 11px; }
+.bench .price { white-space: nowrap; font: 500 13px/1 var(--f-mono); color: var(--teal-lite); }
+.bench .acts { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.chips button {
+  border: 0; border-radius: 999px; padding: 7px 11px; cursor: pointer;
+  background: rgba(243, 239, 231, .12); color: var(--paper); font: 500 12px/1 var(--f-body);
+}
+.chips button:hover { background: rgba(243, 239, 231, .22); }
+.chips button[aria-pressed="true"] { background: var(--teal-lite); color: var(--ink); }
+.roast { display: flex; flex-direction: column; gap: 6px; }
+.roast .stage { font: 600 15px/1.2 var(--f-display); color: #ffc46b; }
+.roast input[type="range"] { width: 100%; margin: 4px 0; accent-color: #d98a3a; }
+.roast .scale { display: flex; justify-content: space-between; font: 500 10px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+/* đang mở bảng: ẩn chú thích và thanh trạm để nhường chỗ */
+body.acting .caption, body.acting .rail, body.acting .hero-copy { opacity: 0 !important; pointer-events: none !important; }
+
+.hint-chip {
+  position: fixed; z-index: 5; left: 50%; top: calc(62px + env(safe-area-inset-top, 0px)); margin: 0;
+  transform: translate(-50%, -6px); opacity: 0; transition: opacity .4s, transform .4s; pointer-events: none;
+  padding: 8px 14px; border-radius: 999px; background: rgba(14, 20, 19, .72); color: var(--paper);
+  font: 500 12px/1.3 var(--f-body); white-space: nowrap;
+}
+.hint-chip.on { opacity: 1; transform: translate(-50%, 0); }
+
+/* điện thoại dọc: bảng thành tấm trượt từ dưới lên */
+@media (max-width: 600px) and (orientation: portrait) {
+  .bench { left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); width: auto; max-height: 52vh; }
+}

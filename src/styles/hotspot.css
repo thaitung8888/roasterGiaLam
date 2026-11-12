@@ -10,4 +10,8 @@
 .hs .tag { background: var(--paper); padding: 6px 9px; border-radius: 3px; box-shadow: 0 4px 14px rgba(0, 0, 0, .25); }
 .hs:hover .tag { background: var(--teal-lite); }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(127, 214, 224, .6); } 100% { box-shadow: 0 0 0 16px rgba(127, 214, 224, 0); } }
+/* chấm tương tác (pha, rang): màu hổ phách để phân biệt với chấm xem ảnh */
+.hs.act .dot { background: #ffc46b; animation-name: pulseAmber; }
+.hs.act .tag { background: #ffc46b; }
+@keyframes pulseAmber { 0% { box-shadow: 0 0 0 0 rgba(255, 196, 107, .7); } 100% { box-shadow: 0 0 0 16px rgba(255, 196, 107, 0); } }
 body.pick { cursor: pointer; }

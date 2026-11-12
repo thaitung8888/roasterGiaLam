@@ -23,7 +23,7 @@ html {
   -webkit-text-size-adjust: 100%; text-size-adjust: 100%;   /* iPhone không tự phóng chữ khi xoay ngang */
   overscroll-behavior-y: none;                              /* không kéo-tải-lại, không nảy ở hai đầu trang */
   -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;                               /* bỏ độ trễ chạm hai lần, vẫn chụm phóng to được */
+  touch-action: pan-y pinch-zoom;                           /* vuốt dọc để cuộn, vuốt ngang để xoay nhìn trong cảnh, vẫn chụm phóng to được */
 }
 [hidden] { display: none !important; }
 body {
@@ -34,6 +34,7 @@ body {
   overflow-x: hidden;
 }
 /* cao bằng màn lớn nhất: thanh địa chỉ ẩn hiện không làm canvas đổi cỡ, khỏi vẽ lại và giật hình */
+#track, #scene { -webkit-user-select: none; user-select: none; }   /* kéo để nhìn quanh không bôi đen chữ */
 #scene { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; height: 100lvh; display: block; z-index: 0; }
 .shade {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;

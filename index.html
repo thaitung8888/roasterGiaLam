@@ -40,6 +40,15 @@
 
   <main id="track"></main>
 
+  <p class="hint-chip" id="hint" aria-live="polite"></p>
+  <div class="bench" id="bench" hidden role="dialog" aria-labelledby="benchTitle">
+    <p class="eyebrow" id="benchEyebrow"></p>
+    <h2 id="benchTitle"></h2>
+    <p id="benchText"></p>
+    <div id="benchCtl"></div>
+    <div class="acts" id="benchActs"><button class="btn" id="benchClose" type="button">Xong</button></div>
+  </div>
+
   <div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-labelledby="menuTitle">
     <div class="menu-card">
       <header class="menu-head">

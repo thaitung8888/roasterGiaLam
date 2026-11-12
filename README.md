@@ -33,6 +33,7 @@ gialam-coffee-roaster/
    │  ├─ stations.js          10 trạm: chữ hiển thị, vị trí camera, điểm đi qua (via)
    │  ├─ menu.js              Menu theo nhóm: [tên, mô tả, giá]
    │  ├─ levels.js            Tỉ lệ mặt bằng PLAN, kích thước xưởng, cao độ các tầng, khối cuối xưởng
+   │  ├─ stories.js           Lời kể cho thao tác pha một ly, rang một mẻ
    │  └─ photos.js            Ảnh thật: vị trí chấm "Xem ảnh" ở từng trạm, chú thích
    │
    ├─ styles/                 CSS tách theo phần, gom trong main.css
@@ -42,6 +43,7 @@ gialam-coffee-roaster/
    │  ├─ caption.css          Chú thích góc dưới (thông tin quán ở màn kết)
    │  ├─ hotspot.css          Chấm "Xem menu"
    │  ├─ menu.css             Khung menu
+   │  ├─ bench.css            Bảng tương tác, gợi ý khám phá
    │  ├─ lightbox.css         Khung xem ảnh
    │  ├─ turn.css             Lời nhắc xoay ngang
    │  └─ responsive.css       Điện thoại dọc, điện thoại ngang, màn cảm ứng, giảm chuyển động
@@ -55,11 +57,15 @@ gialam-coffee-roaster/
    │  ├─ turn.js              Lời nhắc xoay ngang trên điện thoại
    │  ├─ clock.js             Nút Sáng, Chiều, Tối (tự chọn theo giờ Hà Nội) và nút Mưa
    │  ├─ lightbox.js          Khung xem ảnh toàn màn hình
+   │  ├─ bench.js             Bảng tương tác: pha một ly, rang một mẻ
+   │  ├─ hint.js              Gợi ý kéo để nhìn quanh, chạm sàn để đi tới
    │  └─ hotspots.js          Chấm "Xem menu", chấm "Xem ảnh", bấm thẳng vào quầy
    │
    └─ scene/                  Cảnh 3D
       ├─ index.js             Dựng từng khu theo thứ tự, vòng lặp vẽ
       ├─ core.js              renderer / scene / camera, onFrame, PICK
+      ├─ explore.js           Kéo để nhìn quanh, chạm sàn để đi tới, chạm đồ vật để tương tác
+      ├─ brew.js              Ly cà phê được rót khi pha thử ở quầy
       ├─ cameraRig.js         Đường bay camera qua trạm và điểm via, liếc theo chuột
       ├─ helpers.js           Hàm dựng nhanh: box, boxAt, cyl, plane, rod, beam, group…
       ├─ random.js            Số ngẫu nhiên có hạt giống (cảnh lần nào cũng giống nhau)

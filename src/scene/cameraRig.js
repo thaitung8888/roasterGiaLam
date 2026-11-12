@@ -1,6 +1,7 @@
 // Đường bay camera qua các trạm (và các điểm via), cộng chút liếc theo chuột.
 import { reduce } from '../env.js';
 import { T, camera, measureView, renderer, view } from './core.js';
+import { adjustView } from './explore.js';
 import { UP, toPlan, V } from './helpers.js';
 
 export function createRig(stations) {
@@ -32,6 +33,7 @@ export function createRig(stations) {
         const d = p.distanceTo(l);
         l.addScaledVector(right, sx * d * 0.08).addScaledVector(UP, -sy * d * 0.045);
       }
+      adjustView(p, l);
       camera.position.copy(p); camera.lookAt(l);
     },
     // chuột đã dừng và camera liếc xong: không cần vẽ lại vì chuyển động của camera nữa

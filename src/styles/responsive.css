@@ -56,6 +56,13 @@
   .caption .info dt { font-size: 9.5px; line-height: 1.7; }
   .caption .fine { font-size: 9.5px; line-height: 1.35; }
 
+  /* bảng tương tác gọn lại, nằm bên phải để camera vẫn thấy đồ vật bên trái */
+  .bench { width: min(20rem, 44vw); padding: 10px 12px; gap: 5px; max-height: calc(100vh - 56px); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+  .bench h2 { font-size: 1.05rem; }
+  .bench p { font-size: .76rem; line-height: 1.4; }
+  .chips button { padding: 6px 9px; font-size: 11px; }
+  .hint-chip { top: calc(44px + env(safe-area-inset-top, 0px)); font-size: 11px; }
+
   /* ảnh chiếm trọn chiều cao, chú thích nằm cạnh ảnh */
   .photo { flex-direction: row; gap: 14px; }
   .photo p { max-width: 24ch; text-align: left; font-size: .8rem; }

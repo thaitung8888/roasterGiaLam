@@ -1,6 +1,7 @@
 // Cuối xưởng tầng 1: kho hạt (vách kính ám xanh) bên trái, xưởng rang mở bên phải, nhà vệ sinh.
 import { BACK, HALL, LV } from '../../config/levels.js';
-import { T, lin, onFrame } from '../core.js';
+import { PICK, T, lin, onFrame } from '../core.js';
+import { STEAM } from '../fx.js';
 import { V, add, box, boxAt, cyl, glow, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
 import { campChair } from '../props/furniture.js';
@@ -8,6 +9,10 @@ import { monsteraBig } from '../props/plants.js';
 import { pick, rr } from '../random.js';
 import { canvasTex } from '../textures/canvas.js';
 import { TX } from '../textures/index.js';
+
+// hạt trong khay làm nguội đổi màu theo độ rang khi người xem kéo thanh nhiệt (0 hạt xanh, 1 rang đậm)
+const BEAN = ['#7d8f55', '#c8b26a', '#b07a3e', '#8a5428', '#5e3519', '#3d2210', '#24140a'].map(lin);
+export const ROAST = { level: 0.72, set() {} };
 
 export function buildRoastery() {
   const { z1 } = HALL, Y3 = LV.t3, ZF = BACK.zFront, XP = BACK.xRoom;
@@ -92,11 +97,29 @@ export function buildRoastery() {
   box(0.62, 0.55, 0.48, green, 0, 0.275, 0, ro);
   const dr = cyl(0.2, 0.2, 0.42, M.chrome, 0, 0.62, 0.02, 20, ro); dr.rotation.x = Math.PI / 2;
   cyl(0.21, 0.21, 0.03, green, 0, 0.62, 0.24, 20, ro).rotation.x = Math.PI / 2;
-  cyl(0.07, 0.07, 0.02, glow('#ff9a4a', 0.8), 0, 0.62, 0.26, 14, ro).rotation.x = Math.PI / 2;
+  const ember = glow('#ff9a4a', 0.8), emberBase = ember.color.clone();
+  cyl(0.07, 0.07, 0.02, ember, 0, 0.62, 0.26, 14, ro).rotation.x = Math.PI / 2;
   cyl(0.18, 0.05, 0.28, M.chrome, 0, 1.0, -0.05, 16, ro); cyl(0.05, 0.05, 0.1, M.chrome, 0, 0.84, -0.05, 10, ro);
   cyl(0.26, 0.26, 0.08, M.chrome, -0.36, 0.3, 0.28, 22, ro); box(0.06, 0.06, 0.18, dark, -0.15, 0.35, 0.2, ro);
   const stir = live(group(-0.36, 0.36, 0.28, 0, ro)); box(0.44, 0.02, 0.03, dark, 0, 0, 0, stir);
-  onFrame((t, dt) => { stir.rotation.y += dt * 1.2; });
+  let stirSpeed = 1.2;
+  onFrame((t, dt) => { stir.rotation.y += dt * stirSpeed; });
+  const beanM = new T.MeshStandardMaterial({ roughness: 0.5 }), beans = new T.InstancedMesh(new T.SphereGeometry(1, 8, 6), beanM, 110), o3 = new T.Object3D();
+  for (let i = 0; i < 110; i++) {
+    const a = rr(0, 6.28), r = Math.sqrt(rr(0, 1)) * 0.22;
+    o3.position.set(-0.36 + Math.cos(a) * r, 0.345 + rr(0, 0.012), 0.28 + Math.sin(a) * r);
+    o3.rotation.set(rr(-0.3, 0.3), rr(0, 6.28), rr(-0.3, 0.3)); o3.scale.set(0.011, 0.0075, 0.0085); o3.updateMatrix(); beans.setMatrixAt(i, o3.matrix);
+  }
+  live(beans); ro.add(beans);
+  ROAST.set = k => {
+    ROAST.level = k;
+    const f = k * (BEAN.length - 1), i = Math.min(BEAN.length - 2, Math.floor(f));
+    beanM.color.copy(BEAN[i]).lerp(BEAN[i + 1], f - i);
+    ember.color.copy(emberBase).multiplyScalar(0.4 + k * 2.2);   // lửa trong trống rang đỏ dần
+    stirSpeed = 0.6 + k * 4;
+    if (STEAM.roaster) { STEAM.roaster.userData.boost = 0.3 + k * 1.4; STEAM.roaster.uniforms.uAlpha.value = STEAM.roaster.userData.alpha * STEAM.roaster.userData.boost; }
+  };
+  ROAST.set(ROAST.level);
   box(0.2, 0.14, 0.03, std('#c9a24a', 0.4, 0.6), 0.2, 0.4, 0.245, ro);
   box(0.12, 0.09, 0.02, glow('#7fd6e0', 0.6), 0.2, 0.42, 0.262, ro);
   // máy rang mẫu trên bàn vàng
@@ -153,6 +176,8 @@ export function buildRoastery() {
   const fadeM = new T.MeshBasicMaterial({ map: fade, color: lin('#1c0f08'), transparent: true, depthWrite: false, fog: false });
   noCast(plane(RW, 1.3, fadeM, RC, RH - 0.65, z1 + 0.06));
   noCast(plane(bL, 1.3, fadeM, RS + 0.12, RH - 0.65, bc, Math.PI / 2)); noCast(plane(bL, 1.3, fadeM, RX1 - 0.05, RH - 0.65, bc, -Math.PI / 2));
+  // khối bấm vô hình quanh máy rang
+  PICK.roaster = live(boxAt(3.35, 4.45, 0, 2.3, -28.85, -29.7, new T.MeshBasicMaterial({ visible: false })));
   // nhà vệ sinh
   noCast(boxAt(4.7, 10, 0, Y3 - 0.25, ZF, ZF - 0.12, M.white));
   for (const x of [6.0, 8.4]) { boxAt(x - 0.45, x + 0.45, 0, 2.1, ZF + 0.02, ZF - 0.13, M.wood); boxAt(x + 0.3, x + 0.36, 1.0, 1.06, ZF + 0.05, ZF + 0.02, M.chrome); }
