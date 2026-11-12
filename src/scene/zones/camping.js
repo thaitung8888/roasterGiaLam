@@ -1,11 +1,16 @@
 // Khu camping giữa xưởng: cột có 4 đèn tuýp, cây ficus, 4 bộ ghế xếp đặt rải rác.
-import { V, boxAt, glow, group, noCast, rod, std } from '../helpers.js';
+import { T } from '../core.js';
+import { V, boxAt, glow, group, live, noCast, rod, std } from '../helpers.js';
 import { M } from '../materials.js';
 import { campChair, kermitChair, lowTable } from '../props/furniture.js';
 import { ficusTree, fig, spiky } from '../props/plants.js';
 import { rr } from '../random.js';
 
+// ghế ngồi được: mỗi ghế có một khối bấm vô hình, vị trí thật lấy từ khối đó lúc người xem chạm vào
+export const SEATS = [];
+
 export function buildCamping() {
+  const hidden = new T.MeshBasicMaterial({ visible: false });
   const cx = 0.8, cz = -17.5;
   // cột trụ giữa + 4 bóng đèn tuýp xoè chéo lên trời ra 4 hướng (theo ảnh)
   noCast(boxAt(cx - 0.18, cx + 0.18, 0, 7.72, cz - 0.18, cz + 0.18, M.steel));
@@ -26,6 +31,7 @@ export function buildCamping() {
     for (const sx of [-1, 1]) for (const sz of [-0.32, 0.32]) {
       const px = sx * rr(0.6, 0.72), pz = sz + rr(-0.06, 0.06), pry = (sx < 0 ? Math.PI / 2 : -Math.PI / 2) + rr(-0.35, 0.35);
       kind === 'blue' ? campChair(px, pz, pry, '#2c48b4', g) : kermitChair(px, pz, pry, g);
+      SEATS.push({ pick: live(boxAt(px - 0.3, px + 0.3, 0, 1, pz - 0.3, pz + 0.3, hidden, g)), set: [x, z] });
     }
   });
   fig(-4.3, 0, -10.0, 1.15); spiky(5.7, 0, -24.4, 1.1);

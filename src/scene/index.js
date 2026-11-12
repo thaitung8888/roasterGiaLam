@@ -7,6 +7,7 @@ import { PICK, SHADOWS, camera, initCore, renderer, runFrame, scene } from './co
 import { addPick, exploreBusy, exploreUpdate, initExplore } from './explore.js';
 import { toPlan } from './helpers.js';
 import { createQuality } from './quality.js';
+import { SEATS } from './zones/camping.js';
 import { BUILD_STEPS } from './zones/index.js';
 import { Bench } from '../ui/bench.js';
 import { createClock } from '../ui/clock.js';
@@ -45,7 +46,10 @@ export function startScene({ canvas, scroll, hud, onProgress, onReady }) {
         if (i < BUILD_STEPS.length) { BUILD_STEPS[i++](); onProgress(0.08 + 0.87 * i / BUILD_STEPS.length); requestAnimationFrame(next); return; }
         hs = createHotspots(); hint = createHint(); initExplore();
         // vật nhỏ nằm trong khối quầy phải thêm trước khối quầy
-        addPick(PICK.espresso, () => Bench.show('brew')); addPick(PICK.roaster, () => Bench.show('roast')); addPick(PICK.menu, () => Menu.show());
+        addPick(PICK.espresso, () => Bench.show('brew')); addPick(PICK.roaster, () => Bench.show('roast'));
+        addPick(PICK.desk, () => Bench.show('desk')); addPick(PICK.blind, () => Bench.show('blind')); addPick(PICK.tree, () => Bench.show('tree'));
+        Bench.setSeats(SEATS); SEATS.forEach(s => addPick(s.pick, () => Bench.show('seat', s)));
+        addPick(PICK.menu, () => Menu.show());
         createClock(setTime, setRain);
         rig.fit(); scroll.measure(); cur = scroll.target(); rig.place(cur);
         renderer.compile(scene, camera);

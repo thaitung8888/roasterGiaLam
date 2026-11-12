@@ -33,7 +33,7 @@ gialam-coffee-roaster/
    │  ├─ stations.js          10 trạm: chữ hiển thị, vị trí camera, điểm đi qua (via)
    │  ├─ menu.js              Menu theo nhóm: [tên, mô tả, giá]
    │  ├─ levels.js            Tỉ lệ mặt bằng PLAN, kích thước xưởng, cao độ các tầng, khối cuối xưởng
-   │  ├─ stories.js           Lời kể cho thao tác pha một ly, rang một mẻ
+   │  ├─ stories.js           Lời kể và vị trí các thao tác: pha, rang, ngồi ghế, kéo mặt trời, laptop, rèm, cây
    │  └─ photos.js            Ảnh thật: vị trí chấm "Xem ảnh" ở từng trạm, chú thích
    │
    ├─ styles/                 CSS tách theo phần, gom trong main.css
@@ -57,7 +57,7 @@ gialam-coffee-roaster/
    │  ├─ turn.js              Lời nhắc xoay ngang trên điện thoại
    │  ├─ clock.js             Nút Sáng, Chiều, Tối (tự chọn theo giờ Hà Nội) và nút Mưa
    │  ├─ lightbox.js          Khung xem ảnh toàn màn hình
-   │  ├─ bench.js             Bảng tương tác: pha một ly, rang một mẻ
+   │  ├─ bench.js             Bảng tương tác ở từng trạm (pha, rang, ngồi, mặt trời, laptop, rèm)
    │  ├─ hint.js              Gợi ý kéo để nhìn quanh, chạm sàn để đi tới
    │  └─ hotspots.js          Chấm "Xem menu", chấm "Xem ảnh", bấm thẳng vào quầy
    │

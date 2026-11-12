@@ -18,15 +18,18 @@ const PHASE = { day: 0, dusk: 1, night: 2 };
 const SLOW = 5, QUICK = 1.1;   // số giây cho mỗi nấc: tự chuyển ở góc dating, và khi bấm nút hoặc rời trạm
 const RAIN_S = 1.6;            // số giây để mưa nặng hạt hoặc tạnh
 export const mood = { near: false, night: false, rain: false };
-let base = 0, phase = 0, want = 0, shown = '', atStop = false, rain = 0, rainWant = 0, apply = () => {};
-// đang nắng và dừng ở góc dating thì tự chuyển hoàng hôn, trời mưa thì không có mặt trời lặn
-const aim = () => (base === 0 && atStop && !rainWant ? 1 : base);
+let base = 0, phase = 0, want = 0, shown = '', atStop = false, rain = 0, rainWant = 0, manual = null, apply = () => {};
+// người xem tự kéo mặt trời thì theo tay họ; đang nắng và dừng ở góc dating thì tự chuyển hoàng hôn, trời mưa thì không có mặt trời lặn
+const aim = () => (manual !== null ? manual : base === 0 && atStop && !rainWant ? 1 : base);
 
 export function setTime(time, instant) {
   base = PHASE[time];
   want = aim();
   if (instant) { phase = want; apply(); }
 }
+// kéo mặt trời ở góc dating: phase 0..2 theo tay người xem; null là trả lại theo nút Sáng, Chiều, Tối
+export const currentPhase = () => phase;
+export function setManual(v) { manual = v; want = aim(); if (v !== null) { phase = v; apply(); } }
 export function setRain(on) { rainWant = on ? 1 : 0; want = aim(); mood.rain = on; }
 export function setMood(cur) {
   atStop = Math.abs(cur - STOP) < 0.3;
@@ -223,7 +226,7 @@ export function buildAtmosphere() {
     lines.visible = drops.visible = r > 0.01;
     col(lines.material.uniforms.uTint.value, tintC); lines.material.uniforms.uAlpha.value = r * 0.56;
     col(drops.material.uniforms.uTint.value, tintC); drops.material.uniforms.uRain.value = r;
-    gust.value = 1 + r * 0.9;
+    gust.base = gust.value = 1 + r * 0.9;
     tuneFx(num([0.84, 1, 0]) * (1 - 0.85 * r), num([1, 0.8, 0.16]) * (1 - 0.25 * r), r, col(tmp, shaftC));
   };
 

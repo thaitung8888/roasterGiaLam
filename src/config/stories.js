@@ -1,6 +1,7 @@
-// Lời kể cho các thao tác: pha một ly ở quầy, rang một mẻ ở xưởng rang.
-//   at     : vị trí chấm gợi ý trên đồ vật (toạ độ thiết kế)
-//   camera : camera tiến lại gần đồ vật khi mở bảng (toạ độ thiết kế)
+// Lời kể cho các thao tác ở từng trạm.
+//   at      : vị trí chấm gợi ý trên đồ vật (toạ độ thiết kế)
+//   camera  : camera tiến lại gần đồ vật khi mở bảng (toạ độ thiết kế); không có thì camera đứng yên
+//   instant : bấm là xảy ra ngay, không mở bảng
 
 export const BENCH = {
   brew: {
@@ -14,8 +15,39 @@ export const BENCH = {
     camera: { pos: [2.75, 1.55, -27.2], look: [3.55, 1.1, -28.95] },
     eyebrow: 'Xưởng rang', title: 'Rang một mẻ hạt',
     intro: 'Kéo thanh nhiệt để xem hạt trong khay đổi màu, từ xanh sang nâu.'
-  }
+  },
+  seat: {
+    station: 'camping', at: [3.6, 1.25, -14.4], label: 'Ngồi xuống',
+    eyebrow: 'Khu camping', title: 'Ngồi xuống một lúc',
+    intro: 'Từ chiếc ghế xếp này, gốc cây ở ngay trước mặt, tầng 2 ở trên cao, tiếng máy xay vọng lại từ quầy. Chạm vào chiếc ghế khác để đổi chỗ.'
+  },
+  sun: {
+    station: 'dating', at: [-5.2, 3.35, -0.4], label: 'Kéo mặt trời',
+    eyebrow: 'Góc dating', title: 'Kéo mặt trời qua khung kính',
+    intro: 'Kéo thanh để đi từ trưa tới đêm, xem góc này đổi màu theo giờ.'
+  },
+  desk: {
+    station: 'ban-lam-viec', at: [-6.65, 4.35, -25.05], label: 'Mở laptop',
+    camera: { pos: [-7.5, 4.62, -25.95], look: [-7.6, 4.2, -25.0] },
+    eyebrow: 'Bàn làm việc', title: 'Một chỗ để làm việc',
+    intro: 'Wifi, ổ cắm và một ly cà phê là đủ cho cả buổi chiều.'
+  },
+  blind: {
+    station: 'san-t3', at: [9.7, 6.25, -29.0], label: 'Hạ rèm',
+    eyebrow: 'Sân tầng 3', title: 'Hạ rèm cho đỡ nắng',
+    intro: 'Kéo thanh để hạ rèm cuộn ở mép mái. Rèm xuống thì sân tối và mát hơn, kéo lên thì tán cây lại hiện ra.'
+  },
+  tree: { station: 'san-t3', at: [12.2, 5.8, -26.2], label: 'Chạm vào cây', instant: true }
 };
+
+// góc dating: các khoảnh khắc khi kéo mặt trời (0 giữa trưa, 100 nửa đêm)
+export const SUN_STAGES = [
+  { to: 25, name: 'Giữa trưa', text: 'Nắng rọi thẳng xuống mái đê, khung kính sáng trong.' },
+  { to: 45, name: 'Xế chiều', text: 'Bóng cây ngả dài, ly cà phê đá bắt đầu đọng nước.' },
+  { to: 60, name: 'Hoàng hôn', text: 'Trời chuyển cam hồng, cả căn phòng ấm lên một tông.' },
+  { to: 80, name: 'Chạng vạng', text: 'Đèn trong phòng nổi dần, mái đê chìm vào bóng tối.' },
+  { to: 101, name: 'Đêm', text: 'Đèn đường bật sáng trên đê, trên trời đã có sao.' }
+];
 
 // mỗi món cà phê một câu, khớp đúng tên trong menu.js
 export const DRINKS = {

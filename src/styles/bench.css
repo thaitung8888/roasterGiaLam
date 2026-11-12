@@ -17,6 +17,10 @@
 }
 .chips button:hover { background: rgba(243, 239, 231, .22); }
 .chips button[aria-pressed="true"] { background: var(--teal-lite); color: var(--ink); }
+.bench .info { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; margin: 2px 0 0; font: 400 13px/1.45 var(--f-body); }
+.bench .info dt { color: var(--mist); font: 500 10.5px/1.9 var(--f-mono); letter-spacing: .1em; text-transform: uppercase; }
+.bench .info dd { margin: 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bench .copy { border: 0; border-radius: 2px; background: rgba(243, 239, 231, .14); color: var(--paper); font: 500 11px/1 var(--f-mono); padding: 4px 7px; cursor: pointer; }
 .roast { display: flex; flex-direction: column; gap: 6px; }
 .roast .stage { font: 600 15px/1.2 var(--f-display); color: #ffc46b; }
 .roast input[type="range"] { width: 100%; margin: 4px 0; accent-color: #d98a3a; }

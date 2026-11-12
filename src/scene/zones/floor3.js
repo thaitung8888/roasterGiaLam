@@ -1,7 +1,8 @@
 // Tầng 3: tường sau, phòng làm việc (quầy xanh ngọc liền tường thấp), vách kính + cửa lùa tự mở, sân nửa ngoài trời, hai cây lớn.
 import { BACK, HALL, LV, PLAN } from '../../config/levels.js';
-import { T, camera, lin, onFrame, scene } from '../core.js';
-import { leafBlob } from '../foliage.js';
+import { SHOP } from '../../config/shop.js';
+import { PICK, T, camera, lin, onFrame, scene } from '../core.js';
+import { gust, leafBlob } from '../foliage.js';
 import { GLASS, V, add, beam, box, boxAt, cyl, fit, group, keep, live, noCast, plane, rod, std, tmat } from '../helpers.js';
 import { M } from '../materials.js';
 import { plyChair, roundTable, tubChair } from '../props/furniture.js';
@@ -11,8 +12,23 @@ import { R, rr } from '../random.js';
 import { canvasTex } from '../textures/canvas.js';
 import { TX } from '../textures/index.js';
 
+// tương tác ở tầng 3: màn laptop sáng lên, rèm cuộn hạ xuống, cây lớn rung lá và chim bay đi
+export const DESK = { show() {} };
+export const TERRACE = { level: 0.08, blind() {}, shake() {} };
+
+function screenTex() {
+  return canvasTex(512, 320, (g, w, h) => {
+    const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#123a40'); gr.addColorStop(1, '#0b1f24');
+    g.fillStyle = gr; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#7fd6e0'; g.font = '600 26px "Be Vietnam Pro", sans-serif'; g.fillText('Gia Lâm Coffee Roaster', 34, 62);
+    g.fillStyle = '#f3efe7'; g.font = '500 22px "JetBrains Mono", monospace';
+    g.fillText('WIFI  ' + SHOP.wifi, 34, 150); g.fillText('MỞ CỬA  ' + SHOP.hours.replace(', mỗi ngày', ''), 34, 196);
+    g.fillStyle = 'rgba(243,239,231,.5)'; g.font = '400 18px "Be Vietnam Pro", sans-serif'; g.fillText('Ổ cắm dọc quầy · Chúc bạn làm việc hiệu quả', 34, 262);
+  }, { clamp: true });
+}
+
 export function buildFloor3() {
-  const { z1 } = HALL, Y3 = LV.t3, ZF = BACK.zFront, XP = BACK.xRoom;
+  const { z1 } = HALL, Y3 = LV.t3, ZF = BACK.zFront, XP = BACK.xRoom, hidden = new T.MeshBasicMaterial({ visible: false });
   // tường sau
   noCast(boxAt(-10.2, XP, 0, HALL.eave, z1, z1 - 0.2, M.panel));
   noCast(boxAt(XP, 10.2, 0, Y3, z1, z1 - 0.2, M.panel));
@@ -41,10 +57,14 @@ export function buildFloor3() {
   leafBlob('heart', KX0 + 0.15, Y3 + 1.42, -25.15, 0.34, 46, 0.2, [0.26, 0.31], [0.22, 0.34]);
   pothosTrail(KX0 + 0.2, Y3 + 1.14, -25.3, 0.5);
   for (const x of [-7.6, -6.65, -5.7, -4.75]) tubChair(x, Y3, -25.85, rr(-0.08, 0.08));
+  const screenM = new T.MeshBasicMaterial({ map: screenTex(), toneMapped: false }), screens = [];
   for (const x of [-7.6, -5.7]) {
     boxAt(x - 0.16, x + 0.16, KY + 0.045, KY + 0.06, -25.0, -25.22, std('#3a3d40', 0.4, 0.5));
     boxAt(x - 0.16, x + 0.16, KY + 0.055, KY + 0.255, -24.98, -25.0, std('#202224', 0.3, 0.4)).rotation.x = -0.2;
+    const scr = live(plane(0.29, 0.18, screenM, x, KY + 0.155, -25.006)); scr.rotation.set(-0.2, Math.PI, 0); scr.visible = false; screens.push(scr);
   }
+  DESK.show = on => screens.forEach(s => { s.visible = on; });
+  PICK.desk = live(boxAt(-8.3, -4.2, KY, KY + 0.45, -24.8, -25.5, hidden));
   // lá cờ nhỏ trên quầy, ly nước
   const flag = canvasTex(96, 64, (g, w, h) => {
     g.fillStyle = '#d0232a'; g.fillRect(0, 0, w, h); g.fillStyle = '#f8d34a'; g.beginPath();
@@ -117,6 +137,15 @@ export function buildFloor3() {
   boxAt(9.84, 9.92, Y3 + 1.08, Y3 + 1.12, ZF, z1, frameK);
   for (const z of [ZF - 0.05, z1 + 0.05]) noCast(boxAt(9.82, 9.98, Y3, 7.3, z - 0.06, z + 0.06, frameK));
   const blind2 = cyl(0.09, 0.09, ZF - z1 - 0.2, std('#9aa09e', 0.6, 0.3), 9.75, 6.48, (ZF + z1) / 2, 16); blind2.rotation.x = Math.PI / 2;
+  // tấm rèm buông từ hai trục cuộn, dài ngắn theo thanh kéo
+  const sheetM = std('#d2c9b4', 0.95, 0, { side: T.DoubleSide }), sheet = (x, z, w, ry) => {
+    const g = new T.PlaneGeometry(1, 1); g.translate(0, -0.5, 0);
+    const m = live(add(new T.Mesh(g, sheetM))); m.position.set(x, 6.4, z); m.rotation.y = ry; m.scale.x = w; return m;
+  };
+  const sheets = [sheet((XP + 10) / 2, z1 + 0.2, 10 - XP - 0.2, 0), sheet(9.75, (ZF + z1) / 2, ZF - z1 - 0.2, Math.PI / 2)];
+  TERRACE.blind = k => { TERRACE.level = k; sheets.forEach(m => { m.scale.y = 0.12 + k * (6.4 - (Y3 + 0.95)); }); };
+  TERRACE.blind(TERRACE.level);
+  PICK.blind = live(boxAt(XP, 10, 6.1, 6.75, z1, z1 + 0.5, hidden));
   noCast(boxAt(9.82, 9.98, 6.6, 7.3, ZF, z1, M.corrSide));
   { const tx = 13.6, tz = -28.4, base = V(tx, 0, tz), mid = V(tx - 0.5, 4.6, tz + 0.3);
     rod(base, mid, 0.34, M.trunk, null, 10);
@@ -126,6 +155,29 @@ export function buildFloor3() {
       leafBlob('ficus', e.x, e.y, e.z, 1.9, 300, 0.44, [0.25, 0.31], [0.2, 0.34]);
     }
     leafBlob('ficus', mid.x, 7.4, mid.z, 2.7, 520, 0.44, [0.25, 0.31], [0.2, 0.34]);
+    PICK.tree = live(boxAt(10.4, 16.5, 4.2, 10, -31.5, -25.2, hidden));
+    // chim đậu trong tán: chạm vào cây là một cơn gió lay cả tán và đàn chim bay đi
+    const birdM = std('#2a2622', 0.8, 0, { side: T.DoubleSide }), birds = [];
+    for (let i = 0; i < 6; i++) {
+      const b = live(group()), wing = s => { const g = new T.PlaneGeometry(0.17, 0.06); g.translate(s * 0.085, 0, 0); g.rotateX(-Math.PI / 2); const w = new T.Mesh(g, birdM); b.add(w); return w; };
+      box(0.045, 0.04, 0.12, birdM, 0, 0, 0, b); b.visible = false;
+      birds.push({ b, l: wing(-1), r: wing(1), dir: V(rr(-1, 0.3), rr(0.35, 0.8), rr(-1, 1)).normalize(), t: 0 });
+    }
+    let shake = 0;
+    TERRACE.shake = () => {
+      shake = 1;
+      birds.forEach((p, i) => { p.t = -i * 0.14; p.b.position.set(mid.x + rr(-1.5, 1.5), rr(6.4, 8.2), mid.z + rr(-1.5, 1.5)); p.b.rotation.y = Math.atan2(p.dir.x, p.dir.z); p.b.visible = true; });
+    };
+    onFrame((t, dt) => {
+      if (shake > 0) { shake = Math.max(0, shake - dt * 0.45); gust.value = gust.base * (1 + 2.6 * shake); }
+      for (const p of birds) {
+        if (!p.b.visible) continue;
+        p.t += dt; if (p.t < 0) continue;
+        p.b.position.addScaledVector(p.dir, (2.5 + p.t * 2.5) * dt);
+        const a = Math.sin(p.t * 24) * 0.9; p.l.rotation.z = -a; p.r.rotation.z = a;   // vỗ cánh quanh trục thân chim
+        if (p.t > 4.5) p.b.visible = false;
+      }
+    });
     noCast(boxAt(24, 30, 0, 11, -18, -38, std('#f1efea', 0.9)));
     noCast(plane(20, 7.6, M.house, 23.98, 7.2, -28, -Math.PI / 2));
   }

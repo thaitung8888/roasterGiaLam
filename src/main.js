@@ -23,7 +23,7 @@ document.addEventListener('click', e => {
   if (a.dataset.action === 'menu') Menu.show();
   if (a.dataset.action === 'wifi') {
     const done = () => { a.textContent = 'Đã chép'; setTimeout(() => { a.textContent = 'Chép'; }, 1600); };
-    const fallback = () => { const s = getSelection(), r = document.createRange(); r.selectNodeContents($('wifiPass')); s.removeAllRanges(); s.addRange(r); a.textContent = 'Đã chọn, bấm chép'; };
+    const fallback = () => { const s = getSelection(), r = document.createRange(); r.selectNodeContents(a.previousElementSibling); s.removeAllRanges(); s.addRange(r); a.textContent = 'Đã chọn, bấm chép'; };
     try { navigator.clipboard.writeText(SHOP.wifi).then(done, fallback); } catch (err) { fallback(); }
   }
 });

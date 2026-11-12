@@ -7,7 +7,7 @@ import { R, rr } from './random.js';
 export const FOL = {};
 // gió: đầu lá lay trong shader, chân lá đứng yên, mỗi lá lệch nhịp theo vị trí nên cả tán không lắc đều tăm tắp
 const wind = { value: 0 };
-export const gust = { value: 1 };   // độ mạnh của gió, atmosphere.js tăng lên khi mưa
+export const gust = { value: 1, base: 1 };   // độ mạnh của gió: base do atmosphere.js đặt theo mưa, value có thể tạm mạnh hơn khi có cơn gió
 function sway(shader) {
   shader.uniforms.uWind = wind; shader.uniforms.uGust = gust;
   shader.vertexShader = 'uniform float uWind, uGust;\n' + shader.vertexShader.replace('#include <begin_vertex>', `
